@@ -1,0 +1,959 @@
+******************
+** Exam Compass **
+******************
+
+** Test 3 **
+MIME - Multipurpose Internet Mail Exchange
+	Extends the format of email messages so they can support
+		Non-text attachments
+		Different character sets
+		Multiple parts in a single email
+S/MIME Secure/Multipurpose Internet Mail Extensions
+	The current standard
+	Addes security to MIME
+	Encryption of emails for confidentiality
+	Digital signaturew for authentication and integrity
+	Uses PKI to encrypt/decrypt messages and verify signatures
+SFTP - SSH File Transfer Protocol
+	FTP over SSH port 22
+FTPS - File Transfer Protocol Secure
+	FTP + SSL/TLS encryption usually port 21
+IPsec
+	AH - Provides authentication and integrity but not encryption
+	ESP - Provides encryption, authentication, and integrity
+PFS - Perfect Forward Secrecy
+	Ensures even if a server's long-term private key is compromised, past encrypted communications can't be decrypted
+SPD - Security Policy Database
+	Defines the rule that determine how traffic should be handled by IPsec
+SRTP - Secure Real Time Transport Protocol
+	Provides security for real time communication like VoIP, video conferencing, and streaming media
+TKIP - Temporal Key Integrity Protocol
+	A security protocol used to improve WEP for wifi networks
+CCMP - Counter Mode with Cipher Block Chaining Message Authentication Code Protocol
+	Provides strong security for wifi networks, and is used by WPA2 and WPA3 instead of TKIP
+Symmetric Encryption
+	Secret Key / Session Key
+	AES, DES, IDEA, RC4, 3DES
+Asymmetric Encryption
+	Public-Key
+	RSA, ECC, DHE
+PGP - Pretty Good Privacy
+	Provides encryption and digital signatures for email and file communications
+PFS - Perfect Forward Secrecy
+	A cryptographic property that ensures past session keys cannot be recovered even if the server's
+	long-term private key is compromised
+ECDHE - Elliptic Curve Diffie-Hellman Ephemeral
+	A key exchange protocol used to securely share encryption keys over an insecure channel
+ECDSA - Elliptic Curve Digital Signature Algorithm
+	Provides digital signatures using elliptic curve cryptography
+ECB - Electronic Codebook
+	block cipher mode of operation in symmetric encryption
+PFX - Personal Information Exchange
+	A file format used to store and transport cryptographic information securely
+ECC - Elliptic Curve Cryptography
+	A form of asymmetric (public-key) cryptography that uses elliptic curves over finite fields to create secure keys
+	ECC achieves the same level of security as RSA but with much smaller keys. (256-bit ECC key = 3072-bit RSA key)
+RSA - Rivest Shamir Adleman
+	A widely used asymmetric (public-key) encryption algorithm
+	Used for Encryption, Digital Signatures/Authentication, and Key Exchange/Secure Communication
+DHE - Diffie Hellman Ephemeral
+	A key exchange protocol used to securely share a summetric session key over an insecure channel
+	"ephemeral" -> temporary
+
+** Test 4 **
+DES - Data Encryption Standard
+	Deprecated symmetric encryption algorithm
+	Replaced by AES
+Block Cipher
+	Encrypts fixed size blocks of plaintext at a time
+	How it works:
+		Data is divided into blocks
+		Each block is encrypted separately (or combined with other blocks in some modes like CBC)
+	Examples:
+		AES, DES, 3DES, IDEA
+		IDEA - International Data Exchange Algorithm
+			Replaced by AES, a symmetric block cipher that used PGP to encrypt emails and files
+	Slower in real-time data, but very secure for bulk data
+	Modes:
+		ECB - Electronic Codebook
+			Each block encrypted independently
+			Fast but insecure -> identical plaintext blocks produce identical ciphertext blocks
+		CBC - Cipher Block Chaining
+			Each plaintext block is XORed with previous ciphertext block before encryption
+			Requires an IV (Initialization Vector); Prevents repeating patterns
+				IV - A random or pseudo random value used along with a key to ensure the
+				same plaintext encrypts differently each time
+				It's not a securet but it must be unique for each encryption session
+				Salt is to hashing what IV is to encryption
+		CFB - Cipher Feedback
+			Converts a block cipher into a self-synchronizing stream cipher
+			Encrypts smaller units (like bytes), useful for real-time data
+		OFB - Output Feedback
+			Converts block cipher into a synchronous stream cipher
+			Generates keystream independent of plaintext; prevents error propagation
+		CTR - Counter
+			Converts block cipher into a stream cipher using counters
+			Very fast, supports parallel encryption; each block uses a unique counter
+		GCM - Galois/Counter Mode
+			Like CTR but adds integrity/authentication
+			Provides AEAD (Authenticated Encryption with Associated Data); widely used in TSL/HTTPS
+Stream Cipher
+	Encrypts data one bit or byte at a time, usually by combining it with a pseudo random key stream
+	How it works:
+		Generates a keystream from a secret key
+		XORs the keystream with plaintext to produce ciphertext
+	Examples:
+		RC4, Salsa20/ChaCha20
+	Fast and suitable for real-time communications like VoIP, streaming
+XOR in cybersecurity is particularly used in encryption and obfuscation techniques
+KDC - Key Distribution Center
+	A trusted authority in a network that manages and distributes cryptographic keys
+	Central component of symmetric key infrastructures, especially in Kerberos authentication
+	How it works:
+		AS (Authenticaion Service) - KDC verifies the user's identity and issues a Ticket-Granting Ticket (TGT)
+		Ticket-Granting Service (TGS) - KDC issues service tickets for access to specific resources using the TGT
+		The user can now access resources without sending their password across the network
+Symmetric-Key Block Cipher Algorithm (examples)
+	AES - currently used
+	DES - weak and obsolete
+	3DES - stronger than DES, but slow. Encrypts data 3 times. being phased out
+	IDEA - historically used in PGP. largely replaced by AES
+	Blowfish - fast, secure, and used in old VPNs and file encryption
+	Twofish - Successor to Blowfish
+	CAST-128/CAST5 - Used in PGP
+	RC5 - Experimental
+Not Block Ciphers
+	RC4 - stream cipher
+	ChaCha20 - stream cipher
+	DHE/ECDHE - key exchange
+	RSA - asymmetric
+	ECC - asymmetric
+	SHA-256 - hash function
+
+
+
+** Test 5 **
+SHA-3 - The strongest SHA algorithm
+RIPEMD-160 - Safe alternative to SHA-1, but not widely used
+HMAC - Hash Based Message Authentication Code
+	Ensures Integrity and Authentication
+RSA is an Asymetric aglorithm used for encryption, digital signature, and key exchange
+GPG/PGP - Encrypting, decrypting, and digitally signing data mainly in email communication and file protection
+DSA - Asymmetric algorithm
+PBKDF2 - Password Based Key Derivative Function 2
+	Takes a password and turns it into a cryptographically strong key
+	Protects against
+		Brute-force attacks, Dictionary attacks, Rainbnow table attacks
+ISO - International Organization for Standardization
+	General international standards
+	Quality, safety, maufacturing
+IEC = Electrical and electronig standards
+	Hardware, power systems, electronics
+ITIL - Information Technology Infrastructure Library 
+	Framework of best practices for IT service management
+	Structure set of guidelines for planning, delivering, and maintaining IT services
+P10 - Certificate Signing Requests
+P11 - Cryptographic Tokens
+P12 - File format for storing private keys + certificates
+P13 - ECC
+RA - Identity verification, approves Certificate Requests, Acts as an Intermediate Layer, does not issue certificates
+CSR - Certificate Signing Requests
+	A file generated by a user, server, or device when it wants a digital certificate
+	Contains your public key, identifying info, optional SANs, and a digital signature created with your private key
+DN - Distinguished Name
+
+** Test 6 **
+OID - Object Identifier
+	A globally unique identifier used in PKI, X.509 certificates, LDAP, and many other security standards
+	Identifies specific objects, policies, or attributes
+CSR - Certificate Signing Request
+	A file generated when a user, server, or device wants a digital certificate from a CA
+Root Signing Certificate
+	Top-Most certificate in a PKI hierarchy
+	Issued by the Root CA
+	Stored in client trust stores (browsers, OS)
+	Froms the trust anchor for the entire certificate chain
+Subject Signing Certificate (Intermediate CA Certificate)
+	Certificates issued to a subordinate/intermediate CA, which is allowed to sign other certificates
+	Also called: Intermediate certifcates, Subordinate CA certificates, Issuing CA certificates
+	Signed by the Root CA or another intermediate
+	Used to sign end-entity (server/user) certificates
+	Provide an extra layer of security
+Extended Validation (EV) Certificate
+	Type of certificate with the highest level of validation
+	Requires strict identity verification
+	Confirms the legal organization behind a website
+	Used by banks, financial institutions, big companies
+Wildcard Certificate
+	Secures all subdomains of a domain
+	Cannot secure multi-level subdomains
+GUID - Globally Unique Identifier
+	A 128-bit unique value used to uniquely identify something across space and time
+Nation-State - External, High Resources, High sophistication
+Unskilled Attacker - Internal/External - Low Resources, Low Sophistication
+Hacktivist - External, Low to Medium resources - Low to High sophistication
+Insider Threat - Internal, Low to High resources - Low to Medium Sophistication
+Organized Crime - External, Medium to High resources, Medium to High Sophistication
+Shadow IT - Internal, Low to Medium Resources, Low to Medium Sophistication
+BEC Attack - Business Email Compromise
+
+** Test 7 **
+WAF - Web Application Firewall
+	A security solution that protects web applications by monitoring, filtering, and blocking http/s traffic between users
+	and the application
+WPS - Wifi Protected Setup
+	Vulneratble to brute force attacks
+Bluetooth Threat Vectors
+	Bluesmacking
+		DoS attack that overwhelms a device with large numbers of L2CAP (Logical Link Control and Adaptation Protocol)
+		packets
+		Device freezes, Drains battery, Causes unexpected reboots
+	Bluejacking
+		Unsolicited message attacks
+		Sending unwanted messages, vCards, or photos to nearby Bluetooth devices
+		Annoyance, Social engineering opportunity, No data theft
+	Bluesnarfing
+		Data theft attack
+		An attacker connects to a Bluetooth device without authorization and steals data such as:
+			Contacts, Messages, Files, Call Logs
+		Confidentiality breach, unauthorized access
+	Bluebugging
+		Full device takeover
+		A vulnerability that allows an attacker to gain remote control of a Bluetooth device
+		Attacker can: Make calls, send messages, access the internet, eavesdrop, and modify settings
+		Total device compromise, privacy invasion
+MSSP - Managed Security Service Provider
+	A company or service that manages and monitors security for other organizations
+MaaS - Monitoring as a Service 
+	Cloud based security service where a provider remotely monitors an organizations IT infrastructure, networks,
+	and systems for threats and performance issues
+MSP - Managed Service Provider
+	Company that provides ongoing IT services to an organization, usually on a subscription basis
+Pretexting - Creating a fake scenario to build trust and extract information
+	Attacker pretending to be HR, IT support, Bank rep, etc.
+TOC/TOU - Time-of-Check to Time-of-Use vulnerability
+	A type of race condition that happens when a system checks a condition at one moment, but uses that data later.
+TSIG - Transaction Signature
+	A security mechanism for DNS that provides authentication and integrity for DNS messages using
+	symmetric cryptographic keys
+
+** Test 8 **
+CSRF - Cross Site Request Forgery
+	Web based attack where an attacker tricks a user's browser into performing an unwanted action
+	on a website where the user is already authenticated
+Middleware
+	Software that sits in the middle between applications, services, or systems to help them
+	communicate, process data, or manage requests
+Device Driver - Software that allows the operating system to communicate with hardware devices
+	A translator between the OS and hardware
+EOA - End of Assignment
+	Refers to the point when a person's assignment, contract, or role ends at an organization
+	Rights are revoked, accounts are disabled, assets are collected, etc.
+EOS vs EOL
+	EOL - A product is no longer being sold or developed, but may still recieve limited support and patches
+	EOS - Vendor completely stops supporting the product
+Sideloading - The process of installing apps or software on a device from a source other than the official
+		or approved app store
+Carrier Unlocking - The process of removing a mobile deices network restriction so it can work with
+		any cellular carrier instead of only the one it was originally locked to
+Rooting - Gaining superuser (root) access to a mobile device's OS, typically Android.
+IV attack - When an attacker collects large numbers of packets to analyze and eventually predict or reuse the IV
+		allowing them to decrypt data or crack the encryption key
+Grayware - Software that isn't outright malicious but is still undesirable, annoying, or risky.
+		Adware, Spyware, PUPS, Extensions.
+PUP - Potentially Unwanted Program
+	Software that a user may not want, even though it isn't classified as malicious malware
+	Often bundled with other software
+Logic Bomb - A piece of malicious code that remains dormant until a specific condition or event triggers it
+Bloatware - Software that comes preinstalled on a device, often by the manufacturer or carrier, that is unnecessary,
+		unwanted, or resource heavy.
+		Usually not outright malicious, but can consume CPU, memory, or storage, and cannot be easily removed.
+Characteristics of XSS
+	Code injection where an attacker injects malicious JS into a website so it runs in the browser of other users
+	1. Injects JS into trusted website
+		Attacker doesn't target the server directly, they target other users visiting the site
+	2. Exploits poor input validation / sanitization
+		XSS happens because the application does not properly sanitize user input
+		The site reflects or stores malicious code and sends it to other users
+	3. Steals or manipulates user data
+		XSS can be used to:
+			Steal session cookies
+			Perform actions as the user
+			Redirect to malicious websites
+			Modify webpage content
+	4. Runs code in the victim's browser with their permissions
+		The browser trusts the website
+		So it also trusts the malicious script, thinking it's legitimate
+	5. The server is not compromised, the user is
+		
+** Test 9 **
+Volumetric DDoS 
+	Overwhelms network bandwidth with high traffic volume
+Amplified DDoS
+	Uses a vulnerable third party server to amplify traffic sent to the target
+		Small request -> Huge response sent to the victim
+		Makes the attack more efficient: fewer attacker resources required
+Reflected DDoS
+	Similar to amplified, but emphasizes reflecting traffic off another system
+		Attack spoofs victim IP in requests
+		Servers respond to the victim instead of attacker
+		Often combined with amplification for even bigger effect
+Application DDoS
+	Targets the application layer instead of network bandwidth
+		Focused on specific functions: HTTP request, login forms
+		Harder to detect because traffic can look legitimate
+Credential stuffing
+	An attack where an attacker takes username/password pairs that were stolen from one website and automatically
+	tests them on many other websites to find accounts that reuse the same credentials
+	Relies on password reuse, not brute force
+DNS Spoofing
+	Also called DNS Poisoning, is an attack where an attacker corrupts DNS information so a victim's DNS query
+	returns a malicious IP address instead of a legitimate one
+	As a result:
+		Redirected to fake websites, malware sites, phishing portals, attacker-controlled servers
+URL Hijacking (Typosquatting)
+Domain Hijacking
+	When an attacker takes unauthorized control of a domain name, allowing them to change DNS records
+	transfer ownership, or redirect traffic
+ARP Poisoning (ARP Spoofing)
+	An attack where an attacker sends forged ARP messages on a local network to associate their MAC address with the 
+	IP address of another device (usually the gateway/router)
+	How it works:
+	1.	ARP maps IP -> MAC on the local network (layer 2)
+		ARP has no authentication, so devices trust whatever ARP reply they receive
+	2.	Enables MITM attacks
+		By poisoning the ARP cache, the attacker can:
+			Intercept traffic, Modify packets, redirect traffic, drop packets (DoS)
+	3.	Works only on local networks so the attacker must be on the same subnet or VLAN
+Sybil Attack
+	An attack where one adversary creates many fake identities (nodes, accounts, machines, or personas)
+	to gain disproportionate influence over a system
+Jump Server (jump box, or jump host)
+	Hardened, controlled entry point used to access devices on a secure or isolated network.
+War Driving
+	A wireless reconnaissance technique where an attacker drives around with a laptop or mobile devices
+	searching for wifi networks, often to find unsecured or poorly secured ones
+Pass the Hash - PtH
+	An authentication attack where an attacker uses a stolen password hash to authenticate to systems without ever
+	needing to know the actual password
+LDAP Injection Attack
+	A type of injection attack where an attacker inserts malicious LDAP statements into user supplied fields to 
+	manipulate or bypass authentication and directory queries
+CSRF/XSRF Attack
+	Cross Site Request Forgery is an attack where a malicious website tricks a users browser into performing
+	actions on a trusted website where the user is already authenticated
+XML Injection Attack
+	An attack where an attacker inserts malicious XML content or modifies XML data structures to manipulate
+	how an application processes XML
+ARP Poisoning vs DNS Poisoning
+	ARP Poisoning
+		When an attacker sends fake ARP messages on a LAN to associate their MAC address with another devices IP addr
+		Goal: to redirect LAN traffic through the attacker
+		Enabling: MITM, Session Hijacking, Traffic Sniffing, DoS
+		Only works inside the same broadcast domain
+	DNS Cache Poisoning
+		When an attacker inserts false DNS records into a DNS resolvers cache
+		Goal: To redirect victims to malicious websites
+		Characteristics: Works across the internet, not just LAN, Targets DNS servers, resolvers, or local machine 
+				DNS caches
+
+** Test 10 **
+FACL - File Access Control List
+	A list of entries that define which users or groups can access a file and what actions they can perform
+FIM - File Integrity Monitoring
+	A security control that monitors files, directories, or system configurations for unauthorized changes
+	It detects tampering, corruption, or suspicious modifications, helping organizations identify malware,
+	insider threats, or misconfigurations
+NTFS - New Technology File System
+	A proprietary file system used by Windows that provide advanced features for security,
+	reliability, and performance compared to older file system like FAT32
+VDI - Virtual Desktop Infrastructure
+	Hosts desktop environments on a centralized server and delivers them to end users over a network
+EDR - Endpoint Detection and Response
+	A cybersecurity solution that continuously monitors endpoints (like laptops, desktops, servers)
+	to detect, investigate, and respond to malicious activity
+MPLS - Multiprotocol Label Switching
+	A high performance method for directing network traffic
+	Instead of relying solely on IP addresses to route packets, MPLS attaches short path labels to packets
+	which are used to make forwarding decisions along a predefined path
+AIS - Automatic Identification System
+	A tracking system used on ships and vessels to automatically share information about a vessles:
+	identity, position, course, speed to other nearby ships and coastal authorities
+CVE - Common Vulnerabilities and Exposures
+	A publicaly disclosed catalog of known cybersecurity vulnerabilities
+IoC - Indicator of Compromose
+	A piece of evicence that a system has been breached or is under attack
+Birthday Attack
+	A cryptographic attack that exploits the mathematical probability behind the birthday paradox to find collisions
+	in hash functions more efficiently than brute force
+Dictionary Attack
+	A dictionary attack is a password cracking method where an attacker tries many common or likely passwords
+	taken from a precompiled list instead of brute forcing every possible character combination
+Replay Attack
+	Occurs when an attacker captures legitimate data (such as authentication traffic) and then replays it later
+	to impersonate the user or perform the same action again without even needing the password or key
+Spraying Attack
+	A password spraying attack is when an attacker attempts one or a few common passwords against many different user
+	accounts, instead of trying many passwords on one account
+
+** Test 11 **
+C2 server - a server operated by attackers that provide remote command, control, and communication to malware
+		or compromised devices inside a victims network
+UC server - Unified Communications server is a system that integrates multiple communication services such as
+		voice, video, messaging, conferencing, and presence into a single platform for an organization
+HA - High Availability is a design and implementation strategy that ensures a system, service, or application
+	remains operational and accessible with minimal downtime, even during failures.
+RTOS - Real Time Operating System
+	Designed to process data and respond to events within a guaranteed, predictable time frame
+	Minimal latency, task scheduling, lightweight and efficient
+SCADA - Supervisory Control and Data Acquisition is a system used to monitor and control industrial processes remotely
+	It collects realtime data from sensors, instruments, and devices to contorl operations in industries like energy,
+	manufacturing, and utilities
+CMS - Content Management System is a software platform that allows users to create, manage, and modify digital content
+	on websites or applications without needing to write code
+HMI - Human Machine Interface is the user interface used to interact with machines, industrial systems, or processes
+	providing operators with visualizations, controls, and feedback from devices like SCADA or PLC systems
+PLC - Programmable Logic Controller is a specialized industrial computer used to automate and control machinery and processes
+	in industrial environments
+Clustering - A technique that links multiple servers or systems together to work as a single system providing
+		HA, scalability, and load balancing
+Hyperthreading - HT is an intel CPU technology that allows a single physical processor to act as two logical cores,
+		enabling it to process multiple threads simultaneously
+Edge Computing - A distributed computing paradigm where data processing and analysis occur closer to the source of the data,
+		such as IoT devices, sensors, or local gateways, instead of relying solely on centralized cloud servers
+MSP - Managed Service Provider is a third party company that remotely manages and assumes responsibility for providing IT
+	services, infrastructure, and security for an organization, often on a subscription basis
+Cloud Responsibility Matrix - Also known as the Shared Responsibility Model, defines which security and operational
+				responsibilities are handled by the cloud provider versus the customer
+SWG - Secure Web Gateway - A security solution that monitors, filters, and protects web traffic to enforce corporate 
+				security policies and prevent threats from reaching users or systems
+
+** Test 12 **
+PAC - Proxy Auto Configuration
+	A PAC file is a script used by web browsers and other clients to automatically determine the appropriate
+	proxy server for network requests
+DDNS - Dynamic Domain Name System
+	A service that automatically updates the DNS records when an IP address of a device changes, ensuring that
+	a domain name always points to the correct current IP
+PAM - Privileged Access Management
+	A security solution and practice that controls, monitors, and manages accounts with elevated privileges
+	to reduce the risk of misuse or compromise
+WIDS - Wireless Intrusion Detection System
+	A security system that monitors wireless networks to dectect unauthorized or malicious activity
+WAF - Web Application Firewall
+	A security solution that monitors, filters, and blocks HTTP/HTTPS traffic to and from web applications
+	protecting them from common attacks
+Domain Controller - A server that manages user accounts, authentication, and access to resources within a Windows domain.
+		It's a core component of Active Directory (AD) environments
+IEEE 802.1X - A NAC standard that provides port-based authentication for devices connecting to wired or wireless networks
+EAP - Extensible Authentication Protocol
+	An authentication framework used in network access control that supports multiple authentication methods
+	commonly used in 802.1X and wireless networks.
+PEAP - Protected Extensible Authentication Protocol
+	Uses TLS tunnel to protect the authentication exchange
+EAP-FAST - EAP Flexible Authentication via Secure Tunneling
+	Cisco developed method that uses a PAC instead of a certificate to set up a secure tunnel
+EAP-TLS - EAP Transport Layer Security
+	Strongest EAP method that requires a client certificate + server certificate
+EAP-TTLS - EAP Tunneled TLS
+	Similar to PEAP, only the server needs a certificate
+Layer 4 Firewall
+	Filters: ports like 53 and 80, tcp/udp, ip addresses, and connection states
+	Cannot: inspect contents of traffic, understand applications, identify users, or specific apps (only ports)
+	Typical Usage: Basic perimeter firewall, allow/deny traffic by ip/port, network segmentation
+Layer 7 Firewall (next gen firewall)
+	Filters: Content aware inspection, specific applications, urls, api calls, http requests, malicious payload, identity
+	Capabilities: Deep Packet Inspection, Evasion techniques, Can look inside encrypted traffic, Web filtering, DLP, AV
+	Typical Usage: NGFWs (Palo Alto, Fortinet, Cisco Firepower), WAFs (for web apps), Advanced threat protection
+L2TP - Layer 2 Tunneling Protocol
+	A VPN tunneling protoocl used to creaet secure connections across untrusted networks like the internet
+	L2TP does not provide encryption on its own, and only creates the tunnel between endpoints
+RAS - Remote Access Service
+	A broad term for technologies that allow remote users to connect into a private network
+	Not a single protocol, but refers to a service category
+		VPNs, RDPs, Dial-up Servers, Anything that allows remote network access
+WTLS - Wireless Transport Layer Security
+	used in the old WAP stack, designed to secure comms on early mobile devices
+	Provides authentication, encryption, and data integrity for WAP
+
+** Test 13 **
+Data masking vs Tokenization
+
+** Test 14 **
+RAID 0 - Striping
+	Minimum Disks: 2
+	Redundancy: None
+	Performance: Fastest read/write
+	Capacity: 100% Usable
+	How it Works:
+		Data is split evenly across disks
+		If one drive dies -> All data is lost
+	Best For:
+		High speed temporary data, Gaming PCs, Caches, Non critial performance workloads
+RAID 1 - Mirroring
+	Minimum Disks: 2
+	Redundancy: Full
+	Performance: Reads - faster, Writes - slightly slower
+	Capacity: 50%
+	How it Works:
+		Each disk contains an exact copy of the data
+		If 1 disk fails -> system keeps running
+	Best For: 
+		OS drives, Small business servers, Systems needing high availability with small data sets
+RAID 5 - Striping + Single Parity
+	Minimum Disks: 3
+	Redundancy: Can survive 1 disk failure
+	Performance: Reads - fast, Writes - slower (parity calc)
+	Capacity: (N-1)
+	How it Works:
+		Data is striped, and parity (recovery info) is stored across disks
+		If 1 disk dies -> Data is rebuilt from parity
+	Best for:
+		File servers, Backup servers, Environments needing balance of speed + capacity + redundancy
+RAID 6 - Striping + Double Parity
+	Minimum Disks: 4
+	Redundancy: Can survive 2 disk failures
+	Performance: Reads - fast, Writes - slowest (double parity calc)
+	Capacity: (N-2)
+	How it Works:
+		Same as RAID 5 but with 2 sets of parity
+		Much safer with large disks (3TB+) where rebuilds take days
+	Best for:
+		Large storage arrays, Mission critical data, Big data environments, Systems where rebuild is long and risky
+RAID 10 - Raid 1 + Raid 0 (Mirrored Stripes)
+	Minimum Disks: 4
+	Redundancy: Can survive multiple disk failures as long as they aren't both in the same mirrored pair
+	Performance: Very fast
+	Capcity: 50%
+	How it Works:
+		1. Data is mirrored
+		2. Then mirrored sets are striped
+		Gives the speed of RAID 0 + safety of RAID 1
+	Best for:
+		Databases
+		Virtualization hosts
+		High performance applications
+		Systems needing fast writes + high availability
+COOP - Continuity of Operations Plan
+	A formal plan that ensures an organization can continue essential functions during and after a disruptive event
+Restore Point 
+	A snapshot of a systems state at a specific moment in time that can be used to roll the system back 
+Shadow Copy
+	Microsoft Volume Shadow Copy Service - VSS is a backup technology that creates point-in-time snapshots
+	of files or entire volumes while they are in use
+Snapshot
+	A point-in-time image of an entire system or virtual machine, including its memory, disk state, and configuration.
+	it allows you to roll the system back to the exact state it was in when the snapshot was taken.
+	Think of it as a saved state for servers or VMs.
+System Image
+	A complete backup of an entire computer including:
+		OS, configs, programs, sys files, user files, boot sector, and partition layout.
+		A bit for bit copy of the entire drive
+Incremental Backups
+	A type of backup that only copies data that has changed since the most recent backup of any type.
+	Designed to be fast, efficient, and use minimal storage
+Tape Backup
+	A traditional backup method that stores data on magnetic tape cartridges. Widely used in enterprises because
+	its cheap, reliable, durable, and supports massive storage capacity
+Differential Backups
+	Copy all data that has changed since the last full backup
+	They sit right between full and incremental backups in terms of speed and storage usage
+Mirroring
+	A data redundancy technique where the same data is written to two or more drives at the same time.
+	it ensures if one drive fails, the systsem can continue running with zero data loss and no downtime
+	Commonly implemented as RAID 1
+Journaling
+	A file system feature that records changes in a special log called a journal before those changes
+	are committed to the main filesystem
+Replication
+	The process of copying data from one system/lcoation to another in real time or at scheduled intervals so that
+	the data exists in multiple places. This improves availability, fault tolerance, and disaster recover
+
+** Test 15 **
+COPE - Corporate Owned Personally Enabled
+Storage Segmentation - Data level
+Containerization - Application level
+Secure Baseline - used to describe a foundational level of security configs and settings required to safeguard a system
+Just-in-time Permissions - A security approach where users are granted elevated privileges only when they need them
+				for the shortest time possible, and then those privileges are automatically removed
+XDR - Extended Detection and Response
+	A modern, centralized cybersec solution that unifies detection and response across multiple
+	layers of an organizations enivronment
+PAM - Privileged Access Management
+	A security solution used to control, monitor, and secure access to privileged accounts (admin, root, domain, etc.)
+UEM - Unified Endpoint Management
+	A platform or toolset that provides centrailzed management and security for all types of endpoints
+	within an organization through a single console
+WPA3-SAE (Simultaneous Authentication of Equals)
+	Type: WPA3-Personal
+	Used for: Home networks, small businesses, networks without a RADIUS server
+	Provides forware secrecy, users all share a single passphrase, no enterprise infrastructure needed
+WPA3-Enterprise
+	Type: Enterprise grade WPA3
+	Used for: Corporations, universities, government environments
+	Requires a RADIUS server + 802.1X authentication
+	Uses 802.1X/EAP - examples: EAP-TLS, PEAP, EAP-TTLS
+	Individual user or device authentication, centralized access control, per session encryption keys
+IEEE 802.1D - STP
+IEEE 802.1X - Port based NAC
+	Used to authenticate devices before they are allowed onto a wired or wireless network
+AES-CCMP - AES Counter Mode with Cipher Block Chaining Message Authentication Code Protocol
+	Used in WPA2 and WPA3
+	Provides: Confidentiality (AES in CTR mode), Integrity and Authentication (CBC-MAC)
+	Strongest encryption in WPA2, Mandatory in WPA2-Enterprise, Replaced TKIP, Immune to most legacy wireless attacks
+CBC-MAC - Cipher Block Chaining Message Authentication Code
+	Used in CCMP, older IPSec, secure message integrity systems
+	Provides: Message Integrity, Authentication, NOT encryption
+	Uses a block cipher to produce a fixed length MAC
+AES-GCMP - AES Galois/Counter Mode Protocol
+	Used in: WPA3, 802.11ac/ax Wi-Fi (WAP3-SAE, WPA3-Enterprise)
+	Provides: Confidentiality (CTR mode), Integrity - Galois Message Authentication Code (GMAC)
+	Better than CCMP - Faster, more efficient, stronger integrity
+WPA-TKIP - WPA Temporal Key Integrity Protocol
+	Used in WPA and developed as a quick fix after WEP broke
+	Uses RC4, and provides per packet keying, Legacy and insecure
+TACACS+ - Terminal Access Controller Access Control System Plus
+	Cisco developed AAA protocol used to control and manage AAA for network devices
+	Provides centralized access control for routers, switches, firewalls, VPN applicances, and
+	other administrative interfaces
+	Characteristics:
+		Separates AAA giving granular control, such as specifying which commands a user can run
+		Encrypts the Entire Packet (Except Header)
+			Encrypts the full payload, not just the password, unlike RADIUS
+			TCP port 49
+RADIUS - Remote Authentication Dial In User Service
+	Widely used AAA protocol that provides centralized AAA for users who are trying to access a network service
+	such as wifik vpn, or remote access
+	Unlike TACACS+, RADIUS is focused on end user access, not administrator device access
+	Characteristics:
+		Combines Authentication and Authorization
+		Handles authentication and authorization together in the same process
+			TACACS+ separates them
+		Encrypts only the password, not the entire packet
+			Username, accounting data, and most of the packet remain in plaintext
+		UDP 1812 and 1813
+		Designed for User Network Access
+			Designed for end users such as
+				WiFi Enterprise Authentication 802.1X + RADIUS
+				VPN signons, Remote access servers, NAC
+		Open Standard RFC 2865 and RFC 2866
+		Supports EAP
+
+** Test 16 **
+EAP-TLS - Extensible Authentication Protocol Transport Layer Security
+	Strongest and most secure EAP method
+	Client side and server side certificates
+	Characteristics:
+		Mutual authentication
+		Requires a PKI infrastructure
+		Very resistant to attacks
+		Often used in tnerprise wifi
+PEAP - Protected EAP
+	Developed by Microsoft, Cisco, and RSA
+	Creates an encrypted TLS tunnel before tranmitting authentication data
+	Characteristics:
+		Only requires a server certificate, not a client certificate
+		Client credentials are sent inside the encrypted tunnel
+		Very common in enterprise wifi
+		Uses innter authentication protocols
+EAP-TTLS - EAP Tunneled Transport Layer Security
+	Similar to PEAP, but more flexible. Creates a TLS tunnel, then sends client authentication inside it
+	Characteristics:
+		Server side certificate required, clients do not need certificates
+		Allows multiple innter authentication methods: PAP, CHAP, MSCHAP, MSCHAPv2
+LEAP - Lightweight EAP
+	Proprietary Cisco EAP method, now considered outdated and insecure
+	Characteristics:
+		Uses MS-CHAPv1, which is vulnerable to dictionary attacks
+		Does not use certificates
+		No longer recommended
+Code Signing - The process of digitally signing software, scripts, executables, firmare, or drivers to prove:
+	Integrity: The code has not been altered or tampered with
+	Authenticity: The code comes from a trusted publisher/developer
+	Trust: The software is safe to install and run
+Fuzzing - A software testing technnique where an application, system, or network is fed unexpected, random, 
+		or malformed inputs to discover bugs, vulnerabilities, or security flaws
+Secure Cookie - An HTTP cookie that includes specific security attributes to protect it during transmission 
+		and reduce the risk of theft or misuse
+		Attributes:
+			Secure Flag: ensures the cookie is only sent over HTTPS never http
+					Prevents exposure over plaintext, protecting against packet sniffing and MitM atacks
+			HttpOnlyFlag
+				Prevents client side JS from accessing the cookie
+				Protects agaist XSS attacks stealing session cookies
+			SameSite Attr
+				SameSite=Strict -> Only sent for same site requests; strongest protection
+				SameSite=Lax -> Some cross site allowed, but safe interactions permitted
+				SameSite=None -> Cross site allowed, must use secure flag
+				Protects against CSRF
+EPC - Electronic Product Code
+	A unique identifier for physical objects, similar to a serial number but designed for RFID tags and
+	supply chain tracking
+	Used in inventory management, logistics, and IoT devices
+	Works alongside RFID to track and identify items automatically
+SEH - Structured Exception Handling
+	A Windows programming mechanism for handling exceptions during program execution
+	Allows programs to gracefully handle runtime errors like divide by zero, invalid memory access, or file errors
+EH - Exception Handling
+ASLR - Address Space Layout Randomization
+	A security technique used to prevent attackers from reliably exploiting memory corruption vulnerabilities
+	such as buffer overflows
+IR - Incident Response
+GSM - Glbal System for Mobile Communications
+Degaussing - The process of erasing data from magnetic storage media by exposing it to a strong magnetic field
+
+** Test 17 **
+Application Hardening - configuring software to reduce vulnerabilities and resist attacks
+AIS - Automated Indicator Sharing
+	A framework for sharing cyber threat indicators
+STIX - Structured Threat Information eXpression
+	A standardized language for repesenting cyber threat information
+	Used to share threat intelligence between orgranizations, tools, and government agencies
+TTP - Tactics, Techniques, and Procedures
+	How threat actors operate. Used in cyber intelligence to understand, detect, and defend against attacks.
+CVSS - Common Vulnerability Scoring System
+TAXII - Trusted Automated eXchange fo Indicator Information
+	Protocol for sharing cyber threat intelligence
+Fault Tolerance - The ability of a system, network, or application to continue operating correctly even
+			one or more components fail
+True Positive - Correctly identifies a threat
+False Positive - Incorrectly identifies a threat
+True negative - Correctly identifies no threat
+False Negative - Fails to identify a threat
+FAR - False Acceptance Rate
+	Used in biometric authentication systems
+		Measures the probability that an unauthorized person is incorrectly granted access
+FRR - False Rejection Rate
+	A metric used in biometric authentication systems
+	Measures the probability that an authorized user is incorrectly denied access
+CER (Crossover Error Rate)
+	A metric used in biometric authentication systems
+	Represents the point where the FAR and FER are equal
+ATT&CK - Adversarial Tactics, Techniques, and Common Knowledge
+	A framework for understanding and analyzing attacker behavior
+	Maps real world adversary tactics, techniques, and procedures
+SOAR - Security Orchestration, Automation, and Response
+SCAP - Security Content Automatoin Protocol
+	A framework of standards for automating vulnerability management, config management, and compliance monitoring
+	Developed by NIST to help organizations assess, measure, and report security posture in a standardized way
+DEP - Data Execution Prevention
+	A security feature that prevents code from running in certain regions of memory that are meant to store data only
+DCS - Distributed Control System
+	A control system used in industrial environments to monitor and manage processes across multiple locations
+
+** Test 18 **
+DSU - Digital Subscriber Unit / Digital Service Unit
+	A divice used in older WAN connections that interfaces between digital circuits
+	Converts Digital WAN signals into a form that routers or other customer devices can use
+CSU - Channel Service Unit
+	A device used in older WAN circuits that connects the service providers network to the customers equipment
+OUI - Organizationally Unique Identifier
+	First 24 bits of a MAC address
+OpenVAS - Open Vulnerability Assessment System
+	Open source vulnerability scanner used to identify security weaknesses in systems, networks, and applications
+	Part of the Greenbone Vulnerability Management (GVM) framework
+iPerf
+	CLI tool used to measure network throughput and performance between two endpoints
+pfSense
+	Open source firewall and router platform
+	Commonly deployed as a:
+		perimeter firewall, router, vpn gateway, ids/ips platform, dhcp/dns server
+NetFlow - Network flow monitoring technology created by cisco
+	Network traffic analysis and telemetty protocol that collects metadata about IP traffic flowing
+	through a router, switch or firewall
+Screened Subnet (DMZ) - network segment isolated from both internal network and public internet using one or more firewalls
+Captive Portal - Web page that a user must interact with before gaining accerss to a network
+Heuristic - Behavior based detection method used by security tools especially AV and IDS to identify zero day and
+		modified malware
+Local Users and Groups
+	Windows management tool to manage local: user accounts, security groups, and passwords, privileges, and
+	group memberships
+Resource Monitor - Windows utility providing real time detailed system performance data
+Group Policy - Windows feature used in Active Directory environments to define and enforce security settings, configs,
+		and restrictions across multiple computers or users
+User Account Control - Windows security feature that prevents unauthorized system changes by required admin approval
+			when elevated permissions are needed
+SELinux - MAC security model for Lunux designed to strictly control how proccesses, users, and applictions interact 
+	with system resources
+	Three modes:
+		Enforcing - actively blocks violations
+		Permissive - violations are logged but not blocked
+		Disabled - SELinux turned completely off
+IMAPS - Internet Message Access Protocol Secure
+	TCP 993
+	TLS/SSL, prevents attackers from intercepting or reading email in transit
+	Used for secure email retrieval
+POP3S - Post Office Protocol 3 Secure
+	Used for downloding email from a a mail server to a client
+SMTPS - Deprecated protocol designed as a secure way to send emails from a client to a mail server and between mail servers
+Agent Based Web filtering
+	Software agent is installed on each endpoint
+
+** Test 19 **
+DKIM - DomainKeys Identified Mail
+	A security standard used to verify that an email was not altered and that it truly came from the claimed domain
+	Integrity, Authentication, Non-Repudiation
+SPF - Sender Policy Framework
+	DNS based email authentication method used to prevent email spoofing by specifying which mail servers are authorized
+	to send email for a domain
+PEM - Privacy Enhanced Email
+	A file format for storing and sharing cryptographic keys and certificates, not email itself
+DMARC - Domain based Message Authentication, Reporting and Conformance
+	A DNS based email authentication protocol that builds on SPF and DKIM to prevent email spoofing and
+	improve domain protection
+MAC - Mandatory Access Control
+	Strict access control model where access to resources is controlled by the system not the user.
+	Users cannot override permissions
+	Access decisions are based on:
+		Security labels/classifications on subjects (users/processes)
+		Labels on objects (files, folders, data)
+Attestation - Process of proving or verifying that a system, device, or component is in a trusted and secure state
+		Commonly used in trusted compnuting and security verification
+		Ensures that the system has not been tampered with and is running approved hardware/software
+Auditing - Review and verify acionts, events, or configurations for compliance or accountability
+SAML - Security Assertion Markup Language
+	Widely used federated identity and SSO standard that allows secure exchange of authentication and authorization
+	data between parties
+	XML based, Handles authentication and authorization for SSO, Commonly used in enterprise/legacy systems.
+OpenID Connect - Authentication
+OAuth - Authorization
+Syndication - Distributing or pushing content or data from a central source to multiple destinations
+Federation - Linking identity systems or services across differrent domains to that authentication and 
+		authorization can be shared
+Association - A logical or physical relationship between entities that allows them to interact or recognize each other
+Propagation - The process of distributing changes, updates, or permissions across a system or network
+XDR - Extended Detection and Reponse
+	Provides centralized detection, investigation, and response across multiple security layers
+WAF - Web Application Firewall
+	Protects web applications from attacks like SQL injection, XSS, and application layer exploits
+EDR - Endpoint Detection and Reponse
+	Detects, Investigates, and response to threats on endpoints
+SWG - Secure Web Gateway
+	Protects users from web based threats and enforces corporate internet usage policies
+CASB - Cloud Access Security Broker
+	A security tool that sits between users and cloud service providers to enforce security policies and
+	provide visibility into cloud usage
+FIM - File Integrity Monitoring
+	A security control that monitors files, system configs, and critital data for unauthorized changes
+Email Client Filter runs on the users device and filters spam, phishing or unwanted emails after they arrive in the inbox
+Email Security Gateway runs on the network or cloud before email reaches the inbox
+
+** Test 20 **
+Mandatory Access Control
+	Access controlled by: The system, not users
+	Rules based on: Security labels/classifications
+	Users cant override permissions
+	Common in: Military, government, and high security systems
+Discretionary Access Control
+	Access controlled by: Owner of the resource
+	Rule based on: ACLs or permissions set by the owner
+	Flexible but less secure
+	Common in: Windows and Linux file systems (chmod)
+Role Based Access Control
+	Access controlled by: Roles assigned to users
+	Rules based on: Job function or role in the organization
+	Example: XR role can access employee records, Finance role can access budgets
+Rule Based Access Control
+	Rules or policies often dynamic
+	Rules based on: Conditions like time of day, IP, device type
+	Exapmle: VPN access allowed only during business hours or from corporate IPs
+Attribute Based Access Control
+	Access controlled by: Attributes of users, resources, and environment
+	Rules based on: multiple factors:
+		User: role, department, clearnance
+		Resource: classification, owner
+		Environment: Location, time, device
+	Very flixible and dynamic
+FRR - False Rejection Rate - The rate at which the system incorrectly rejects a legitimate user
+FAR - False Acceptance Rate - The Rate at which the system incorrectly accepts un unquthorized user
+CER - Crossover Error Rate - The point where FRR and FAR are equal
+Just in time Permissions - Grants useres access to resources only when they need it, for a limited time, rather than perma
+Password Vault - An encrypted database that provides secure storage space for user credentials
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,609 @@
+*******************************
+** CompTIA Security+ sy0-701 **
+*******************************
+
+
+
+*******************************
+** General Security Concepts **
+*******************************
+
+** Security Controls **
+
+1. Technical (Logical) Controls
+d. Controls implemented through technology - hardware, software, or firmware.
+	They enforce CIA electronically
+p. To automatically protect systems and data through configured rules and restrictions
+e.	Firewalls
+	Antivirus / EDR (Endpoint Detection and Response) solutions
+	IDS/IPS
+	ACLs
+	Encryption
+	MFA
+	Password hashing and salting
+	Network segmentation and VLANs
+	SIEM
+	RBAC
+t. If it involves a device or software enforcing policy it's technical
+
+2. Administrative (Managerial) Controls
+d. Policies, procedures, and guidelines that define how security is managed
+	They set the rules and expectations for people and processes
+p. Provides the organizational framework for security and risk management
+e.	Security policies (AUP, password, remote access)
+	Risk assessments
+	Security awareness training
+	Incident response plan
+	DR and business continuity planning
+	Vendor management and compliance audits
+	Change management procedures
+t. If it's written in a policy or involves management decision-making, it's administrative
+
+3. Physical Controls
+d. Controls that physically restrict access or protect tangible assets
+p. Prevent unauthorized physical access or damage to systems, facilities, and people
+e.	Locks and keys
+	Fencing, turnstiles, gates
+	CCTV cameras
+	Security guards
+	Badge access systems
+	Mantraps
+	Fire suppression systems
+	Environmental controls (HVAC, humidity sensorsearadf
+	Backup power (UPS, generators)
+t. If it's something you can touch or walkthrough, it's physical
+
+
+--- Functional Classifications ---
+
+
+4. Preventative Controls
+d. Controls that stop security incidents before they occur
+p. Reduce or eliminate the likelihood of a threat exploiting a vulnerability
+e.	Firewalls blocking unauthorized ports
+	Encryption protecting data in transit
+	Access control (MFA, strong passwords)
+	User training on phishing
+	Security guards checking badges
+	Locked server rooms
+t. If the control acts before an event, it's preventative
+
+5. Detective Controls
+d. Controls that detect and alert when a security incident happens
+p. Identify, log, or report unauthorized activity in progress or after the fact
+e.	IDS
+	Security cameras
+	Log monitoring
+	Monitor detectors
+	File integrity monitoring
+	Security audits
+t. If the control discovers or reports something, it's detective
+
+6. Corrective Controls
+d. Controls that restore systems or data after a security incident
+p. Reduce damage and restore normal operations after a breach or failure
+e.	Backup restoration
+	Patching vulnerabilities
+	System reimaging
+	Incident response containment actions
+	Antivirus quarantine/removal
+	Recovery procedures after an attack
+t. If it fixes ar restores something it's corrective
+
+7. Deterrent Controls
+d. Controls that discourage or deter attackers or insiders from acting maliciously
+p. Influence behavior to prevent security violations through perceived risk
+e. 	Warning banners on login screens
+	Security guard visibly present
+	Fences and CCTV signs
+	Policies with strict disciplinary measures
+t. If the goal is to discourage bad actions rather than prevent directly, it's deterrent
+
+8. Compensating Controls
+d. Alternate or temporary controls used when a primary control cannot be implemented or fails
+p. Provide equivalent protection when standard measures aren't possible due ot cost, time, or practicality
+e.	Using a security guard instead of a broken biometric scanner
+	MFA temporarily replacing smart card access
+	Manually log review when SIEM is offline
+t. If it's "in place of" another control, it's compensating
+
+9. Directive Controls
+d. Controls that direct or mandate specific security behavior or action
+p. Ensure that people and processes follow security expectations
+e.	AUP
+	Security awareness training
+	Standard Operating Procedures (SOPs)
+	Signage
+	Posted evacuation routes
+t. If it tells people what to do or how to behave, it's directive
+
+
+
+** Fundamental Concepts **
+
+1. The CIA Triad - Confidentiality, Integrity, and Availability
+Confidentiality
+	d. Ensures only authorized individuals can access data
+	p. Prevent unauthorized disclosure
+	e. Encryption, ACL, MFA, Data Classification, Steganography
+Integrity
+	d. Ensures data remains accurate and unaltered, whether in storage, processing, or transit
+	p. Prevent unauthorized modification
+	e. Hashing (SHA-256), Digital Signatures, Checksums, Version Control, File Integrity Monitoring
+Availability
+	d. Ensures data and systems are accessible when needed
+	p. Prevent downtime and ensure resilience
+	e. Redundancy (RAID clustering), Backups, Fault tolerance, Load balancing, UPS, DDoS protection
+
+-- Further Break Down -- 
+
+Confidentiality
+	Based on "need-to-know" and "least privilege"
+	Implemented via:
+		Encryption (AES, TLS)
+		AC (RBAC, MAC, DAC)
+		Network Segmentation
+		Data masking and tokenization
+	Violations: Data breaches, shoulder surfing, sniffing, privilege escalation
+t. "Prevent disclosure", "Data exposure", "Protect sensitive info"
+Integrity
+	Protects data from unauthorized or accidental modification
+	Uses hashing algorithms (e.g, SHA-256, SHA-3, HMAC) to ensure data isn't altered
+	Uses digital signatures and message authentication codes (MACs) for verification
+	Violations: MITM attacks, tampering, file corruption, improper input validation
+t. "Detect modification", "Ensure accuracy", "Prevent Tampering"
+Availability
+	Focuses on ensuring services are always reachable
+	Achieved with:
+		Redundant systems (load balancing, clustering)
+		Backups and disaster recovery plans
+		DDoS mitigation
+		UPS/generators
+	Violations: DOS, ransomware, natural disasters
+t. "Minimize downtime", "Maintain uptime", "Ensure access"
+t. CIA Triad = Protect the secrecy, accuracy, and accessibility of data
+
+2. Non-Repudiation
+d. Ensures that a party in a communication cannot deny the authenticity of their signature or message
+p. Provides proof of origin and delivery, ensuring accountability
+e. If a user signs an email with a digital certificate, they cannot later claim they didn't send it
+e.	Digital Signatures (provide integrity + Authentication)
+	PKI with certificates
+	Audit logs (record who did what, when)
+	Time stamps
+t. Non-repudiation often pairs with integrity - both use hashing and digital signatures, but integrity ensures data wasn't changed
+	while non-repudiation ensures it was authentically sent
+t. "Prove identity of sender", "Cannot deny action", "Legal accountability"
+
+3. AAA - Authentication, Authorization, and Accounting
+The 3 pillars of identity and access management (IAM)
+They control who you are, what you can do, and what you did
+Authentication
+	d. Verifies identity of the user/system
+	p. "Who are you?"
+	e. Passwords, biometrics, smart cards, MFA, Kerberos
+Authorization	
+	d. Determines what actions or resources the authenticated entity can access
+	p. "What are you allowed to do?"
+	e. ACLs, RBAC, permissions, policies
+Accounting (Auditing)
+	d. Tracks what was done by whom
+	p. "What did you do?"
+	e. Logs, SIEM, RADIUS accounting, audit trails
+
+-- Futher Break Down --
+
+Authentication (Who Are You?)
+Methods:
+	1. Something you know - password, PIN
+	2. Something you have - token, smart card
+	3. Something you are - biometric (fingerprint, retina)
+	4. Somewhere you are - geolocation/IP
+	5. Something you do - behavior pattern (typing cadence)
+MFA combines two or more of these categories for stronger security
+t. Using two passwords is NOT MFA (same category), but using a password and fingerprint is.
+
+Authorization (What Can You Access?)
+Implemented through Access control models:
+	DAC (Discretionary Access Control) - owner assigns access
+	MAC (Mandatory Access Control) - system-enforced labels (used by military)
+	RBAC (Role-Based Access Control) - permissions by job role
+	ABAC (Attribute-Based Access Control) - permissions based on attributes (time, device, location, etc.)
+e. A user authenticated via smart card (authentication) may only access HR data if their role is "HR Manager" (authorization)
+
+Accounting (What Did You Do?)
+Used for: Auditing, Tracking activity for compliance, and Incident Response
+e.	RADIUS and TACACS+ (network authentication)
+	Syslog servers
+	SIEM platforms (e.g., Splunk, QRadar)
+	Windows Event Logs
+t. If it mentions logging, monitoring, or tracking, it's accounting
+
+4. Zero Trust Architecture (ZTA)
+d. A security model where no user, device, or application is inherently trusted - even if inside the network perimeter
+Every access request must be continuously verified, authenticated, and authorized
+Core Principle: "Never trust, Always verify"
+Core Components
+	1. Continuous Verification - Always authenticate users and devices (not just at login)
+	2. Least Privilege - Users get only the permissions they need
+	3. Microsegmentation - Divide the network into small, isolated zones to limit lateral movement
+	4. Strong identity management - MFA, device posture checks, identity federation
+	5. Real-time monitoring - Use SIEM and behavioral analytics to detect anomalies
+	6. Data-centric protection - Encrypt and classify sensitive information
+e. In a tradional model once a user connects to the internal LAN, they're "trusted". In a Zero Trust model, every
+	api call, session, and connection is validated through policies, device health checks, and identity proofs. 
+Technologies supporting Zero Trust:
+	MFA and identity federation (SAML, OAuth, OpenID Connect)
+	Endpoint posture checks (EDR)
+	NAC
+	Conditional access policies
+	Software-Defined Preimeter (SDP)
+	Cloud Access Security Broker (CASB)
+t. If you see "trust but verify" that's NOT Zero Trust - Zero Trust never trusts by defualt
+
+5. Deception and Disruption Technologies
+d. Security technologies designed to confuse, mislead, or slow down attackers, gathering intelligence or reducing damage. 
+Used to detect intrustions early, waste attacker time, or disrupt their progress.
+Types of Deception/Disruption Technologies:
+	Honeypots:
+		Fake systems or resources that attract attackers.
+		Used to observe attackers behavior without risking production systems
+		Should be isolated from production networks
+	e. A decoy database that logs all SQL injection attempts
+	t. If it's "Fake but looks real" - honeypot
+	Honeynets:
+		A network of honeypots, simulating an entire environment
+		Used by research and intelligence teams to study attacker tactics (TTPS)
+	Honeytokens:
+		Fake data objects (e.g., fake credentials, fake records) planted in real systems
+		Trigger alerts when accessed, indicating compromise
+	e. A fake AWS key placed in a GitHub repo; if used, it alerts the SOC instantly
+	Sandbox Environments:
+		Isolated, controlled environments used to analyze suspicious code (like malware) safely
+	e. Executing an unknown email attachment in a sandbox VM to see if it's malicious
+	Disruption Tecnhologies:
+		Designed to actively interfere with attack operations
+		Sinkholes - Redirect malicious traffic to controlled servers for analysis
+		Tarpits - Slow down automated attacks by responding slowly to each request
+		Blackholes - Drop malicious traffic silently
+		Rate limiting / throttling - Slow brute-force or DDoS attacks
+	t. If its about luring, delaying, or confusing attackers, its decepting/disruptionl.
+
+
+** Change Mangement **
+
+d. The structured process of planning, approving, implementing, and documenting changes to systems,
+	configurations, or processes in a controlled and secure manner. 
+p. To ensure changes are authorized, tested, documented, and do not introduce new risks or vulnerabilities.
+
+1. Business Processes
+d. In change management, are the policies and procedures that define how and when changes are proposed, reviewed,
+	approved, implemented, and reviewed post-deployment.
+p.	Align IT and security changes with business goals.
+	Reduce unintended downtime and security risks
+	Ensure accountability and traceability of changes
+	Facilitate communication among IT, security, and business units
+The Standard Change Management Lifecycle
+	1. Request for Change (RFC)
+		Initiator submits a formaal change request. 
+		Includes description, justification, impact assessment, and rollback plan
+	2. Review and Assessment
+		The Change Advisory Board (CAB) reviews the request
+		Assesses risk, impact, cost, and urgency
+		Determines if testing or downtime is needed
+	3. Approval or Rejection
+		CAB or management authorizes or denies the change
+		Approval may depend on risk mitigation measures
+	4. Testing/Staging
+		Changes are implemented in a sandbox or staging environment first
+		Validates that the change works as intended without causing harm
+	5. Implementation
+		Change is applied to the production environment at a planned time (often during maintenance windows)
+		Backout or rollback plans must be ready if it fails
+	6. Documentation/Communication
+		Update configuration management databases (CMDB), network diagrams, and SOPs
+		Inform stakeholders and users
+	7. Post-Implementation Review
+		Evaluate success or failure
+		Identify lessons learned
+		Document and close the request
+Change Types 
+Standard Change		Low risk, pre-approved, routine			Patching printers monthly
+Normal Change		Requires full review and CAB approval		Deploying new firewall firmware
+Emergency Change	Needed immediately to fix critial issue		Mitigating active zero-day exploit
+t. If it says "Requires immediate action to stop an ongoing breach", that's an emergency change, but it must still be documented afterward
+Security Importance:
+	Every unauthorized or undocumented change is a potential attack vector:
+	Misconfigured firewalls
+	Unpatched software
+	Unverified updates introducing malware
+	Disabled security controls without tracking
+
+2. Technical Implications
+d. These are the technical effects and risks that a change can have on systems, networks, or security posture
+Common Technical Considerations:
+	1. System Compatability
+		Will the new software or update conflict with existing configurations?
+		e. Updating an OS that breaks older applications
+	2. Security Posture Changes
+		Does the change weaken security?
+		e: Opening new firewall ports, adding new users, modifying ACLs
+	3. Service Availability
+		Will there be downtime? Is there redundancy?
+		e. Upgrading routers - how will traffic reroute?
+	4. Performance Impact
+		Could the change slow systems or cause resource exhaustion?
+	5. Dependency Analysis
+		Will the change affect dependent services?
+		e. Updating a database server that feeds multiple web apps
+	6. Rollback Planning
+		What's the plan if something goes wrong?
+		You should alawys be able to restore to a known good state quickly
+Security Control Implications
+	Changes can:
+	Add a new attack surfaces (new APIs, new devices)
+	Break existing security tools(e.g., antivirus updates conflicting with OS patches)
+	Introduce misconfigurations (e.g., missing encryption on new systems)
+	Invalidate complicance (e.g., PCI-DSS violation if encryption disabled temporarily)	
+
+3. Documentation
+d. Change documentation is the recordkeeping that captures what was changed, when, why, and by whom
+p.	Maintain accountability and traceability
+	Supports audits and compliance
+	Enable incident response and troubleshooting
+	Preserve institutional knowledge
+Key Documentation Elements
+	1. Change Request Form
+		Description of change
+		Reason/business justification
+		Systems affected
+		Risk/impact analysis
+		Rollback plan
+		Approval signatures
+		Implementation date/time
+	2. Configuration Management Database (CMDB)
+		Stores system configurations, software versions, dependencies, and owners.
+	3. Change Logs / Audit Trails
+		Record all modifications (who, what, when, why)
+		Useful for forensics and non-repudiation
+	4. Network and System Diagrams
+		Must be updated after any topology or configuration change
+	5. Policies and Procedures
+		Documentation must reflect the latest operational standards
+Security Perspective
+	Documentation supports non-repudiation and accountability
+	Incomplete documentation = unverified system state = increased attack surface
+	During audits, missing documentation can lead to complicance violations
+t. If a scenario describes a change made without updating diagrams or logs, the correct answer is likely
+	a violation of change management documentation practices
+
+4. Version Control
+d. Version control is the systematic tracking of changes to files, code, configurations, or documentation
+	so that previous versions can be recovered if needed. 
+p.	Ensure only approved and tested versions are in production
+	Allow rollback in case of a bad deployment
+	Maintain accountability (who made which change, when)
+	Support collaboration and consistency across teams
+Common Version Control Concepts
+Repository (Repo)	Central place where files/code are stored			e.g., GitHub, GitLab
+Commit			Saved change to the repository					Includes author, timestamp, change note
+Branching		Create isolated environments for development or testing		Prevents interference with production
+Merging			Combine changes from branches					Requires review/approval
+Tagging/Release		Marking stable versions						e.g, "v2.3.1" release
+Rollback/Revert		Return to previous version					Used if new version fails or introduces bugs
+Security Relevance:
+	Prevent unauthorized or untracked changes to code/configurations
+	Helps detect insider threats or supply-chain attacks (malicious code inserted without approval)
+	Enables code signing to verify authenticity and integrity of releases
+Tools and Technologies
+	Git, Subversion (SVN), Mercurial - for software and scripts
+	Configuration management systems (Ansible, Puppet, Chef) - for infrastructure
+	Cloud versioning (AWS S3 versioning, Azure DevOps repos)
+	SIEM integration - to detect anomalies in change patterns
+e. A system admin deploys a new firewall configuration that locks out several services.
+	Because version control was used, they quickly revert to the previous configuration
+Version control supports availability and integrity - critial pillars of the CIA triad.
+
+How it all fits together:
+Business Process	Structured change request, review, and approval workflow	Prevent unauthorized or risky changes
+Technical Implications	Evaluates risk, compatability, and dependencies			Maintains system stability and security posture
+Documentation		Records details, updates diagrams, logs, and policies		Supports accountability and complicance
+Version Control		Tracks file/code/configuration changes				Enables rollback, ensures integrity
+e.	"Unauthorized configuration change" -> Lack of change management
+	"No rollback plan documented" -> Failed change management process
+	"Unexpected outage after update" -> Change not tested or approved
+	"No record of who made the change" -> Missing version control or documentation
+	"Emergency patch deployed after breach" -> Emergency change (still must be documented)
+
+
+** Cryptographic Solutions **
+
+1. Public Key Infrastructure (PKI)
+d. The framework of policies, procdures, hardware, software, and people needed to create, manage,
+	distribute, use, store, and revoke digital certificates
+It's the backbone of the internet - enabling encryption, authentication, and non-repudiation through asymmetric cryptography
+Core Components:
+Certificate Authority (CA)			Trusted entity that issues and signs digital certificates		DigiCert, GlobalSign, Let's Encrypt
+Registration Authority (RA)			Verifies user identity before the CA issues a certificate		Acts as intermediaty or verifier
+Certificate Repository				Database that stores and distributes certificates			e.g., LDAP directories
+Certificate Revocation List (CRL)		List of revoked or invalid certificates					Must be regularly updated
+Online Certificate Status Protocol (OCSP)	Real-time query to check if a cert is revoked				Faster than CRLs
+Digital Certificate				Electronic credential binding a public key to an entity's identity	X.509 standard
+Key Pair					Public and private keys used for encryption/decryption			Generated via asymmetric algorithms (RSA, ECC)
+Certificate Lifecycle
+	1. Key generation -> Create public/private key pair
+	2. Registration -> Identity verified by RA
+	3. Certificate Issuance -> CA signs and issues cert
+	4. Distribution -> Cert published to repo or ueer
+	5. Usage -> Used for encryption/authentication
+	6. Revocation/Expiration -> Aded to CRL or expired naturally
+	7. Renewal -> New cert issued before expiry
+PKI Use Cases
+	HTTPS/TLS (SSL certificates)
+	Email encryption (S/MIME)
+	VPN authentication
+	Code signing
+	Document signing (PDFs, contracts)
+	Smart card logon
+	Device authentication (IoT)
+Common Terms
+Root CA			The top-level trusted CA - anchor of trust
+Intermediate CA		Delegated CA that issues certificates on behalf of the root
+Self-signed certificate	Signed by the entity itself (not trusted externally)
+Wildcard certificate	Covers multiple subdomains (e.g., "example.com"
+SAN certificate		Subject Alternative Name - supports multilpe domain names
+OCSP stapling		Server caches OCSP response to speed up revocation checks.
+t. Private keys must be kept secret and protected - compromise of a private key breaks trust for that certificate chain
+t. Verifies identity via certificates", "CA/RA involved", "Revocation/CRL/OCSP", "TLS, HTTPS, S/MIME"	
+
+Self-signed certificate	Signed by the entity itself (not trusted externally)
+Wildcard certificate	Covers multiple subdomains (e.g., "example.com"
+SAN certificate		Subject Alternative Name - supports multilpe domain names
+OCSP stapling		Server caches OCSP response to speed up revocation checks.
+t. Private keys must be kept secret and protected - compromise of a private key breaks trust for that certificate chain
+t. Verifies identity via certificates", "CA/RA involved", "Revocation/CRL/OCSP", "TLS, HTTPS, S/MIME"		Delegated CA that issues certificates on behalf of the root
+2. Encryption
+Types of Encryption
+Symmetric (Secret-Key)		Uses one shared key for encryption and decryption			AES, DES, 3DES, Blowfish, Twofish, RC4		Bulk data encryption (fast)
+Asymmetric (Public-Key)		Uses two keys: public (encrypts) and private (decrypts)			RSA, ECC, Diffie-Hellman, ElGamal		Key exchange, digital signatures
+Hybrid Encryption		Combines both: asymmetric for key exchange, symmetric for data		TLS/SSL						Secure network communications
+Symmetric Encryption
+	Fast, suitable for large data volumes
+	Requires secure key exchange (weak point)
+	Common uses: disk encryption, VPN tunnels, data-at-rest
+	e. AES-256 - modern standard for government/military-grade encryption
+Asymmetric Encryption
+	Uses a key pair (public + private)
+	Public key encrypts data, private key decrypts (for confidentiality). OR reversed for digital signatures (integrity + non-repudiation)
+	Common Uses:
+		PKI certificates
+		Secure email (S/MIME)
+		HTTPS
+		Digital Signatures
+		Key Exchange in hybrid systems
+	Common Algorithms
+		RSA - Widely used, strong but slower
+		ECC (Elliptic Curve Cryptography) - Smaller key sizes, faster, used in mobile and IoT
+		Diffie-Hellman - Used for key exchanges, not encryption itself
+Hybrid Encryption Example (TLS)
+	1. Asymmetric encryption exchanges a session key securely
+	2. Symmetric encryption uses that key for bulk data transfer
+	That gives speed + security - a practical best of both worlds
+t. Symmetric = Fast, one key, data encryption
+t. Asymmetric = Slow, two keys, key exchange and identity
+t. Hybrid = TLS, SSH, PGP, HTTPS
+
+3. Obfuscation
+d. Deliberately making something hard to understand or analyze - often used to hide the true meaning or structure of code or data
+p. To make reverse engineering, exploitation, or unauthorized use more difficult
+Uses of Objuscation
+Code Obfuscation		Make software harder to reverse engineer			Variable renaming, code encryption, anti-debugging
+Data Obfuscation		Hide sensitive data within test environments			Masking, tokenization, pseudonymization
+URL or Script Obfuscation	Used by attackers or defenders to hide payloads or code		Javascript encoding, PowerShell, base64
+Security Implications
+	Legitimate use: protecting intellectual property and sensitive data
+	Malicious use: attackers obfuscate malware to evade detectoin
+t. If the question says "making source code unreadable without changing it functionality" -> Obfuscation
+
+4. Hashing
+d. The process of converting data of any length into a fixed-length string (hash value) using a mathematical algorithm
+Used to ensure integrity - if the input changes, the hash changes
+Properties of Good Hash Functions
+Deterministic - same input -> same output
+Unique - small change -> drastically different hash ("avalanche effect")
+Irreversible - cannot get original data from hash
+Collision-resistant - hard to find two inputs producing same hash
+Common Hashing Algorithms
+MD5	128-bit			Weak (collisions) - legacy only
+SHA-1	160-bit			Weak - deprecated
+Sha-2	224/256/384/512-bit	Strong - widely used
+Sha-3	Variable		Newest standard, secure
+HMAC	Variable		Hash + secret key for integrity + authentication
+Uses of Hashing
+	Password storage (hashed, salted)
+	File integrity verification
+	Digital signatures
+	Message Authentication Codes (MAC)
+	Blockchain (block linkage)
+t. If you see "verify data integrity", "ensure file wasn't altered", or "store passwords securely", the answer is likely hashing
+
+5. Digital Signatures
+d. A digital signature is a mathematical scheme that provides:
+	Integrity - message not altered
+	Authentication - verifies sender identity
+	Non-repudiation - sender can't deny sending it
+How it Works (Asymmetric Process)
+	1. Sender hashes the message
+	2. Sender encrypts the hash using their private key -> digital signature
+	3. Recipient decrypts signature using sender's public key to verify the hash
+	4. Recipient rehashes the message and compares values
+	If the hashes match:
+		The message wasn't altered (integrity)
+		It came from the claimed sender (authentication)
+		The sender cannot deny sending it (non-repudiation)
+Common uses: Email signing (S/MIME), Code signing, Document signing (PDFs, contracts), Software integrity verification
+t. If the question mentions authentication + integrity + non-repudiation, it's digital signatures - not just hashing or enryption alone
+
+6. Blockchain
+d. A blockchain is a distributed, immutable ledger that securely records transactions across multiple systems (nodes) using cryptographic principles
+Core Concepts
+Block			A group of records (transactions) with a cryptographic hash linking it to the previous block
+Chain			Sequence of blocks, each dependent on the previous one
+Decentralization	Data replicated across multiple nodes - no single point of failure
+Concensus Mechanism	Agreement among nodes on the validity of transactions (e.g., Proof of Work, Proof of Stake)
+Immuntability		Once recorded, data cannot be altered wihtout concensus and rehashing all subsequent blocks
+Cryptographic Roles in Blockchain
+	1. Hashing - Links each block to the previous block (chain of integrity)
+	2. Digital Signatures - Verify transaction authenticity and ownership
+	3. Asymmetric Encryption - Protects identities and ensures non-repudiation
+Real-World Uses (beyond cyrptocurrency)
+	Supply chain verification
+	Digital identity management
+	Secure voting systems
+	Smart contracts
+	Healthcare record integrity
+t. If you see keywords like "distributed ledger", "immutability", or "dectralized trust" think blockchain
+
+
+
+***********************************************
+** Threats, Vulnerabilities, and Mitigations **
+***********************************************
+
+
+
+***********************************************
+** Security program management and oversight **
+***********************************************
+
+** Security Governance **
+
+1. Policies, Standards, Guidelines, and Procedures (PSGP)
+	2.1 Policies
+		High-level statements of management intent
+		They are:
+			broad
+			mandatory
+			approved by executive leadership
+			technology-agnostic
+			foundation for all other documents
+		examples:
+			AUP - rules for using company systems
+			ISP - defines overall security expectations
+			password policy - broad rules like minimum complexity or MFA requirement
+			remote access policy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

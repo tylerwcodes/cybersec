@@ -1,0 +1,3218 @@
+t*******************************
+** Networking Concepts (23%) **
+*******************************
+
+<OSI Model Layers>
+*** NOTES ***
+$ OSI Model
+- Physical, Data Link, Network, Transport, Session, Presentation, Application
+- Data is encapsulated top-down (Application -> Physical) when sending
+- Data is decapsulated bottom-up (Physical -> Application) when receiving
+
+$ Layer 7 - Application
+- Purpose: Provides network services directly to the end user's applications. (Not the application, but the services it uses (e.g., HTTP)
+- Functions:
+	- Defines how apps access network resources
+	- Manages high-level protocols, user interfaces, and data exchange.
+- Protocols/Examples:
+	- HTTP/HTTPS -> Web Browsing
+	- SMTP, POP3, IMAP -> Email
+	- FTP, SFTP, TFTP -> File Transfers
+	- DNS -> Resolves names to IPs
+- Devices: proxies, application gateways, firewalls with deep packet inspection
+- Headers: Application data (user data, like HTML, email body)
+
+$ Layer 6 - Presentation
+- Purpose: Formatting, compression, and encryption of data so the receiving application understands it
+- Functions:
+	- Translation: Different systems use different encoding; presentation ensures compatibility.
+	- Encryption/Decryption: SSL/TLS handshake
+	- Compression: JPEG, MP3, MPEG
+- Examples:
+	- SSL/TLS (though often described as layer 5-7 depending on context)
+	- ASCII, Unicode
+	- JPEG, GIF, MP3
+- Devices: SSL accelerators, gateways
+? Which layer in the OSI model provides encryption ->  Presentation Layer
+
+$ Layer 5 - Session
+- Purpose: Manages dialogue (sessions) between applications. Sets up, manages, and terminates sessions.
+- Functions:
+	- Establish, maintain, and end connections (logon/logoff)
+	- Synchronization checkpoints (e.g., resume a file transfer)
+- Examples: 
+	- NetBIOS
+	- RPC
+	- PPTP
+	- SMB session control
+- Devices:
+	- Session border controllers (VoIP)
+
+$ Layer 4 - Transport
+- Purpose: Provides reliable (or unreliable) delivery of data between hosts.
+- Functions: 
+	- Segmentation: Splits data into smaller units for transmission
+	- Reliability: Ensures all segments arrive (if using TCP)
+	- Flow control: Prevents overwhelming the receiver
+	- Error detection/recovery: Retransmit lost packets.
+- Key Protocols
+	- TCP: Connection-oriented, reliable, sequencing, acknowledgements, error recovery
+	- UDP: Connectionless, no guarantees, faster
+- Headers:
+	- TCP/UDP headers with port numbers
+- Devices:
+	- Firewalls
+	- Load balancers
+
+$ Layer 3 - Network
+- Purpose: Responsible for logical addressing and routing packets across networks
+- Functions:
+	- Logical Addressing (IP addresses)
+	- Routing and forwarding
+	- Fragmentation (splitting packets to fit MTU)
+- Protocols/Examples:
+	- IPv4/IPv6
+	- ICMP (ping, traceroute)
+	- ARP (though often considered between 2 & 3)
+	- OSPF, RIP, EIGRP, BGP (routing protocols)
+- Devices: 
+	- Routers
+	- Layer 3 switches
+	- Firewalls (at IP layer)
+- Headers: Network header contains source and destination IP addresses
+
+$ Layer 2 - Data Link
+- Purpose: Provides physical addressing and reliable communication over a physical medium
+- Sub-layers:
+	- LLC (Logical Link Control): Error checking, flow control
+	- MAC: deciding who can talk when on a shared medium
+- Protocols/Examples:
+	- Ethernet (802.3)
+	- Wi-Fi (802.11)
+	- PPP, HDLC
+- Devices:
+	- Switches
+	- Bridges
+	- NICs
+	- WAPs
+- Headers: Frame header/trailer with MAC source/destination + error check (FCS)
+
+$ Layer 1 - Physical
+- Purpose: Transmits raw bits (0s and 1s) over a medium. Defines physical aspects of transmission
+- Functions:
+	- Bit representation (voltage, light pulses, radio waves)
+	- Cable specifications (UTP, fiber, coax)
+	- Connectors (RJ45, RJ11)
+	- Data rate (bps)
+- Examples:
+	- Ethernet physical layer specs
+	- Wi-Fi radio frequencies
+	- DSL, ISDN
+- Devices: 
+	- Hubs
+	- Repeaters
+	- Cables
+	- Connectors
+
+$ Encapsulation - How OSI Layers Work Together
+- L7: user data created (HTTP request)
+- L6: encryption, compression, formatting
+- L5: session management info added
+- L4: segment header added (ports, TCP/UDP)
+- L3: packet header added (IP source/destination)
+- L2: frame header/trailer added (MAC addresses, FCS)
+- L1: bits put onto the wire
+
+<Networking Appliances>
+*** NOTES ***
+$ Router
+- Definition: A layer 3 devices that forwards packets between different networks using IP addressing
+- How it works:
+	- Looks at destination IP address
+	- Uses routing tables + protocols (OSPF, BGP, RIP)
+- Pros:
+	- Connects LANs/WANs
+	- Can do NAT, DHCP, ACLs
+- Cons:
+	- Slower than switches (more processing)
+- Examples:
+	- Home router (Wi-Fi + NAT)
+	- Enterprise edge router (Cisco ISR, Juniper)
+* "Forwards packets between different networks" -> Router
+
+$ Switch
+- Definition: A layer 2 device that forwards frames based on MAC addresses
+- How it works:
+	- Builds MAC address table dynamically
+	- Modern switches also do Layer 3 (routing)
+- Pros:
+	- Faster than hubs (unicast forwarding)
+	- Supports VLANs
+- Cons:
+	- More expensive than hubs
+- Examples:
+	- LAN access switches (Cisco Catalyst)
+	- Data center switches (Arista, Juniper)
+* "forwards frames within a LAN" -> Switch
+* Don't confuse with a hub (hub = broadcast everything)
+
+$ Firewall
+- Definition: Security device that filters traffic based on rules (ports, IPs, protocols, state)
+- Types:
+	- Packet-filtering firewall -> basic ACLs
+	- Stateful firewall -> tracks sessions
+	- Next-gen firewall (NGFW) -> adds DPI, IDS/IPS, app filtering
+- Pros:
+	- First line for defense
+- Cons:
+	- Single point of failure if not redundant
+- Examples:
+	- Palo Alto, Cisco ASA, Fortinet
+* "Filters traffic based on port/protocol/IP" -> Firewall
+
+$ IDS/IPS
+- Definition: Intrusion Detection System / Intrusion Prevention System
+	- IDS = Detect only (alert)
+	- IPS = Detect + Prevent (block)
+- How it works:
+	- Signature-based (known patterns)
+	- Behavior-based (anomalies)
+- Pros:
+	- IDS = non-intrusive monitoring
+	- IPS = real-time blocking
+- Cons:
+	- IDS = can't stop attack
+	- IPS = may block false positives
+- Examples:
+	- Snort, Suricata, Cisco Firepower
+
+$ Load Balancer
+- Definition: Distributes traffic across multiple servers to improve performance/reliability
+- Types:
+	- Layer 4 -> based on IP/port
+	- Layer 7 -> based on application (HTTP headers, cookies)
+- Pros:
+	- High availability
+	- Prevents overload
+- Cons:
+	Single point of failure if not redundant
+- Examples:
+	- AWS ELB, F5 BIG-IP, NGINX
+* "Distributes client requests among multiple servers" -> Load balancer
+
+$ Proxy Server
+- Definition: Intermediary between client and server
+- Types:
+	- Forward Proxy -> client -> proxy -> internet
+	- Reverse Proxy -> internet -> proxy -> internal server
+- Pros:
+	- Caching, anonymity, filtering
+	- Security layer
+- Cons:
+	-Adds latency
+- Examples:
+	- Squid, Blue Coat, NGINX
+* "Forward Proxy" = client anonymity
+* "Reverse Proxy" = hides backend servers
+
+$ NAS (Network Attached Storage)
+- Definition: File-level storage device on a network
+- Protocols: SMB/CIFS, NFS
+- Pros:
+	- Easy to share files
+	- Centralized storage
+- Examples:
+	- Synology, QNAP appliances
+* "NAS" == File-level storage
+
+$ SAN (Storage Area Network)
+- Definition: High-speed network dedicated to block-level storage
+- Technologies: Fibre Channel, iSCSI, FCoE
+- Pros:
+	- Very fast, scalable, supports databases/VMs
+- Cons:
+	- Expensive, complex
+- Examples:
+	- Enterprise data centers (VMware clusters)
+* "SAN" == Block-level, not file-level	
+
+
+
+<Cloud Concepts>
+$ NFV - Network Functions Virtualization
+- Definition: The virtualization of traditional network services (like firewalls, load balances, routers) into software that runs on commodity hardware.
+- How it works:
+	- Instead of buying physical hardware, you spin up virtual appliances in the cloud or data center.
+	- Managed through orchestrators like OpenStack or VMware NSX
+- Real-world examples:
+	- A virtual firewall instead of a Cisco ASA box.
+	- A virtual load balancer like AWS Elastic Load Balancer (ELB)
+* Don't confuse NFV with SDN (Software-Defined Networking)
+	- NFV = virtual functions (services)
+	- SDN = central control over networking
+
+$ Virtual Private Cloud (VPC)
+- Definition: A logically isolated private subnet in a public cloud provider's environment.
+- How it works: 
+	- You get a slice of AWS, Azure, or GCP with your own private IP ranges, routing tables, and gateways
+	- Think of it as your own private data center inside a public cloud
+- Examples:
+	- AWS VPC
+	- Azure Virtual Network (VNet)
+	- Google VPC
+* VPC = isolated private cloud environment | VPN = encrypted tunnel over public internet
+
+$ NSG - Network Security Group
+- Definition: A virtual firewall/filter for controlling inbound and outbound traffic to resources in a VPC
+- How it works:
+	- Rule-based: allow/deny based on source, destination, port, and protocol
+	- Applied to subnets, NICs, or instances
+- Examples:
+	- Azure NSG
+	- AWS Security Groups
+* NSG != NACL
+	- NSG = stateful (remembers sessions)
+	- NACL = stateless (must allow both inbound and outbound separately)
+
+$ Cloud Gateways
+- Definition: Virtual gateways that connect your on-premises network to the cloud
+- Types:
+	- VPN Gateway -> encrypted tunnel to the cloud
+	- Direct Connect/ExpressRoute -> dedicated private link
+	- Application Gateways -> load balancing + SSL termination
+- Examples:
+	- AWS VPN Gateway
+	- Azure application gateway
+	- Google Cloud Cloud VPN / Interconnect
+* "connect on-premises to cloud" == Cloud Gateway
+
+$ Deployment Models
+- Public Cloud
+	- Provider owns everything, shared infrastructure (AWS, Azure, GCP)
+	- Scalable, cheap, flexible
+	- Less control
+- Private Cloud
+	- Infrastructure dedicated to a single organization (on-premises or hosted)
+	- High security, compliance, control
+	- Expensive
+- Hybrid Cloud
+	- Mix of public + private
+	- Example: Company keeps sensitive data in private cloud, uses public cloud for scalability
+- Community Cloud
+	- Shared by multiple organizations with common goals (e.g, hospitals sharing medical cloud infrastructure)
+* Scalability and cost savings -> Public
+* Compliance and security -> Private
+* Best of both worlds -> Hybrid
+* Shared among similar orgs -> Community
+
+
+
+$ Service Models - The "as-a-service" stack
+- IaaS - Infrastructure as a Service
+	- Virtualized infrastructure (servers, storage, networking)
+	- You manage OS, apps; provider manages hardware
+	- Example: AWS, EC2, Azure VM
+	* "you manage the operating system"
+- PaaS - Platform as a Service
+	- Provider gives devs a ready platform (runtime, DB, middle-wear)
+	- You only deploy the code
+	- Example: AWS Elastic Beanstalk, Google App Engine
+	- "Developers only focus on the app not the servers"
+- SaaS - Software as a Service
+	- Fully managed applications delivered via cloud.
+	- Example: Gmail, Office 365, Salesforce
+	- "End-user just uses the software"
+	
+
+
+<Ports and Protocols>
+*** NOTES ***
+$ FTP - File Transfer Protocol
+- Ports: TCP 20 (data) & TCP 21 (control)
+- Purpose: Transfers files between client and server
+- Example: Uploading website files to a hosting server
+- Pros: Simple, widely supported
+- Cons: Insecure (credentials sent in plaintext)
+- Note: Use SFTP or FTPS instead
+
+$ SSH - Secure Shell
+- Port: TCP 22
+- Purpose: Secure remote login and encrypted communication
+- Example: Admins managing linux servers remotely
+- Pros: Encrypted (replaces Telnet)
+- Cons: Needs client software (e.g, PuTTY)
+
+$ SFTP - SSH File Transfer Protocol
+- Port: TCP 22 (same as SSH)
+- Purpose: Secure file transfers using SSH
+- Example: Secure upload of backups or logs
+- Pros: Encrypted end-to-end
+- Cons: Requires SSH access
+* Don't confuse SFTP with FTPS
+
+$ Telnet
+- Port: TCP 23
+- Purpose: Remote terminal access (plaintext)
+- Example: Legacy network device management
+- Pros: Simple, universal
+- Cons: Completely insecure (everything plaintext)
+
+$ SMTP - Simple Mail Transfer Protocol
+- Ports: TCP 25, TCP 587 (submission), TCP 465 (legacy secure)
+- Purpose: Sends outbound email between clients and servers
+- Example: Outlook sending email to Gmail's SMTP server
+- Pros: Standard email sending
+- Cons: Doesn't handle receiving email (that's POP3/IMAP)
+* "Sending Email" == SMTP
+
+$ DNS - Domain Name System
+- Ports: UDP 53 (queries), TCP 53 (zone transfers)
+- Purpose: Resolves domain names -> IP addresses
+- Example: Translating www.google.com -> 142.250.190.14
+- Pros: Human-friendly names
+- Cons: DNS spoofing/poisoning attacks possible
+
+$ DHCP - Dynamic Host Configuration Protocol
+- Ports: UDP 67 (server), UDP 68 (client)
+- Purpose: Automatically assigns IP addresses, subnet masks, and gateways
+- Example: Your laptop joining Wi-Fi at a coffee shop
+- Pros: No manual config needed
+- Cons: Susceptible to rogue DHCP servers
+
+$ HTTP - HyperText Transfer Protocol
+- Port: TCP 80
+- Purpose: Web browsing (unencrypted)
+- Example: Loading a website without HTTPS
+- Pros: Universal standard
+- Cons: Insecure (plaintext)
+
+$ HTTPS - HyperText Transfer Protocol Secure
+- Port: TCP 443
+- Purpose: Secure web browsing (TLS encryption)
+- Example: Banking, online shopping, basically all modern web
+- Pros: Confidentiality, Integrity, Authentication
+- Cons: Requires certificate management
+
+$ SNMP - Simple Network Management Protocol
+- Ports: UDP 161 (queries), UDP 162 (traps)
+- Purpose: Monitors and manages network devices
+- Example: Network monitoring tools (Nagios, SolarWinds)
+- Pros: Centralized monitoring
+- Cons: SNMP v1/v2 = insecure (plaintext); SNMP v3 = encrypted
+* "Network monitoring/management" == SNMP
+
+$ LDAP - Lightweight Directory Access Protocol
+- Ports: TCP/UDP 389, TCP 636 (LDAPS secure)
+- Purpose: Directory services (stores user info, authentication)
+- Example: Active Directory (Windows logins)
+- Pros: Centralized user management
+- Cons: LDAP (389) = insecure; LDAPS (636) = secure
+* "active directory" or "directory services" = LDAP
+
+$ RDP - Remote Desktop Protocol
+- Port: TCP/UDP 3389
+- Purpose: Remote desktop access with GUI
+- Example: IT support accessing a user's Windows PC
+- Pros: GUI
+- Cons: Security risk if exposed to the internet
+
+$ SIP - Session Initiation Protocol
+- Ports: TCP/UDP 5060 (unencrypted), TCP/UDP 5061 (encrypted with TLS)
+- Purpose: Sets up, manages, and tears down VoIP calls
+- Example: Skype, Zoom, VoIP phones
+- Pros: Flexible, scalable
+- Cons: Only sets up sessions (actual media uses RTP)
+* "VoIP call setup" == VoIP
+
+
+<Traffic Types>
+*** NOTES ***
+$ Unicast
+- Definition: One-to-one communication. A single sender transmits data to a specific receiver.
+- How it works:
+	- Destination = Single IP address
+	- Common in most network traffic (web browsing, SSH, VoIP call between 2 people)
+- Example: 
+	- You type www.google.com into your browser
+	- Your computer sends a unicast request to Google's server IP
+	- Google responds directly to you.
+- Pros:
+	- Efficient for direct communication
+	- Private (only sender and receiver see the traffic)
+- Cons:
+	- If you want to reach multiple users, you must send multiple unicasts -> Wastes bandwidth
+* "Normal network traffic" == Unicast
+
+$ Broadcast - IPv4 Only
+- Definition: One-to-all communication. One sender transmits data to all devices in a broadcast domain
+- How it works:
+	- Destination = Broadcast address
+	- Every device in that subnet receives it
+- Example:
+	- ARP requests ("Who has this IP?")
+	- DHCP discover when a device first joins a network
+- Pros:
+	- Useful for service discovery
+- Cons:
+	- Consumes bandwidth -> every device has to process the broadcast, even if it doesn't care
+	- Doesn't scale well on large networks
+* IPv6 has no broadcast - instead, IPv6 uses multicast and anycast
+
+$ Multicast
+- Definition: One-to-many communication, but only to devices that subscribe to a multicast group
+- How it works:
+	- Destination = Multicast group IP (IPv4 Class D: 224.0.0.0 - 239.255.255.255)
+	- Routers deliver packets only to devices that have joined the group.
+- Example:
+	- IPTV streaming
+	- Online gaming updates to multiple players
+	- Video conferencing
+- Pros:
+	- Efficient: sender only sends one stream -> network replicates it for subscribed receivers
+- Cons:
+	- Requires support form routers/switches
+	- More complex than Unicast
+* Class D addresses or "group communications" = Multicast
+
+$ Anycast (IPv6 and some IPv4 with BGP)
+- Definition: One-to-nearest communication. One sender, multiple possible receivers, but data is routed to the nearest/most optimal
+- How it works:
+	- Multiple devices share the same IP address
+	- Routing decides which one is the "closest" (based on routing metrics, not geographic distance)
+- Example:
+	- DNS root servers (multiple servers worldwide use the same IP)
+	- CDNs like Cloudflare, Akamai, Google
+- Pros:
+	- Load balancing
+	- Faster response times
+- Cons:
+	- Only the closest server responds - not multiple
+* "same IP at multiple locations", "routed to nearest server" = Anycast
+
+
+<Transmission Media>
+$ 802.11 Wi-Fi Standards
+- 802.11a (1999) -> 5 GHz, 54 Mbps
+- 802.11b (1999) -> 2.4 GHz, 11 Mbps
+- 802.11g (2003) -> 2.4 GHz, 54Mbps
+- 802.11n (2009) -> 2.4 GHz & 5 GHz, 600Mbps (MIMO) (Wi-Fi 4)
+- 802.11ac (2013) -> 5 GHz, several Gbps (MU-MIMO) (Wi-Fi 5)
+- 802.11ax (2019) -> 2.4 GHz, 5 GHz, 6 GHz, higher efficiency (OFDMA, MU-MIMO) (Wi-Fi 6)
+- Pros:
+	- Mobility, easy deployment
+- Cons:
+	- Interference, limited range, less secure than wired
+* Wi-Fi 6E adds 6 GHz band
+
+$ Cellular Networks
+- Definition: Wireless communication via mobile carriers
+- Generations:
+	- 2G (GSM, CDMA) -> Voice, SMS
+	- 3G -> Basic mobile Internet
+	- 4G LTE -> Broadband speeds, HD video
+	- 5G -> Ultra-low latency, IoT, gigabit + speeds
+- Pros:
+	- Wide coverage
+	- High mobility
+- Cons:
+	- Dependent on carrier towers
+	- Bandwidth varies with congestion
+- Example:
+	- Remote access, backup WAN links
+* "IoT, low latency, gigabit speeds" -> 5G
+
+$ Satellite
+- Definition: Communication via orbiting satellites
+- Pros: 
+	- Global coverage (even remote areas)
+- Cons:
+	- High latency (geostationary ~600ms)
+	- Weather interference (rain fade)
+	- Expensive
+- Example:
+	- Rural internet, ships, aircraft, military
+* "high latency" == Satellite
+
+$ Wired Transmission Media
+
+$ Fiber Optic
+- Definition: Uses light over glass fibers
+- Types:
+	- Single-Mode (SMF)
+		- Long distance (tens of km)
+		- Expensive lasers, thin core
+	- Multimode (MMF):
+		- Short distance (hundreds of meters)
+		- Cheaper LEDs, thicker core
+- Pros:
+	- Very high bandwidth
+	- Immune to EMI
+	- Long distance
+- Cons:
+	- Fragile, more expensive
+- Example:
+	- ISP backbones, data centers, long-haul links
+
+$ Coaxial Cable
+- Definition: Copper cable with central conductor, shield, and insulation
+- Pros:
+	- Better shielding than twisted pair
+	- Supports legacy broadband and TV
+- Cons:
+	- Bulky, less flexible
+	- Mostly legacy in enterprise
+- Examples:
+	- Cable Internet (DOCSIS)
+	- CCTV Cameras
+	- Old Ethernet (10BASE2, 10BASE5)
+* DOCSIS -> coax
+
+$ Direct Attach Copper (DAC)
+- Definition: A twinax copper cable with transceivers permanently attached
+- Pros:
+	- High speed (10/25/40/100Gbps)
+	- Low latency
+	- Cheaper than fiber for short runs
+- Cons:
+	- Very short distance (1-7m)
+- Example:
+	- Data centers for switch-to-switch or switch-to-server connections
+* "short distance, high speed interconnect inside rack" -> DAC
+
+
+
+<Transceivers and Connectors>
+*** NOTES ***
+$ Fiber Connectors (SC, LC, ST, MPO)
+- SC - Subscriber Connector / Standard Connector / Square Connector
+	- Type: Fiber optic
+	- Shape: Square, snap-in, push-pull connector
+	- Size: Large compared to LC
+	- Usage: Common in enterprise fiber networks with data centers
+	- Characteristics:
+		- Easy push-pull mechanism
+		- Often used in pairs (Tx/Rx)
+		- Good for patch panels
+* "Square connector" or "snap-in fiber" == SC
+- LC - Lucent Connector / Little Connector
+	- Type: Fiber optic
+	- Shape: Small, square, uses a latch/tab (like an RJ45 clip)
+	- Size: Half the size of SC -> high-density usage
+	- Usage: Modern networks, switches, SFP modules
+	- Characteristics:
+		- Duplex (pairs Tx/Rx in one clip)
+		- Smaller form factor = fits more ports in a patch panel
+* "high density fiber" or "small form connector" == LC
+- ST - Straight Tip
+	- Type: Fiber Optic
+	- Shape: Round with bayonet twist-and-lock (like BNC)
+	- Usage: Older fiber networks, legacy installations
+	- Characteristics:
+		- Push in, then twist to lock
+		- Not as common in modern builds (LC/SC dominate now)
+* "Twist-lock fiber connector" == ST
+- MPO - Multi-Fiber Push On
+	- Type: Fiber optic
+	- Shape: Rectangular with a push-on latch
+	- Usage: high-density, multi-fiber cables (40G, 100G, 400G Ethernet)
+	- Characteristics:
+		- Can carry 12, 24, or more fibers in one connector
+		- used in data centers for backbone cabling
+* "high-speed backbone" or "multi-fiber in one connector" == MPO
+
+$ Copper Connectors (RJ11, RJ45, F-Type, BNC)
+- RJ11
+	- Type: Copper (twisted pair)
+	- Pins: 4 or 6 positions (usually 2 or 4 wires used)
+	- Usage: Telephony (landline phones, DSL modems)
+	- Characteristics:
+		- Narrower than RJ45
+		- Not used for Ethernet
+* "telephones" or "DSL" == RJ11
+- RJ45
+	- Type: Copper (twisted pair)
+	- Pins: 8 positions (8 wires, 4 pairs)
+	- Usage: Ethernet (Cat5e, Cat6, Cat6a, Cat7, Cat8)
+	- Characteristics:
+		- Standard for 10/100/1000 Mbps and above.
+		- Uses T568A/T568B wiring standards
+* "Ethernet", "UTP", "Cat cables" == RJ45
+- F-Type
+	- Type: Copper coaxial
+	- Shape: Screw-on threaded connector
+	- Usage: Cable TV, cable modems, satellite TV
+	- Characteristics:
+		- Provides tight connection for RF signals
+		- Standard for residential coax service
+* "cable modem" or "TV coax" == F-Type
+- BNC - Bayonet Neill-Concelman
+	- Type: Copper coaxial
+	- Shape: Round with bayonet twist-lock
+	- Usage: Old Ethernet (10Base2), CCTV cameras, some RF applications.
+	- Characteristics:
+		- Push in, twist to lock
+		- Still seen in surveillance systems
+* "coax + twist lock" == BNC
+
+
+
+<Network Topologies>
+$ Mesh
+- Definition: Every device is connected to every other device
+- Types: 
+	- Full Mesh -> Every node has a link to every other node
+	- Partial Mesh -> Some nodes fully connected, others partially
+- Pros:
+	- High redundancy -> if one link fails, traffic reroutes
+	- Excellent fault tolerance
+- Cons:
+	- Expensive (cabling + hardware)
+	- Exomples to manage at scale
+- Examples:
+	- WANs (MPLS, carrier networks)
+	- Wireless mesh networks (IoT, smart cities)
+
+$ Hybrid
+- Definition: Combination of two or more topologies
+- Pros: 
+	- Flexibility - takes best of multiple designs
+	- Scales easily
+- Cons:
+	- Complexity in design/management
+- Examples:
+	- Enterprise networks mixing star in LAN + mesh in WAN
+	- Office LAN = star, backbone WAN = mesh -> that's hybrid
+
+$ Star/Hub-and-Spoke
+- Definitions: All devices connect to a central device (hub, switch, or router)
+- Star (LAN) -> PCs connected to a central switch
+- Hub-and_Spoke (WAN) -> Branch offices (spokes) connect to a central HQ (hub)
+- Pros:
+	- Simple, cheap, easy to expand
+	- One link down = only that device is affected
+- Cons:
+	- Central device is a single point of failure
+- Example: 
+	- LANs (Ethernet star)
+	- WANs (MPLS hub-and-spoke)
+* Star = typical LAN
+* Hub-and-Spoke = typical WAN
+
+$ Spine and Leaf
+- Definition: Data center design with two layers
+	- Leaf switches -> connect to servers
+	- Spine switches -> connect to all leafs
+- Pros:
+	- Predictability latency
+	- Scales horizontally (add more spines/leaves)
+	- Non-blocking = equal cost paths
+- Cons:
+	- Requires more cabling than simple star
+- Examples:
+	- Modern data centers (VMware NSX, Cisco ACI)
+	- Cloud providers (AWS, Azure backbones)
+* "data centers, equal paths, leaf/spine" == Spine and Leaf
+
+$ Point-to-Point
+- Definition: A single direct connection between two devices
+- Pros:
+	- simple, secure, fast
+	- no intermediaries
+- Cons: 
+	- Doesn't scale - limited to 2 devices
+- Examples:
+	- WAN leased lines (T1, MPLS)
+	- Direct wireless links (microwave, satellite)
+* "two endpoints" == Point-to-Point
+
+$ Three-Tier
+- Definition: Traditional enterprise campus LAN design with 3 layers:
+	- Core -> high-speed backbone (fast routing/switching)
+	- Distribution -> Policy, routing between VLANs, security
+	- Access -> end devices (PCs, printers, APIs)
+- Pros:
+	- Structured, scalable
+	- Easier troubleshooting (clear separation of roles)
+- Cons:
+	- More expensive, more hardware
+- Example:
+	- Classic enterprise networks
+* "Core/Distribution/Access" == Three-Tier
+
+$ Collapsed Core
+- Definition: Two-tier design that combines Core + Distribution into one layer, plus Access layer
+- Why: Used in smaller networks to reduce cost/complexity
+- Pros:
+	- Cheaper, simpler
+	- Still provides redundancy
+- Cons:
+	- Less scalable than full three-tier
+- Example:
+	- Small to medium-sized enterprise LANs
+* "smaller environment" but "distribution + access" == Collapsed Core
+
+
+
+<Ipv4 Addressing>
+*** NOTES ***
+$ Public vs. Private IPv4 addresses
+- Ipv4 addresses are 32 bites long  
+- Public IP: Internet-routable addresses that routers on the internet can forwards packets to
+- Private IP: Not routable on the public internet and used in private networks
+	- To reach the internet private addresses are translated via NAT on the edge device (router/firewall)
+? Why use private addresses? - They conserve the public IP space, enable internal addressing schemes, and increase security.
+- RFC1918 private ranges:
+	- 10.0.0.0/8 == 10.0.0.0 to 10.255.255.255
+	- 172.16.0.0/12 == 172.16.0.0 to 172.31.255.255
+	- 192.168.0.0/16 == 192.168.0.0 to 192.168.255.255
+* If asked "Which address is private?" pick from the above ranges
+* /x just means the first x bits are fixed!
+
+$ APIPA (Automatic Private IP Addressing
+- Range 169.254.0.0/16 (169.254.0.0 to 169.254.255.255)
+- Used by Windows and other OSes when DHCP fails and no static IP exists. 
+	- It gives the host an address so it can talk to other local hosts on the same L2 link that also have APIPA addresses.
+	- NOT routable across routers
+* APIPA = DHCP fail fallback. If you see 169.254.x.x, DHCP didn't provide an address.
+
+$ Loopback
+- Range 127.0.0.0/8 (typically 127.0.0.1 is used)
+- Purpose: address that a host uses to talk to itself (test IP stack).
+	- packets to 127.0.0.1 never leave the host
+? What address can be used to ping the host's own NIC stack? 127.0.0.1
+
+$ Address Classes (historical/classful)
+- Class | First octet range | Purpose              | Default Mask
+- A     | 1-126             | Large networks       | /8 -> 255.0.0.0
+- B     | 128-191           | Medium networks      | /16 -> 255.255.0.0
+- C     | 192-223           | Small networks       | /24 -> 255.255.255.0
+- D     | 224-239           | Multicast            | N/A
+- E     | 240-255           | Experimental/Reserve | N/A
+
+- 127.x.x.x is reserved for loopback (not class A hosts!)
+- Classful addressing is largely obsolete as CIDR/VLSM replaced it
+? What class is 130.25.10.5? First octet 130 -> Class B
+
+$ Subnetting - Fundamentals
+- Goal: divide an IP block into subnets or find network/broadcast/usable addresses.
+* Key Concepts
+	- Prefix length /n = number of network bits. Host bits = 32-n
+	- Number of addresses in a block = 2^(host bits)
+	- Usable host addresses (traditional) = 2^(host bits) - 2 (subtract network and broadcast)
+            	- Exception/nuance: /31 and /32 are special:
+		-  RFC 3021 allows /31 for point-to-point links (2 usable addresses, no broadcast)
+		- /32 represents one host route
+	- Common shortcut values
+		- /24 -> 256 addresses -> 254 usable hosts.
+		- /16 -> 65,536 addresses -> 65,534 usable hosts.
+		- /8 -> 16,777,216 addresses -> 16,777,214 usable hosts.
+		- smaller subnets (/30, /29, /28, etc.) are used for point-to-point or small segments.
+* How to find host counts
+	- Formula: Host bits = 32-prefix; total addresses =2^(host bits); usable = 2^(host bits) -2
+	- /24 host bits = 32-24 = 8
+	- /24 total addresses =  2^8 = 256
+	- /24 usable hosts = 2^8 - 2 = 254
+	- /16 host bits = 32-16 = 16
+	- /16 total addresses = 2^16 = 65,536
+	- /16 usable addresses = 2^16 - 2 = 65,534
+
+$ Mask Notation and Conversion (CIDR vs dotted decimal)
+- CIDR: Classless Inter-domain Routing
+- /24 means 24 bits set to 1 in mask
+- /26 = 11111111.11111111.11111111.11000000 = 255.255.255.192
+- Block size method (fast subnetting)
+	- For the octet that contains the subnet boundary, block size = 256 - (mask value in that octet)
+		- /26 = 255.255.255.192
+		- 256-192 = 64, so subnets start every 64 in the octet: .0, .64, .128, .192
+
+$ Calculating Network, Broadcast, and Usable Range - step by step example.
+? Given IP 192.168.1.130/26, find the network, broadcast, and usable host range.
+	- Step 1: Identify mask and block size
+		- /26 = mask 255.255.255.192, block size 64, subnets .0, .64, .128, .192
+	- Step 2: Find which block contains 130
+		- It's included in .128, so the network address = 192.168.1.128
+	- Step 3: Broadcast address
+		- The block runs .128 to .191, so the broadcast address = 192.168.1.191
+	- Step 4: Usable hosts
+		- First usable = network + 1 = 192.168.1.129
+		- Last usable = broadcast - 1 = 192.168.1.190
+		- Count hosts: /26 has 2^6 = 64 addresses -> 64 - 2 = 62 usable hosts (double check 129...190 inclusive is 62 hosts)
+
+$ VLSM (Variable Length Subnet Mask) - Practical allocation (done properly)
+- What it is: Use different-size subnets inside the same network space to save addresses - allocate biggest subnets first.
+- Worked VLSM example (step-by-step)
+? You have 192.168.10.0/24 and need subnets for: 100 hosts, 50 hosts, 10 hosts, and 2 hosts. Allocate using VLSM
+	- Step 1 - sort by largest need: 100, 50, 10, 2
+	- Step 2 - Find smallest prefix that fits each need (remember usable = 2^(host bits) - 2)
+		- Need 100 hosts -> try /25 (usable 126)
+		- host bits = 7 -> 2^7 = 128; usable = 128-2 = 126;
+		- Need 50 hosts -> /26 = 62 usable
+		- Need 10 hosts -> /28 = 14 usable
+		- Need 2 hosts -> /30 = 2 usable
+	- Step 3 - Allocate all from the start of the /24
+		- Start: 192.168.10.0/24
+		- Subnet 1: 192.168.10.0/25; block size 128; usable 192.168.10.1 to 192.168.10.126; broadcast .127;
+		- Subnet 2: 192.168.10.128/26; block size 64; usable 192.168.10.129 to .190; broadcast .191;
+		- Subnet 3: 192.168.10.192/28; block size 16; usable 192.168.10.193 to .206; broadcast .207;
+		- Subnet 4: 192.168.10.208/30; block size 4; usable 192.168.10.209 to .210; broadcast .211;
+
+$ CIDR (Classless Inter-Domain Routing)
+- Uses prefixes /n rather than classful A/B/C. 
+- Allows for flexible allocation and route aggregation (supernetting)
+- Example of aggregation: two /24s - 192.168.0.0/24 and 192.168.1.0/24 can be summarized as 192.168.0.0/23
+	- Why? Because /23 has 9 host bits (32-23=9) -> 2^9 = 512 addresses = two /24s (2x256 = 512)
+- CIDR can be used to reduce the number of routes in routing tables (route summarization)
+
+$ Multicast, Broadcast, and Special Addresses
+- Multicast 224.0.0.0 - 239.255.255.255 (Class D). Used for one-to-many delivery (streaming, routing protocols)
+- Limited broadcast: 255.255.255.255 is used to broadcast on local network (not forwarded by routers)
+- Directed broadcast: e.g., for network 192.168.1.0/24 directed broadcast = 192.168.1.255 - historically forwarded if router is configured, but often blocked
+- 0.0.0.0: "this network" or default route contexts (used in boot/DHCP)
+- 169.254.0.0: APIPA
+
+
+
+
+
+********************************
+** Network Implementation 20% **
+********************************
+
+<Routing Technologies>
+*** NOTES ***
+$ Static vs. Dynamic Routing
+- Static Routing
+	- Manually configured by an administrator
+	- Router has a fixed path
+	- Pros
+		- Simple for small networks
+		- More secure (not advertised)
+		- No overhead
+	- Cons
+		- Doesn't adapt to network changes
+		- Admin burden in large networks
+- Dynamic Routing
+	- Routers automatically learn new routes via routing protocol
+	- Pros
+		- Adapts to network failures
+		- Reduces admin overhead
+	- Cons
+		- More CPU/Memory use
+		- Less secure if not authenticated
+* If scenario says "large, scalable, adaptive network" -> Dynamic
+
+$ Routing Protocols
+- BGP (Border Gateway Protocol)
+	- Type: Exterior Gateway Protocol (EGP) -> runs between ISPs / ASes
+	- Used for Internet routing (between Autonomous Systems)
+	- Path-vector protocol (uses AS-path, policies)
+	- Very scalable but complex
+	* "routing on the Internet" -> BGP
+- EIGRP (Enhanced Interior Gateway Routing Protocol)
+	- Cisco proprietary (hybrid protocol)
+	- Type: Interior Gateway Protocol (IGP) -> within one AS
+	- Uses DUAL algorithm (fast convergence)
+	* Only works on Cisco; "Cisco proprietary, hybrid" -> EIGRP
+- OSPF (Open Shortest Path First)
+	- Type: Link-state IGP
+	- Uses Dijkstra's algorithm to computer shortest path
+	- Converges quickly, hierarchal (areas)
+	* "open standard, fast convergence, large enterprise" -> OSPF
+
+$ Route Selection
+- Routers use a routing table and choose routes based on administrative distance (AD) and metrics
+- Administrative Distance (AD): Trustworthiness of a route
+	- Connected = 0 (most trusted)
+	- Static = 1
+	- EIGRP = 90
+	- OSPF = 110
+	- RIP = 120
+	- External BGP = 20
+- Metrics: Cost, hop count, bandwidth, delay
+* If multiple routes exist: Lowest AD wins. If AD ties: lowest metric wins
+
+$ NAT (Network Address Translation)
+- Translates private IPs to public IPs
+- Conserves IPv4 addresses
+- Types:
+	- Static NAT: 1:1 mapping (one private to one public)
+	- Dynamic NAT: uses pool of public IPs
+	- PAT: Port Address Translation: Many private IPs share one public IP (adds port numbers)
+- PAT = "NAT Overload" -> Most common
+	- Example: A home network with many devices but one ISP IP
+
+$ FHRP - First Hop Redundancy Protocol
+- Ensures default gateway redundancy
+- Without FHRP, if your gateway router fails -> whole network loses internet
+- Types:
+	- HSRP (Hot Standby Router Protocol) - Cisco Proprietary
+	- VRRP (Virtual Router Redundancy Protocol) - Open standard
+	- GLBP (Gateway Load Balancing Protocol) - Cisco, adds load balancing
+- Virtual IP (VIP): Clients use this as their default gateway. If active router dies, backup takes over seamlessly
+* "Redundant default gateway" -> FHRP
+
+$ VIP - Virtual IP Address
+- A shared IP address used by multiple devices (load balancers, FHRPs)
+- Clients think they're connecting to a single IP, but behind the scenes multiple routers/servers share responsibility
+- Example
+	- HSRP = Gateway VIP
+	- Load balancer VIP = Single IP front-end for multiple web servers
+
+$ Subinterfaces
+- Logical interfaces created on a single physical interface
+- Commonly used in router-on-a-stick setups
+	- One physical router interface handles multiple VLANs by tagging traffic with 802.1q VLAN IDs
+- Example:
+	Router g0/1.10 = VLAN 10
+	Router g0/1.20 = VLAN 20
+* "one router interface handling multiple VLANs" -> Sub-interfaces
+
+
+<Switching Technologies>
+*** NOTES ***
+$ VLANs - Virtual Local Area Networks
+- Definition: Logically separate a physical network into multiple broadcast domains
+- Purpose: Improve security, performance, and management
+- Key points:
+	- Devices in the same VLAN can communicate directly (Layer 2)
+	- Devices in different VLANs require a Layer 3 device (router or L3 switch)
+	- VLAN IDs: 1-4094 (0 and 4095 reserved)
+	- Default VLAN: 1 (management)
+- Types:
+	- Data VLAN: User Traffic
+	- Native VLAN: Untagged traffic on a trunk link (default = VLAN 1)
+	- Voice VLAN: Optimized for VoIP
+* "Separate broadcast domains on a switch" -> VLANs
+* VLAN -> "Virtual Lanes" -> Separate traffic lanes on the same road
+
+$ Interface Configuration
+- Access Port: Belongs to one VLAN only. Example: workstation port
+- Example:
+	- switchport mode access
+	- switchport access vlan 10
+- Trunk Port: Carries multiple VLANs using 802.1Q tagging. Example: switch-to-switch or switch-to-router
+- Example:
+	- switchport mode trunk
+	- switchport trunk allowed vlan 10,20,30
+- Native VLAN: Traffic without tags -> goes to native VLAN
+* If a host can't reach another host in the same VLAN -> check access port config
+* If VLANs can't traverse switches -> check trunk config
+
+$ Spanning Tree Protocol (STP)
+- Definition: Prevents Layer 2 loops (which cause broadcast storms)
+- How it works:
+	- Elects a root bridge (lowest bridge ID = priority + MAC)
+	- Blocks redundant paths, leaves one active path
+	- Uses BPDU (Bridge Protocol Data Units) to detect loops
+- Variants
+	- STP (802.1D) - original, ~50s convergence
+	- RSTP (802.1w) - rapid version, faster convergence (~10s)
+	- MSTP (802.1s) - Multiple spanning tree instances
+
+$ MTU - Maximum Transmission Unit
+- Definition: Largest packet size (in bytes) a network link can carry without fragmentation
+- Default: 1500 bytes for Ethernet
+- Issues
+	- If MTU is too small -> Fragmentation
+	- If too big -> packets get dropped (especially in VPN tunnels)
+* "Path MTU Discovery" -> process to find optimal MTU between endpoints
+
+$ Jumbo Frames
+- Definition: Ethernet frames larger than 1500 bytes (commonly up to 9000 bytes)
+- Purpose:
+	- Reduces CPU overhead for large data transfers
+	- Great for storage networks (SANs) and high-performance computing
+- Requirements: Must be supported end-to-end (all switches, NICs, devices)
+* "large file transfers, SAN, virtualization" -> Jumbo Frames
+
+<Wireless Devices>
+*** NOTES ***
+$ Channels
+- Definition: Subdivisions of a frequency band that carry wireless signals
+- 2.4 GHz band
+	- Channels 1-11 (U.S) -> but only 1, 6, 11 are non-overlapping
+	- More interference (microwaves, Bluetooth)
+- 5 GHz:
+	- Better speed, shorter range, less interference
+- 6 GHz (Wi-Fi 6E)
+	- Even faster, lowest interference, but smallest coverage area
+* "Longer range, penetration" -> 2.4 GHz
+* "High speed, less interference" -> 5/6 GHz
+
+$ Frequency Options
+- 2.4 GHz
+	- Better range, worse speed, more interference
+- 5 GHz:
+	- Better speed, shorter range, less interference
+- 6 GHz (Wi-Fi 6E)
+	- Even faster, lowest interference, smallest coverage area
+
+$ SSID - Service Set Identifier
+- Definition: Name of a wireless network (e.g, "Starbucks_WiFi")
+- Key Notes:
+	- Can be broadcasted or hidden
+	- Hiding SSID != security (easy to sniff)
+* "user can't see the Wi-Fi network" -> SSID broadcast is disabled
+
+$ Wireless Network Types
+- Ad Hoc: Peer-to-peer, no access point
+- Infrastructure Mode: Uses an AP -> standard for enterprises
+- Mesh: Multiple APs connected wirelessly -> extends coverage
+- Hotspot: Public access point, often unsecured
+* "enterprise Wi-Fi" -> infrastructure mode
+
+$ Encryption Standards
+- WEP (Wired Equivalent Privacy)
+	- Old, broken, insecure (don't use)
+- WPA (Wi-Fi Protected Access
+	- TKIP encryption, better, but weak today
+- WPA2:
+	- Uses AES-CCMP, strong, standard for many years
+- WPA3:
+	- Strongest, uses SAE (Simultaneous Authentication of Equals)
+* "most secure today" -> WPA3
+* "Best legacy" = WPA2 with AES
+
+$ Guest Networks:
+- Definition: Separate network for visitors with limited access
+- Purpose: Protects internal resources
+- How it works: VLAN separation or captive portal
+* "allow internet but no access to internal servers" -> Guest Network
+
+$ Authentication Methods
+- Open: No password (public hotspot)
+- Pre-Shared Key (PSK): WPA2/WPA3 with shared password
+- Enterprise (802.1X with RADIUS)
+	- Each user has unique credentials
+	- Strongest authentication model
+- Captive portal: Redirects to login page (hotels, airports)
+* "Coffee shop login page" -> Captive Portal
+* "Enterprise Wi-Fi, unique logins" -> WPA2/WPA3 Enterprise with 802.1X
+
+$ Antennas
+- Omnidirectional:
+	- Radiates 360 degs -> good for general coverage
+- Directional:
+	- Focused bream -> longer distance, point-to-point links
+	- Example: Yagi, parabolic dish
+- MIMO (Multiple Input, Multiple Output)
+	- Uses multiple antennas for higher throughput
+- MU-MIMO (Multi-User MIMO)
+	- Serves multiple devices at once
+* "Extend Wi-Fi across a parking log" -> Directional
+* "Cover office floor" -> Omnidirectional
+
+$ Access Points (APs)
+- Definition: Device that allows wireless clients to join a wired network
+- Types:
+	- Standalone AP: Manually configured
+	- Controller-Based AP (Lightweight): Centrally managed by a WLC (Wireless LAN Controller)
+	- Cloud-managed APs: managed via vendor cloud (Meraki, Aruba)
+- Key Features:
+	- SSID broadcast
+	- Channel and frequency selection
+	- Secuirty settings (WPA2/WPA3)
+* "Enterprise with multiple APs managed centrally" -> Controller-based
+
+
+<Physical Installations>
+*** NOTES ***
+$ Installation Implications
+- Cable Length Limits
+	- Cat5e/Cat6/Cat6a -> 100 meters max (90m horizontal + 10m patch)
+	- Fiber -> Much longer (depends on mm vs. sm)
+	- Exceeding limits = attenuation (signal loss)
+- Bend Radius
+	- Copper/fiber cables have a minimum bend radius (don't bend too tight -> signal distortion)
+- Interference
+	- Keep copper away from fluorescent lights, motors, EMI sources
+	- Use STP if interference is unavoidable
+- Pathways
+	- Use cable trays, raceways, plenum spaces (fire-safe rated)
+- Labeling & documentation
+	- Every cable drop should be labeled for troubleshooting
+
+$ Power Considerations
+- Power over Ethernet (PoE)
+	- IEEE 802.3af (15.4w)
+	- IEEE 802.3at (30W)
+	- IEEE 802.3bt (60-100w)
+- UPS (Uninterruptible Power Supply)
+	- Provides backup during power outages, prevents brownouts/spikes
+- RPS (Redundant Power Supply)
+	- Critical devices (switches, servers) should have dual PSUs
+- Power Budgeting
+	- Ensure switch PoE capacity matches all connected devices
+- Grounding
+	- Prevents electrical hazards and equipment damage
+
+$ Environmental Factors 
+- Rack Layout
+	- Follow rack unit (RU) standards (1U = 1.75")
+	- Heavy devices at the bottom, lighter at the top
+- Cooling
+	- Hot aisle/cold aisle design -> airflow management
+	- Never block vents
+- Temperature & Humidity
+	- Optimal: 64-81 deg F (18-27C)
+	- Humidity: ~40-60% to prevent ESD (electrostatic discharge) or condensation
+- Fire Suppression
+	- FM-200, Halon, or CO2 for data centers (avoid water)
+- Cable Management
+	- Patch panels, velcro ties (not zip ties, which crush cables)
+- Physical Security
+	- Locked racks, restricted access, CCTV
+
+****************************
+** Network Operations 19% **
+****************************
+
+<Documentation>
+*** NOTES ***
+$ Physical vs. Logical Diagrams
+- Physical Diagram
+	- Definition: Shows the actual physical layout of the network - where devices, cables, and racks are located
+	- Purpose: Used by technicians to locate and maintain equipment
+	- Includes:
+		- Device models, serial numbers, rack locations
+		- Cable types and connections	
+		- Physical ports and wiring closets	
+		- Power supplies and UPS units
+	- Tools: Visio, Lucidchart, NetBox, manual rack elevation diagrams
+* "A technician needs to locate equipment" -> Physical Diagram
+- Logical Diagram
+	- Definition: Shows how data flows through the network - subnets, VLANs, IP addressing, routing relationships
+	- Purpose: Used by network engineers to understand topology and routing
+	- Includes:
+		- IP address ranges
+		- VLAN IDs and trunk links
+		- Routing protocols (OSPF, BGP)
+		- Firewalls and logical segmentation
+		- WAN links and VPN tunnels
+* "A network engineer needs to troubleshoot communication paths" -> Logical Diagram
+
+$ Rack Diagrams
+- Definition: A front-view diagram of a server/network rack, showing the placement of equipment (measured in RU (Rack Units))
+- Purpose: Helps plan physical installations and cooling
+- Details
+	- 1U = 1.75 inches
+	- Devices labeled by RU position (Ex: Switch 2U-3U)
+	- Includes UPS, patch panels, cable management bars
+	- Heavy devices (UPS, servers) at bottom, lighter at top
+
+$ Cable Maps
+- Definition: Diagrams or spreadsheets that document how every port and cable in the network connects
+- Purpose: Aids troubleshooting and moves/adds/changes (MACs)
+- Details:
+	- Include: Cable ID, type, source/destination, patch panel port, length
+	- Example: Cable #C-015 -> Patch Panel A-Port 8 -> Switch 1 - Port 12
+	- Often used with labeling systems and cable testers
+* "To trace an unknown cable" -> Check cable map
+
+$ Network Diagrams
+- Definition: Broad visual representation of the entire topology, combining physical and logical views
+- Purpose: Provides overview of all network connections, locations, and devices
+- Includes:
+	- WAN/LAN boundaries
+	- Routers, switches, firewalls, servers, ISPs
+	- IP ranges and VLANs
+- Tool: Microsoft Visio, Draw.io, NetBrain
+* "Engineer wants to visualize all routers and subnets" -> network diagram		
+
+$ Asset Inventory
+- Definition: Comprehensive list of all hardware and software assets in the network
+- Purpose: Tracks lifecycle, warranty, and security posture
+- Details:
+	- Hardware: Serial number, model, location, owner
+	- Software: OS, license keys, firmware version
+	- Include peripheral devices and IoT nodes
+- Automation Tools: Lansweeper, SolarWinds, ManageEngine Asset Explorer
+* "Identify outdated firmware or missing device" -> consult asset inventory
+
+$ IP Address Management (IPAM)
+- Definition: The centralized system for tracking and managing IP addresses, subnets, and DNS/DHCP records
+- Purpose: Prevent IP conflicts, manage DHCP scopes, track utilization
+- Functions:
+	- Manage IPv4/IPv6 assignments
+	- Integrate with DNS and DHCP servers
+	- Show which addresses are available/used
+- Tools: Infoblox, phpIPAM, BlueCat
+* "Prevent duplicate IP assignment" -> Use IPAM
+
+$ Service Level Agreement (SLA)
+- Definition: A contract between a service provider and customer, defining expected performance and responsibilities
+- Purpose: Set expectations for uptime, response time, and penalties
+- Common Metrics: 
+	- Uptime/Availability: e.g., "99.9% uptime" = ~43.8 mins downtime/month
+	- Response/Resolution Time: e.g., "Response within 1 hour for Priority 1 incidents?
+	- Throughput/Latency guarantees for WAN or cloud services.
+- Monitoring: Network admins use tools to verify SLA compliance
+* "agreement defines uptime and response time" -> SLA
+
+$ Wireless Surveys
+- Passive Site Survey
+	- Listen-only mode - maps existing Wi-Fi coverage, interference, and signal strength
+	- Tool: Ekahau, NetSpot, AirMagnet
+	- Used for troubleshooting and optimization
+- Active Site Survey
+	- Client connects to APs and measures performance (throughput, latency)
+	- Used to validate new installations or upgrades
+- Predictive Survey
+	- Simulated design based on floor plans and materials - used before deployment
+	- Uses algorithms to predict coverage based on wall types, AP power, antenna patterns
+- Survey Goals
+	- Identify dead zones, interference, and optimal AP placement
+	- Ensure coverage overlaps 10-15% between cells
+	- Avoid co-channel interference on same frequency
+* "Determine best AP placement before installing hardware" -> Predictive survey
+* "Identify dead zones in an existing network" -> Passive Survey
+
+
+
+<Life-cycle Management>
+*** NOTES ***
+$ What it is
+- Definition: The process of taking, maintaining and replacing network hardware and software from initial deployment until final retirement.
+- Goal: Keep the network secure, reliable, and compliant by ensuring outdated or unsupported devices and software are replaced and upgraded.
+- Phases:
+	- Planning - Choosing compatible hardware/software
+	- Procurement - Purchasing and documenting assets
+	- Deployment - Installing and configuring
+	- Maintenance - Updating,, patching, monitoring
+	- EOL/EOS - Decommission and replace
+
+$ End-of-Life (EOL)
+- Definition: Means the vendor has stopped selling or manufacturing a product
+- Implications:
+	- No new purchase or hardware replacements available.
+	- Limited warranty or parts availability
+	- Vendor recommends upgrading to newer model
+
+$ End-of-Support
+- Definition:
+	- The vendor no longer provides technical support, security patches, or updates
+- Implications:
+	- No bug/security fixes
+	- Incompatibly with newer hardware/software
+	- Increased operational and security risk
+? 'a network device is still functional but receives no updates -> End of Support
+
+$ Software Management
+- Software/Firmware updates
+	- Keep firmware up to date to fix bugs and vulnerabilities
+	- Plan updates during maintenance windows
+	- Use centralized management tools 
+	- Maintain version control
+- Patch Management
+	- Schedule regular patches
+	- Apply security patches first, then feature updates
+	- Always test patches in a lab or staging environment before production
+	- Document all updates
+- Change Management
+	- Formal process for applying software updates or configuration changes
+	- Steps: Request -> Review -> Approve -> Test -> Implement -> Document -> Review
+	- Reduces risk of outages or misconfigs.
+- Configuration Management
+	- Maintain consistent configurations using automation tools (Ansible, Puppet, Chef)
+	- Use backups and version control for router/switch configs.
+- Software Licensing
+	- Track license expirations, seat counts, and usage
+	- Noncompliance can cause legal or operational issues.
+
+$ Decommissioning
+- Definition: The controlled retirement and removal of hardware for software that is no longer secure, supported, or needed
+- Steps to proper decommissioning:
+	- Plan the Decommissioning
+		- Verify the device's replacement is operational
+		- Schedule during low-impact periods
+		- Notify affected users/departments
+	- Data Sanitization
+		- Wipe all storage (hard drives, flash memory) using secure methods
+		- Use NIST SP 800-88 guidelines for data destruction (overwrite, degauss, shred)
+		- Critical to prevent data leaks
+	- Remove from Network:
+		- Delete IP/DNS entries
+		- Remove from authentication systems (RADIUS, AD)
+		- Update documentation (asset inventory, diagrams, IPAM)
+	- Disposal or Recycling
+		- Use certified e-waste vendors or return to manufacturer
+		- Follow environmental and compliance standards
+	- Post-Decommission Documentation:
+		- Update asset inventory (mark device as retired)
+		- Record reason for removal and replacement details
+
+
+<Change Management>
+*** NOTES ***
+$ What it is
+- Definition
+	- Change management is the structured process of planning, approving, implementing, and documenting changes
+		to a networks infrastructure or configuration.
+- Purpose:
+	- To ensure every change is:
+		- Safe
+		- Controlled
+		- Documented
+		- Reversible
+
+$ The Change Management Lifecycle
+- Step 1: Change Request (RFC - Request for Change)
+	- Definition: A formal request submitted to propose a network change
+	- Includes:
+		- Description of the change
+		- Business justification
+		- Devices/services affected
+		- Risk assessment
+		- Rollback plan
+		- Requested day/time window
+		- Responsible parties
+	
+? 'Technician must document potential impacts and rollback plan" -> Change Request
+
+- Step 2: Review and Approval
+	- The Change Advisory Board (CAB) or management team reviews the request
+	- They assess:
+		- Risk vs. Reward
+		- Impact on business operations
+		- Scheduling (maintenance window suitability)
+		- Rollback and testing plans
+	- Only after approval can the change proceed
+? 'Who authorizes the change?' -> Change Advisory Board (CAB)
+
+- Step 3: Planning and Testing
+	- Changes are tested in a lab/staging environment first
+	- Testing verifies:
+		- Functionality
+		- Compatibility
+		- Rollback procedure works
+	- Change Plan Should Include:
+		- Step-by-step implementation procedure
+		- Verification checklist
+		- Rollback steps
+		- Responsible technicians
+? 'Technician applied change without testing; network went down' -> Change Management Process
+
+- Step 4: Implementation
+	- The actual deployment of the approved change
+	- Typically occurs during maintenance windows (off-peak hours)
+	- Admins follow the approved change plan exactly - no improvisation
+	- All actions are logged in real-time
+? "When is the change actually made?" -> Implementation Phase
+
+- Step 5: Verification / Validation
+	- Confirm the change achieved the intended outcome
+	- Test all affected services to ensure they're operational
+	- Document results and any deviations from the plan
+? "The technician confirms network performance after modification" -> Verification Stage
+
+- Step 6: Documentation and Tracking
+	- Update:
+		- Network diagrams
+		- Asset inventory
+		- IPAM records
+		- Configuration management database (CMDB)
+	- Record:
+		- Who made the change
+		- When and why was it made
+		- Results and issues encountered
+	- Tracking Tools:
+		- ITSM systems (ServiceNow, Jira Service Management, SolarWinds service Desk)
+		- CMDB (Configuration Management Database)
+? "If a switch was replaced but asset records weren't updated" -> failure in change tracking/documentation
+
+- Step 7: Post-Implementation Review
+	- Team evaluates:
+		- Was the change Successful?
+		- Were there unexpected issues?
+		- Lessons learned for next time
+	- CAB signs off and closes the request
+? "Meeting after change implementation to review success" -> Post-Implementation review
+
+
+<Configuration Management>
+*** NOTES ***
+$ What it is:
+	- Definition: Configuration Management (CM) is the systematic process of maintaining consistent settings and records 
+		for network devices and systems - routers, switches, firewalls, servers, etc.
+	- Goal:
+		- Ensure devices operate predictably
+		- Prevent configuration drift (unauthorized or accidental changes)
+		- Enable rapid recovery from failures
+		- Provide auditability and version control
+	- Core Principles of CM:
+		- Consistency - All devices follow the same configuration standards
+		- Control - Only authorized changes are made
+		- Documentation - Every configuration is recorded and versioned
+		- Recovery - Backups are maintained for fast restoration
+
+$ Production Configs
+	- Definition: The live, active configurations currently running on devices in the production network
+		- The configs actually being used in operation
+		- Stored in the device's running configuration memory (RAM) or startup config (NVRAM)
+		- Directly impacts network performance, connectivity, and security
+	- Key Concepts:
+		- Should always match what's documented in the configuration management
+		- Changes must go through change management (no manual edits in production without approval)
+		- Often mirrored to a backup repository after every authorized change
+	- Best Practices:
+		- Never edit configs directly on production devices unless absolutely necessary
+	? "Which config represents the settings actively being used?" -> Production Configuration
+
+$ Backup Configs
+	- Definition: A stored copy of a device's configuration, used to restore functionality after a failure,
+		corruption, or unauthorized change.
+
+	- File Type          | Location                      | Purpose
+	  Running-config     | RAM                           | Active memory settings (lost on reboot)
+	  Startup-conifg     | NVRAM/Flash                   | Saved configuration loaded at boot
+	  Backup config file | External storage or CM system | Used for recovery and auditing
+
+	- Backup Methods:
+		- Manual: copy running-config TFTP: or scp to a server
+		- Automated: Scheduled nightly/weekly backups via network management software
+		- Centralized: Tools like SolarWinds NCM, RANCID, or Ansible pull configs automatically
+	- Backup Storage Best Practices
+		- Store in secure, off-site, or cloud locations (encrypted)
+		- Maintain multiple versions (version history)
+		- Label backups clearly with device name, version, and timestamp
+		- Regularly test restore procedures to ensure integrity
+	? "A switch fails and must be replaced; technician restores configuration from last saved file" -> Backup Configuration
+
+$ Baseline Configs
+	- Definition: A known-good, approved configuration that defines the standard setup for a device or system.
+	- Serves as a reference point for comparison and compliance - the "gold standard" configuration
+	- Purpose:
+		- Acts as the template for new device deployments
+		- Provides a benchmark for detecting unauthorized changes
+		- Use for configuration drive analysis and compliance audits
+	- Baseline Config Includes:
+		- VLANs, IP addressing, routing protocols
+		- Security policies, ACLs, port settings
+		- SNMP community strings, logging syslog, NTP configuration
+		- Software/firmware version
+		- Device hostname and management access settings
+	- Process to Establish a Baseline
+		- Verify configuration is fully functional and approved
+		- Document and label as "baseline version"
+		- Store securely in CM system
+		- Compare future configs against it for changes
+	? "What configuration should be used to compare against future unauthorized changes?" -> Baseline configuration
+
+
+<Network Monitoring>
+*** NOTES ***
+$ SNMP (Simple Network Management Protocol)
+- Purpose: SNMP allows network monitoring systems (NMS) to collect information from and configure network devices like routers, switches, and firewalls
+- Function: 
+	- Devices run an SNMP agent
+	- The monitoring server (NMS) is the manager
+	- They communicate using UDP ports 161 (requests) and 162 (traps/alerts)
+- Key Components:
+	- Agent: Software running on a managed device that gathers metrics (CPU, memory, interface status)
+	- NMS (Manager): Central server that polls or listens for SNMP messages
+	- MIB (Management Information Base): Database of objects/variables the agent can report (like interface speed, uptime, packet counts)
+	- OID (Object Identifier): Numeric address of each item in the MiB (e.g. 1.3.6.1.2.1.2.2.1.10 = interface in octets)
+- Operations
+	- GET: NMS requests a value from the agent
+	- SET: NMS changes a value on the device
+	- TRAP/INFORM: Agent sends an unsolicited alert (e.g, link down, high CPU)
+- Versions:
+	- SNMPv1 had no security and sent plain-text community strings
+	- SNMPv2 had minimal security and added bulk transfer and better performance while remaining unsecure
+	- SNMPv3 has strong security with authentication + encryption (secure, modern standard)
+
+$ Flow Data (NetFlow, sFlow, IPFIX)
+- Purpose: Flow data provides summary-level information about traffic patterns - who's talking to whom, how much data, and over which protocols.
+	- Unlike SNMP, which monitors device health, Flow data monitors traffic behavior
+- Key Concepts
+	- NetFlow (Cisco): Exports flow records (source/destination IPs, ports, protocol, bytes, etc.)
+	- sFlow (standardized): Uses sampling; can monitor layers 2-7
+	- IPFIX (IETF standard): Successor to NetFlow v9 (vendor-neutral)
+- Use Cases:
+	- Bandwidth analysis
+	- Detecting DDoS or exfiltration
+	- Identifying top talkers
+	- Understanding traffic baselines
+- Tools:
+	- Cisco NetFlow Analyzer
+	- SolarWinds NTA
+	- nProbe, ntopng, Plixer Scrutinizer
+? 'Monitoring who is talking to whom and how much data" -> Flow Data
+
+$ Packet Capture
+- Purpose: Captures and analyzes individual packets (deep inspection)
+	- Used for troubleshooting, performance analysis, or investigating security incidents
+- Tools:
+	- Wireshark, tcpdump, Tshark
+- What you can see:
+	- Headers (MAC, IP, TCP/UDP)
+	- Payloads (Actual data)
+	- Flags, retransmissions, errors
+	- Latency or jitter issues
+- Modes:
+	- Normal: Captures packets destined for the host
+	- Promiscuous: Captures all packets on the LAN segment
+	- Monitor: Captures wireless traffic (used with Wi-Fi adapters)
+- Use Cases:
+	- Troubleshooting latency or retransmissions
+	- Verifying encryption (http handshake)
+	- Investigating intrusion attempts
+? Analyzes the actual content of packets" or "captures frames for offline inspection" -> Packet Capture
+
+$ Baseline Metrics
+- Definition: A baseline set of normal performance measurements collected over time that defines "healthy" network behavior
+- Common Baseline Metrics
+	- Bandwidth Utilization: % of link usage under normal load
+	- Latency: Typical delay between hosts
+	- Jitter: Variation in packet delay
+	- Error Rate: CRC errors, collisions
+	- CPU/MEMORY Utilization: Device performance under normal conditions.
+- Purpose:
+	- Detect deviations that signal performance issues or attacks
+	- Establish thresholds for alerts in monitoring systems
+	- Identify capacity planning trends
+
+$ Log Aggregation
+- Definition: The process of collecting and centralizing logs from multiple devices into one place for correlation, analysis, and long-term storage.
+- Tools & Protocols
+	- Syslog: UDP/TCP 514: Sends logs from routers, switches, servers
+	- SIEM Systems: Splunk, Graylog, ELK stack: Aggregate, correlate, and visualize logs
+	- Cloud services: AWS CloudWatch: Azure Monitor: Cloud-native log collection
+- Log Types to Aggregate:
+	- System logs (OS)
+	- Network device logs
+	- Application logs
+	- Firewall and IDS alerts
+	- Authentication logs (RADIUS, TACACS+)
+? "Collect logs from many devices into one dashboard" -> Log Aggregation
+? "Correlating logs for security insights" -> SIEM
+
+$ API Integration
+- Definition: An API (Application Programming Interface) allows software systems (like NMS or SIEM tools) to communicate programmatically with devices or platforms
+- Why it matters:
+	- Modern networking gear (Cisco, Palo  Alto, ect.) Supports RESTful APIs
+	- Enables automation and monitoring without manual CLI commands
+	- Used by monitoring tools to query deices for stats, logs, or configurations
+? "Retrieves data using HTTP requests instead of SNMP" -> API Integration
+
+$ Port Mirroring (SPAN)
+- Definition: Port Mirroring or SPAN - Switched Port Analyzer is the process of copying all network traffic from one or more ports on a switch to a dedicated monitoring port
+- Purpose: Allows a monitoring or IDS/IPS device to analyze traffic without interrupting normal flow
+- Key Concepts:
+	- Source port(s): The port(s) who's traffic you want to monitor
+	- Destination port: The port that receives the mirrored traffic
+	- SPAN session: The configured mirroring process
+	- RSPAN: Remote SPAN - sends mirrored traffic across multiple switches
+? "A copy of all traffic is sent to a monitoring port" -> Port Mirroring or SPAN
+
+
+<Disaster Recovery>
+*** NOTES ***
+- Core Concepts
+	- RPO (Recovery Point Objective)
+	- RTO (Recovery Time Objective)
+	- MTTR (Mean Time To Repair)
+	- MTBF (Mean Time Between Failures)
+	- Cold / Warm / Hot Sites
+	- Active-Active vs. Active-Passive
+	- Disaster Recovery Testing
+
+$ What is Disaster Recovery (DR)?
+- Definition: DR is the process and plan for restoring IT systems and network operations after a major disruption (natural disaster, power failure, cyberattack, data corruption, etc.)
+- Goal: Minimize downtime, data loss, and business support
+- Related Concepts:
+	- Business Continuity (BC): Keeping the business running during and after an incident
+	- Disaster Recovery (DR): Restoring systems and data after the incident
+
+$ RPO (Recovery Point Objective)
+- Definition: How much data loss the organization can tolerate during a disaster
+- Example: If your RPO = 2 hours, that means backups must occur often enough that the business can survive losing up 2 hours of data
+? "RPO" -> How much data you can lose
+
+$ RTO (Recovery Time Objective)
+- Definition: How long it takes to restore operations after a disaster
+- Example: if RTO = 4 hours, your recovery plan must get systems operational within 4 hours after failure
+? "RTO" -> How long you can be down
+
+$ MTTR (Mean Time To Repair)
+- Definition: Average time it takes to repair or restore a failed component or service
+? "MTTR" -> Average repair time
+
+$ MTBF (Mean Time Between Failures)
+- Definition: Average time between one failure and the next
+? "MTBF" -> Reliability metric, not downtime
+
+$ Cold, Warm, and Hot Sites
+- These refer to recovery site readiness levels - alternate locations where business operations can resume
+- Cold Site: Empty building or minimal infrastructure: no equipment required, slowest recovery speed, lowest cost
+- Warm Site: Has power, network, and some equipment, medium recovery speed, medium cost
+- Hot Site: Fully functional, real-time replication with full equipment, fastest recovery speed, highest cost
+
+$ Active-Active vs. Active-Passive
+- Active-Active: Both systems are live and share the workload
+	- If one fails, the other already has the same data and continues seamlessly
+	- Common in data centers, load balancing, and clustered databases.
+- Active-Passive: One system is live, the other sites idle
+	- Passive node activates only during failover
+	- Simpler and cheaper but slower to failover
+
+$ Disaster Recovery Testing
+- Purpose: To verify that disaster recovery plans actually work - not just exist on paper
+- Types of DR Tests:
+	- Checklist / Tabletop: Review DR plan on paper with team discussion
+	- Simulation / Walkthrough: Simulated disaster event; staff perform procedures
+	- Parallel Test: Secondary systems activated alongside production (wihtout interruption)
+	- Full interruption Test: Production systems taken offline to test complete recovery
+
+<Network Services>
+*** NOTES ***
+$ DHCP (Dynamic Host Configuration Protocol)
+- Purpose: Automatically assigns IP addresses and other network configuration parameters (subnet mask, gateway, DNS servers) to hosts
+- Protocol: UDP (Ports 67 for server, 68 for client)
+- How it Works - The DORA Process
+	- D - Discover: Client broadcasts to find DHCP servers; Message Type: Broadcast
+	- O - Offer: Server responds with an IP lease offer; Message Type: Broadcast
+	- R - Request: Client requests the offered address; Message Type: Broadcast
+	- A - Acknowledge: Server confirms lease and sends config info; Message Type: Broadcast/Unicast
+- Result: Client receives an IP address, subnet mask, gateway, DNS server, and lease time.
+- DHCP Lease Terms:
+	- Lease Time: Duration the IP is assigned
+	- Reservation: Permanent IP assignment at a specific MAC address
+	- Scope: Range of IP addresses available for lease
+	- Exclusion Range: IPs within the scope that are not assigned
+	- Relay Agent: Forwards DHCP broadcasts across routers (UDP 67/68 -> uses IP Helper Address)
+? If a client shows an IP starting with 169.254.x.x, DHCP failed - and APIPA took over.
+
+$ SLAAC (Stateless Address AutoConfiguration)
+- Purpose: Automatically configures IPv6 addresses without a DHCPv6 server.
+- Key Concept: SLAAC uses ICMPv6 messages and Router Advertisements (RA) to let hosts self-generate their IPv6 address.
+- How SLAAC Works:
+	- Router Advertisement (RA): Router sends out network prefix info
+	- Host Self-Configures: Host appends its own interface ID (usually from MAC address via EUI-64)
+	- Optional DNS info: Sent using RDNSS (Recursive DNS Server option) in the RA
+- Example:
+	- Router Prefix = 2001:db8:acad:1::/64
+	- Host MAC = 00-1A-2B-3C-4D-5E
+	- Generated IPv6 = 2001:db8:acad:1:21a:2bff:fe3c:4d5e
+- Advantages:
+	- No DHCP server needed
+	- Simple Fast setup
+- Disadvantages:
+	- Limited control (no centralized lease management)
+	- Harder to manage large enterprise networks
+? If IPv6 devices get addresses without DHCP, it's SLAAC using ICMPv6 Router Advertisements
+
+$ DNS (Domain Name System)
+- Purpose: Translates domain names (like google.com) into IP addresses that computers use to communicate
+- Protocol: UDP/TCP port 53
+
+- How DNS Resolution works:
+	- Client Query: User enters "example.com" -> DNS request sent to resolver
+	- Recursive Resolver: Queries multiple servers on behalf of client
+	- Root Server: Directs query to appropriate TLD server (.com, .net, etc.)
+	- TLD Server: Points to the authoritative server for "example.com"
+	- Authoritative Server: Returns final IP address
+	- Caching: Resolver stores the answer (TTL - Time to Live)
+- DNS Record Types:
+	- A: IPv4 address: example.com -> 93.184.216.34
+	- AAAA: IPv6 address: example.com -> 2606:2800:220:1:248:1893:25c8:1946
+	- CNAME: Alias for another domain: mail.example.com -> ghs.google.com
+	- MX: Mail Server: example.com -> mail.example.com
+	- PTR: Reverse lookup (IP -> hostname): 93.184.216.34 -> example.com
+	- TXT: Misc info (SPF, DKIM, etc): SPF record for email validation
+	- NS: Nameserver delegation: ns1.example.com
+- Forward vs Reverse Lookup Zones
+	- Forward: Name -> IP
+	- Reverse: IP -> Name
+? "resolves hostnames to IPs" -> DNS A or AAAA
+? " Resolves IPs to hostnames" -> PTR record
+
+$ NTP (Network Time Protocol)
+- Purpose: Synchronizes the clocks of network devices to a reference time source
+- Protocol: UDP 123
+- Why it Matters?:
+	- Log correlation and security audits require consistent timestamps
+	- Encryption (Kerberos, TLS) relied on time accuracy
+- How it Works:
+	- Devices form a hierarchical system of 'strata'
+		- Stratum 0: Atomic clock or GPS reference (satellite)
+		- Stratum 1: Server directly connected to Stratum 0 (time.nist.gov)
+		- Stratum 2: Syncs from Stratum 1, and so on (your router)
+	- Offset: Difference between system time and reference time
+? Which protocol ensures all devices have synchronized timestamps? -> NTP
+
+$ PTP (Precision Time Protocol)
+- Purpose: Provides high-accuracy time synchronization, better than NTP, for environments that need sub-microsecond precision. (financial networks, telco, etc.)
+- Defined in: IEEE 1588
+- How it Works:
+	- Uses a master-slave clock model
+	- Syncs time using hardware time stamping (NIC or switch-level)
+	- Accounts for network delay asymmetry, unlike NTP
+	- Common in Ethernet and industrial control systems
+
+$ NTS (Network Time Security)
+- Purpose: Provides cryptographic authentication and integrity for NTP messages - preventing spoofing or MITM attacks
+- Problem it solves:
+	- NTP is plaintext, so attackers could send fake time updates
+	- NTS adds TLS encryption and authentication tokens
+- How it Works:
+	- NTP client connects to NTS-enabled server using NTS-KE (Key Establishment) over TLS (port 4460)
+	- Secure session keys are exchanged
+	- Future NTP packets use those keys for integrity verification (UDP 123)
+- Key Features:
+	- Protects against time-spoofing attacks
+	- Backward-compatible with NTP
+	- Standardized in RFC 8915
+? "Which protocol secures NTP communications using encryption and authentication?" -> NTS
+
+<Access and Management>
+*** NOTES ***
+$ VPNs (Virtual Private Networks)
+- Definition: A VPN creates an encrypted "tunnel" through an untrusted network (like the internet), allowing private, secure communication between endpoints
+- Key Types of VPNs:
+	Type           | Description                                                         | Common Use
+	Remote Access  | Individual users connect to a private network from remote locations | Remote workers, telecommuting
+	Site-to-Site   | Connects two LANs over the internet                                 | Linking branch offices
+	Client-to-Site | Specific user authenticates into a network                          | Employees or contractors
+	Clientless     | Uses a web browser (no software)                                    | Temporary / Limited access
+- Tunneling Protocols
+	Protocol      | Layer         | Encryption                | Notes
+	PPTP          | 2             | Weak (MS-CHAPv2)          | Deprecated 
+	L2TP/IPsec    | 2+3           | Strong (IPsec encryption) | Common enterprise VPN
+	SSTP          | 7 (SSL/TLS)   | Strong                    | uses TCP 443 (firewall-friendly)
+	OpenVPN       | 4 (TLS-based) | Strong                    | Open-source, flexible
+	IKEv2 / IPsec | 3             | Strong                    | Fast reconnect, ideal for mobile devices
+	WireGuard     | 3             | Very strong, modern       | Minimal overhead, open-source
+- Key VPN Concepts
+	Concept         | Meaning
+	Tunnel          | Encapsulated, encrypted pathway between peers
+	Encapsulation   | Wrapping packets with additional headers for secure transmission
+	Encryption      | Secures data (AES, ChaCha20, etc)
+	Authentication  | Verifies identity before connection (certs, PSK, MFA)
+	Split Tunneling | Sends some traffic through VPN, other traffic direct
+	Full Tunnel     | Routes all traffic through VPN (more secure)
+
+$ SSH (Secure Shell)
+- Definition: SSH provides secure, encrypted remote command-line access to network devices and servers. It replaced Telnet because Telnet transmits data in plaintext
+- Ports: TCP 22
+- SSH Features:
+	Function                  | Description
+	Secure Remote Access      | Admin connects securely to CLI of routers, switches, servers
+	Encrypted File Transfer   | SCP and SFTP run over SSH
+	Tunneling/Port Forwarding | Securely forwards other protocols through SSH
+	Public-Key Authentication | uses key pairs (no passwords) for higher security
+- Key Components
+	- Client: The initiating device
+	- Server: The device being accessed
+	- Key Pair: Public/Private keys used for authentication
+	- Session Encryption: Symmetric cipher negotiated during handshake
+
+$ GUI (Graphical User Interface)
+- Definition: A GUI allows administrators to manage devices through a visual interface
+
+$ API (Application Programming Interface)
+- Definition: An API allows software applications to communicate with each other - commonly used for automating network configuration and monitoring
+- Use in Networking:
+	- REST API: Configure network devices programmatically (JSON over HTTP)
+	- SNMP API: Retrieve monitoring data
+	- NETCONF / YANG: Automate network provisioning
+	- Cloud APIs: Manage AWS VPCs, Azure NSGs, etc.
+
+$ Console (Serial / Direct Access)
+- Definition: The console port provides direct physical access to a device for configuration - no network required
+- Usually used for initial setup, recovery, or when network access fails.
+- Console Connection Types
+	- Port                 | Connector          | Notes
+	- RJ45 (serial console | RJ45-to-USB or DB9 | Common on Cisco gear
+	- USB Console          | USB Type-B         | Newer Equipment
+	- Serial (RS-232)      | DB9                | Legacy Systems
+- Terminal Emulators: PuTTY, Tera Term, SecureCRT
+? "Which management method allows configuration when no network is available?" -> Console Access
+
+**************************
+** Network Security 14% **
+**************************
+
+<Logical Security>
+*** NOTES ***
+$ Encryption
+	- Encryption transforms data into unreadable cipher-text using algorithms and keys, ensuring confidentiality and integrity
+	- Types of Encryption:
+		- a. Data in Transit
+			- Protects data moving across a network
+			- Common methods:
+				- TLS/SSL -> Encrypts web traffic (HTTPS, SMTP, IMAPS)
+				- IPsec -> encrypts IP packets (VPNs)
+				- SSH -> encrypts terminal sessions
+				- WPA2/WPA3 -> encrypts wireless communication
+			? "Which encryption method secures data between two sites over the internet?" -> IPsec (data in transit)
+		- b. Data at Rest
+			- Protects stored data (on disks, USBs, backups)
+			- Common methods:
+				- BitLocker / LUKS (drive encryption)
+				- AES (Advanced Encryption Standard) - Symmetric key, strongest standard
+				- File-level encryption (EFS)
+			? "How do you protect data if a laptop is stolen?" -> Full disk encryption (data at rest)
+		- Encryption Algorithms:
+			Type       | Algorithm        | Description
+			Symmetric  | AES, DES, 3DES   | Same key for encrypt/decrypt; fast
+			Asymmetric | RSA, ECC         | Public/private key pair; slower but secure
+			Hashing    | SHA-2, MD5       | One-way; used for integrity checks
+
+$ Public Key Infrastructure (PKI)
+	- PKI is the framework for managing, issuing, and revoking digital certificates that enable secure communication
+	- Component                       | Function
+	Certificate Authority (CA)        | Issues and validates digital certificates
+	Registration Authority (RA)       | Verifies identities before certificate issuance
+	Certificate Revocation List (CRL) | List of revoked/ expired certs
+	OCSP                              | Checks certificate validity in real-time
+	Digital Certificate               | Binds a public key to an identity
+	- Common uses:
+		- HTTPS (SSL/TLS) for websites
+		- Email encryption (S/MIME)
+		- VPN authentication
+		- Code signing for software trust
+	? "What component checks if a digital certificate is still valid?" -> OCSP
+
+$ Identity and Access Management (IAM)
+	- Key Concepts:
+		- Authentication: Proving identity (who you are)
+		- Authorization: Determining what you can do
+		- Accounting (Auditing): Tracking what you did (logs, reports)
+	- Together -> AAA (Authentication, Authorization, Accounting)
+	- Authentication Factors:
+		Something you know: Password, Pin
+		Something you have: Smart card, token
+		Something you are : Fingerprint, face, iris
+		Somewhere you are : GPS/geolocation
+		Something you do  : Typing rhythm, behavior
+	? "What combines a smart card and a fingerprint scan?" -> Multi-factor authentication (two different factors)
+
+$ MFA (Multi-factor Authentication)
+	- Combines two or more different factor types for stronger security
+	- Example: Password (knowledge) + Authenticator app (possession)
+	- MFA Methods:
+		Hardware tokens (RS SecureID)
+		Software tokens (Google Authenticator, Authy)
+		Push notifications
+		SMS codes
+		Biometric authentication
+	? "Which factor type is a fingerprint?" -> Something you are
+
+$ SSO (Single Sign-On)
+	- Allows users to authenticate once and gain access to multiple systems without re-entering credentials
+	- How it Works:
+		- Relies on federated identity systems (trust between organizations)
+		- uses standards like SAML or OAuth/OpenID Connect
+		- Common in enterprise environments (Microsoft 365, google workspace)
+	? "What allows users to access multiple applications after one login?" -> SSO
+
+$ RADIUS (Remote Authentication Dial-In User Service)
+	- A centralized AAA protocol for authenticating network access (VPNs, Wi-Fi, switches)
+	- Key Details:
+		Uses UDP ports 1812/1813 (older: 1645/1646)
+		Encrypts only the password field
+		Combines authentication and authorization in one step
+		Supports TACACS+ integration
+	? "Which protocol uses UDP and authenticates remote users?" -> RADIUS
+
+$ LDAP (Lightweight Directory Access Protocol)
+	- Used to query and manage directory services like Microsoft Active Directory
+	- Key Facts:
+		- Port 389(LDAP) or Port 636 (LDAPS)
+		- Hierarchical structure: DNs, OUs, CNs (Distinguished Names, Organizational Units, Common Names)
+		- Used for user/group lookups, authentication, and policy control
+	? "Which protocol retrieves credentials from Active Directory" -> LDAP
+
+$ SAML (Security Assertion Markup Language)
+	- An XML-based standard for SSL and identity federation between web services
+	- How it Works:
+		- Uses Assertions (statements of authentication)
+		- Enables cloud SSO (Google, Salesforce, AWS, etc.)
+		- Works with Identity Providers (IdP) and Service Providers (SP)
+	? "Which protocol enables SSO between multiple web apps? -> SAML
+
+$ TACACS+ (Terminal Access Controller Access Control System Plus)
+	- Cisco-developed AAA protocol
+	- Key Features:
+		- Uses TCP port 49
+		- Encrypts entire packet, not just password (more secure than RADIUS)
+		- Separates Authentication, Authorization, and Accounting
+		- Common on Cisco routers/ switches for admin access
+	? "Which protocol encrypts the entire AAA exchange?" -> TACACS+
+
+$ Time-Based Authentication
+	- Used in MFA systems to ensure temporary code validity
+	- TOTP (Time-Based One-Time Password)
+		- Generates codes that expire every 30-60 seconds
+		- Example: Google Authenticator
+	- HOTP (HMAC-Based One-Time Password)
+		- Code valid until used
+		- Synchronized counter between client and server
+	? "Which authentication type expires codes every 30 seconds?" -> TOTP
+
+$ Authorization Concepts
+	- Role Based Access Control (RBAC)
+		- Permissions assigned to roles, not individuals
+		- Example: "Network Admin" role -> Full switch access
+		- Reduces management overhead
+	? "What model assigns permissions to job roles?" -> RBAC
+	- Principle of Least Privilege
+		- Users get only the access they need to perform their job
+		- Reduces attack surface and accidental changes
+	? "User should only access what's necessary" -> Least Privilege
+
+$ Geofencing
+	- Restricts access based on geographic location using GPS, IP range, or Wi-FI triangulation
+	- Use Cases:
+		- Block logins from foreign countries
+		- Trigger MFA when logging in outside company region
+		- Enforce region-based policies
+	? "What technique restricts user access based on physical location?" -> Geofencing
+
+$ Summary Table
+	Concept                   | Purpose                           | Port/Key Info    | CompTIA Focus
+	Encryption (transit/Rest) | Protects data                     | AES, IPsec, TLS  | Confidentiality
+	PKI                       | Manages certificates              | CA, CRL, OCSP    | Digital Trust
+	MFA                       | Verifies identity with 2+ factors | Password + Token | Authentication
+	SSO                       | One login for many systems        | SAML             | federated Identity
+	RADIUS                    | Centralized AAA (UDP)             | 1812/1813        | Wi-Fi/VPN auth
+	LDAP                      | Directory services                | 389/636          | AD queries
+	SAML                      | Federated SSO                     | XML based        | Web SSO
+	TACACS+                   | AAA (TCP)                         | 49               | Cisco devices
+	RBAC                      | Role-based permissions            | -                | Authorization
+	Least Privilege           | Minimum access                    | -                | Security Principle
+	Geofencing                | Location-based control            | GPS/IP           | Conditional access 		
+
+
+<Physical Security>
+*** NOTES ***
+$ Cameras
+	- Purpose: visual monitoring and recording of physical spaces to deter, detect, and investigate unauthorized access, tampering or theft
+	- Camera Types:
+		- Type                           | Description                                                                             | Typical Use
+		CCTV (Closed-Circuit Television) | Traditional analog cameras connected to a DVR via coaxial cable. Limited remote access. | Older facilities or low-cost setups
+		IP Cameras                       | Network-based cameras that send digital video over ethernet or wifi                     | Modern surveillance systems; supports PoE and remote management
+		PTZ (Pan-Tilt-Zoom)              | Cam move horizontally, vertically, and zoom remotely                                    | Large open areas (parking lots, warehouses)
+		Dome Cameras                     | Housed in a dome enclosure; harder to tell where they're aimed                          | Indoor areas, hallways, lobbies
+		Bullet Cameras                   | Long, cylindrical design; visible deterrent                                             | Outdoor surveillance (entrances, perimeters)
+		Infrared/Night Vision Cameras    | Capture footage in low light using IR sensors                                           | 24/7 security, outdoor areas
+		360 deg Cameras                  | Capture wide panoramic views.                                                           | Large rooms or open floors		
+	- Camera Connectivity
+		- Coaxial (analog CCTV) -> Used with DVR systems; limited distance (~300m)
+		- Ethernet (IP Camera -> Supports PoE, remote access, digital recording (NVR)
+		- Wi-FI -> Easier to install, but less reliable and can be jammed/intercepted
+		- Fiber -> Used for long-distance, high-quality video feeds (large campuses)
+	- Supporting Equipment
+		- DVR (Digital Video Recorder) -> Used with analog CCTV cameras, Converts analog to digital
+		- NVR (Network Video Recorder) -> Used with IP cameras; stores digital footage over LAN
+		- PoE Switch -> Powers IP cameras directly over Ethernet (802.3af/at/bt)
+		- UPS (Uninterruptible Power Supply) -> Keeps cameras and recorders running during power loss
+	- Camera Security Concerns
+		- Network Access: IP cameras can be hacked -> Isolate them on separate VLANs
+		- Firmware Updates: Prevent exploits or backdoors
+		- Encryption: Use HTTPS or VPN for remote camera access
+		- Retention Policies: Define how long video footage is kept
+		- Physical Tampering: Secure cameras in protective housings
+	? "Which camera type connects via Ethernet and supports PoE?" -> IP Camera
+	? "Whats the main advantage of dome cameras?" -> Difficult to determine direction; tamper-resistant
+
+$ Locks
+	- Purpose: Locks restrict physical access to sensitive areas like server rooms, network closets, and data racks - preventing unauthorized users from physically compromising the network
+	- Common Lock Types:
+		Lock Type         | Description                                                                           | Use Case
+		Keyed Locks       | Traditional lock-and-key mechanisms. Low cost, but easily duplicated or picked        | Office doors, basic protection
+		Combination Locks | Require a numeric code. No key duplication risk                                       | Shared spaces, small enclosures
+		Electronic Locks  | Use keypads, proximity cards, or RFID tags. Often connected to access control systems | Data centers, network rooms
+		Smart Locks       | Controlled via network or Bluetooth; logs access events                               | High-security environments or smart offices
+		Biometric Locks   | Use fingerprints, facial recognition, or retina scans                                 | Server racks, high-security facilities
+		Cable Locks       | Metal cables looped through laptops or equipment                                      | Prevents device theft
+		Padlocks          | Standalone locks for cabinets, gates, or portable gear                                | Basic deterrence for non-critical assets
+		Magnetic Locks    | Use electromagnetic force; released via keycard, PIN, or fail-safe trigger            | Door access systems; integrates with alarms
+	- Lock Features and Concepts
+		- Fail-Safe vs Fail-Secure -> Fail-safe unlocks when power fails (safety-first). Fail-Secure remains locked (security-first)
+		- Access Logs -> Electronic and smart locks can track who entered and when
+		- Two-Factor Access -> Combine card + PIN or card + biometric
+		- Mantraps -> Small enclosed areas requiring authentication before entering sensitive zones (used in data centers)
+		- Key Management -> Maintain logs and restrict duplication of physical keys
+	? "Which lock type remains locked when power is lost?" -> Fail-secure
+	? "Which lock records entry and exit times?" -> Electronic or smart lock
+	- Physical Security Best Practices:
+		- Server Rooms -> Use electronic or biometric locks; log all entries
+		- Network Closets -> Restrict to authorized personnel only; mount cameras
+		- Workstations -> Use cable locks for laptops; auto-lock screens
+		- Entrance Points -> Use CCTV with visible deterrents
+		- Perimeter Security -> Lighting, fences, access badges
+	
+
+<Deception Technologies>
+*** NOTES ***
+- What they are:
+	- Honeypot: Single decoy system or service configured to look attractive to attackers (e.g., an SSH server web app, or IoT device) and instrumented to log and alert on attacker activity
+	- Honeynet: A network of one or more honeypots (often multiple systems and services) designed to emulate an entire environment so attackers interact with a realistic network segment
+- Goals/Values
+	- Early detection of intrusions (low noise/high signal)
+	- Intelligence gathering: attacker tools, tactics, IOCs, malware samples
+	- Delay and Containment: occupy attackers away from production
+	- Support forensics, threat hunting, and signatures for prevention tooling
+- Types of Honeypots (interaction level)
+	- Low-Interaction
+		- Emulates limited services (fake SSH banner, fake ports)
+		- Pros: safe, low-resource, easy to deploy, low risk of compromise
+		- Cons: Limited intelligence (attacker often probes then moves on)
+	- High-Interaction
+		- Real OS/services that allow attackers to fully interact (real shell, file system)
+		- Pros: rich telemetry (full TTP capture)
+		- Cons: higher risk must isolate strongly, higher maintenance, legal/ethical considerations
+	- Medium-interaction
+		- Somewhere in between (more believable than low-interaction, but contained)
+- Honeynet Architectures / Deployment models
+	- Standalone honeypot: single system on isolated VLAN, monitored and logged
+	- Honeynet (lab-style): Multiple hosts (web server, DB, AD-like mock), routers/switches, simulated services to emulate an enterprise
+	- Production-deceptive overlays: deception services deployed inline or alongside production (e.g., decoy credentials, fake shares)
+	- Cloud-based honeypots: cloud instances that emulate services(Useful for internet-exposed threat intelligence)
+- Isolation and safety (critical)
+	- Put honeypots on segmented networks (dedicated VLANs, no route to production)
+	- Use egress filtering (drop or tightly control outgoing traffic) to prevent a compromised honeypot from being used to attack others
+	- Use visualization and snapshots for fast rollback
+	- Monitor hypervisor/host integrity = keep the host fully secured and separate
+	- Prefer low-interaction if you can't guarantee strict isolation
+- Instrumentation and Telemetry
+	- Full packet capture (.pcap) of inbound/outbound traffic
+	- System call logging, keystroke/session capture for high-interaction
+	- File and binary collection (quarantine malware samples)
+	- Time-stamped logs forwarded to SIEM / central log aggregator
+	- Alerts on rare or suspicious events (e.g., unusual persistence attempts)
+	- Integration: Tie honeypot events into SIEM, IDS/IPS, threat intelligence feeds, and automated response playbooks
+- Common honeypot software and frameworks (examples)
+	- Cowrie - SSH/telnet medium-interaction honeypot (captures sessions, credentials)
+	- Dionaea - malware-capturing honeypot (Windows-exploits focus)
+	- Honeyd - low-interaction virtual host emulator
+	- MHN (Modern Honey Network) / Cuckoo + MHN - central management for many honeypots
+	- Canarytokens/Thinkst Canary - lightweight "tripwires" (documents, DNS tokens) that alert when touched
+- Use cases and examples
+	- Credential harvesting: collect username/password attempts against fake SSH or web login
+	- Malware capture: expose vulnerable protocols and capture binaries for analysis
+	- Attack profiling: observe lateral movement techniques in a controlled network
+	- False-target diversion: distract an intruder while defenders response
+	- Testing IDS/alerting: validate detection rules with real malicious activity
+- What to monitor and common indicators of compromise (IOCs)
+	- Unexpected login attempts, brute-force patterns (many SSH username/password combos)
+	- New outbound connections to C2 domains from the honeypot
+	- File writes/changes to binaries or startup items
+	- Exploit attempts (specific exploit strings, usual packets)
+	- Uncommon processes spawned or shell commands executed
+- Forensics and Analysis
+	- Capture full .pcap and disk snapshots
+	- Extract malware artifacts for sandboxing (Cuckoo) and static/dynamic analysis
+	- Correlate honeypot IOCs with enterprise telemetry to hunt for lateral or pivoting activity
+- Legal, Ethical and Policy Considerations
+	- Privacy: don't intentionally capture unrelated third-party personal data
+	- Entrapment concerns: honeypots are defensive; don't craft content that entices or coerces users illegally
+	- Outbound abuse: prevent your honeypot being used to attack others - implement egress controls and legal disclaimers where required
+	- Lawful monitoring: follow organizational policy and local laws when collecting data
+- Pitfalls and Limitations:
+	- False positives: scanners and benign crawlers may hit your honeypot - classify them
+	- Maintenance overhead: especially for high-interaction honeypots needing snapshots, patching analysis
+	- Advanced adversaries: skilled attackers can detect honeypots (fingerprinting) and avoid them or feed false data
+	- Resource cost: capturing and analyzing large volumes of data takes compute and analyst time
+- Best Practices (quick checklist)
+	1. Isolate: dedicated VLAN , strict ACLs, no direct access to prod
+	2. Limit egress: prevent honeypot from being a launchpad for attacks
+	3. Centralize logs: SIEM integration and timestamp synchronization (NTP)
+	4. Use layered deception: combine low- and high-interaction depending on need
+	5. Legal review: ensure compliance and written authorization
+	6. Rotate snapshots: rollback corrupted honeypots quickly
+	7. Correlate intelligence: feed IOCs to firewalls/IDS and update signatures
+	8. Test for detectability: use red-team to see fi honeypots get fingerprinted by attackers
+
+
+<Security Terminology>
+*** NOTES ***
+- Core Terms Overview
+	- Asset - Anything of value to the organization that needs protection (data, systems, hardware, people, reputation) - Company database, routers, customer info - Assets are what you protect
+	- Threat - Any potential danger that can exploit a vulnerability to harm an asset - Hacker, malware, natural, disaster, insider - threats exploit vulnerabilities
+	- Vulnerability - A weakness or flaw that could be exploited - Unpatched OS, weak passwords, open ports, misconfigured ACLs - Vulnerabilities are what threats use
+	- Exploit - The action or method used by a threat actor to take advantage of a vulnerability - Using an SMB exploit to gain admin access - Exploits are what turn vulnerabilities into attacks
+	- Risk - The likelihood of a threat exploiting a vulnerability combined with the potential impact - The change that ransomware encrypts your data and halts business operations - Risk = Threat x Vulnerability x Impact
+- The CIA Triad
+	- Element - Meaning - Example Threat - Common Protections
+	- Confidentiality - Keeping data secret from unauthorized users - Data breach, eavesdropping, password theft, Encryption, MFA, access control lists (ACLs)
+	- Integrity - Ensuring data hasn't been tampered with or altered - Man-in-the-middle altering data, malware modifying files - Hashing, digital signatures, file permissions, version control
+	- Availability - Ensuring systems and data are accessible when needed - DoS/DDoS attack, power outage, hardware failure - Redundancy, backups, load balancing UPS power
+- Risk Management Concepts
+	- Term - Definition - Example
+	- Risk Assessment - Process of identifying and prioritizing risks - Ranking servers by how critical they are
+	- Risk Mitigation - Implementing controls to reduce risk - Installing firewalls, patching systems
+	- Risk Acceptance - Choosing to accept a risk (cost < impact) - Not encrypting non-sensitive logs
+	- Risk Avoidance - Eliminating the activity causing the risk - Shutting down a vulnerable system
+	- Risk Transference - Shifting risk to another entity - Buying cyber insurance or outsourcing services
+
+
+<Audits and Compliance>
+*** NOTES ***
+- Compliance = meeting the legal, regulatory, and policy requirements that apply to your organization
+	- You must:
+		- Handle and store data securely
+		- Maintain audio trails of access, configurations, and incidents
+		- Follow industry frameworks (like PCI DSS or GDPR)
+		- Prove compliance through audits (internal and external)
+- Key Concepts
+	- Term - Definition - Example
+	- Audit - A formal review of systems, configurations, and processes to ensure compliance with standards and policies - External auditor reviewing firewall configurations for PCI DSS
+	- Data Locality - The physical or geographic location where data is stored or processed - Customer data stored in EU data centers due to GDPR
+	- Compliance Frameworks - Industry standards or laws that set rules for security and privacy - PCI DSS, GDPR, HIPPA, ISO 23001
+
+$ Data Locality
+	- Definition: The physical location of where data is stored, transmitted, or processed - especially relevant in cloud environments and multi-region architectures
+	- Why is matters:
+		- Different countries and regions have different data protection laws
+		- Some regulations prohibit data from leaving a geographic region (known as data sovereignty)
+		- Organizations must ensure that sensitive data stays within allows jurisdictions
+	- Examples:
+		- GDPR: personal data of EU citizens must stay within the EU or be transferred only to countries with adequate protection
+		- US Government Contracts: May require data to be hosted in FedRAMP-approved US data centers
+		- Cloud deployments: AWS/Azure/GCP regions are often chosen based on data locality requirements
+	? "data stored in a different region" or "data sovereignty violation" -> Data locality
+
+$ PCI DSS - Payment Card Industry Data Security Standard
+	- Definition: A security standard created by major credit card companies to protect cardholder data
+	- Applies to: any organization that stores, processes, or transmits credit/debit card data
+	- Core Principles:
+		- Cardholder Data Environment (CDE): The systems and networks that store, process, or transmit payment data - must be strictly isolated
+		- Encryption: Card data must be encrypted using TLS during transmission and AES or similar at rest
+		- Logging: Access and system changes must be logged and reviewed regularly
+		- Audits: Regular compliance audits by a Qualified Security Assessor (QSA)
+	? "encrypting customer payment data", "A company is fined for storing unencrypted card numbers" -> PCI DSS violation
+
+$ GDPR - General Data Protection Regulation (EU)
+	- Definition: An EU regulation that protects the personal data and privacy of individuals in the EU
+	- Applies to: Any organization (worldwide) that collects, stores, or processes data on EU citizens, even if the company is not based in the EU
+	- Core Principles:
+		- Lawfulness, fairness, and transparency -> Organizations must clearly explain what data they collect and why
+		- Purpose limitation -> Data collected must only be used for the stated purpose
+		- Data minimization -> Collect only what is necessary
+		- Accuracy -> Keep data up-to-date and correct
+		- Storage limitation -> Retain data only as long as needed
+		- Integrity and Confidentiality -> Secure data using appropriate controls (encryption, access control)
+		- Accountability -> Organizations must demonstrate compliance (documentation, policies)
+	- Key Roles:
+		- Data Subject - The individual whose data is being collected
+		- Data Controller - The organization that determines why and how personal data is processed
+		- Data processor - The third party that processes data on behalf of the controller (e.g., cloud provider)
+		- DPO (Data Protection Officer) - Responsible for overseeing compliance and reporting breaches
+	- GDPR Rights of Data Subjects
+		- Right to be informed -> Users must know how their data is used
+		- Right to access -> Users can request a copy of their data
+		- Right to rectification -> Correct inaccurate data
+		- Right o erasure ("Right to be forgotten") -> Have data deleted
+		- Right to restrict processing -> Temporarily stop data use
+		- Right to data portability -> Move data to another provider
+		- Right to object -> Opt out of processing (like marketing)
+		- Rights related to automated decision making -> Avoid unfair algorithmic profiling
+	- GDPR Compliance Requirements
+		- Encrypt data in transit and at rest
+		- Implement data minimization and privacy by design
+		- Report breaches within 72 hours to regulators
+		- Maintain records of processing activities
+		- Ensure cross-border transfers comply with EU standards
+		- Penalties: Up to 20 million euros or 4% of global annual turnover, whichever is higher
+
+
+<Network Segmentation>
+*** NOTES ***
+- Definition: Dividing a network into smaller, isolated zones (segments) using VLANs, firewalls, or physical separation to improve security, performance, and control
+- Goals:
+	- Limit the spread of attacks or malware
+	- Enforce least privilege between network zones
+	- Contain high-risk devices (e.g., IoT) from critical systems
+	- Optimize traffic performance
+	- Support compliance (e.g., PCI DSS requires segmentation of cardholder stat networks)
+- Segmentation Techniques:
+	- Method - Description - Example
+	VLAN (Virtual Lan) - Logical segmentation within a switch; separates traffic without separate hardware - VLAN 10 = Corp, VLAN 20 = Guest, VLAN 30 = IoT
+	Subnetting - Divides IP ranges into isolated networks; can be paired with ACLs - 10.0.10.0/24 for IoT, 10.0.20.0/24 for Finance
+	Firewall/Zoning - Uses firewalls to enforce rules between segments - SCADA network only allows Modbus TCP from certain IPs
+	Physical Separation - Separate cables, switches, or NICs; used in high-security or OT environments - SCADA and IT systems on separate physical hardware
+	Network Access Control (NAC) - Restricts device access based on type, compliance or identity - BYOD devices placed in guest VLAN
+
+$ IoT - Internet of Things
+	- Definition: IoT devices are consumer or enterprise devices that connect to networks and share data - often with limited security or no patching ability
+	- Examples: Smart TVs, security cameras, smart thermostats, badge readers, sensors
+	- Security Risks:
+		- Default Credentials
+		- Rarely patched firmware
+		- Weak encryption or plan HTTP communication
+		- Easily hijacked for botnets (like Mirai)
+	- Segmentation Approach:
+		- Place IoT devices on their own VLAN/subnet
+		- Restrict east-west traffic (IoT -> Corp)
+		- Allow only outbound access to known cloud endpoints
+		- Use firewall rules or ACLs to limit communication
+		- Monitor with IDS/IPS and network behavior analysis
+$ IIOT - Industrial Internet of Things
+	- Definition: A subset of IoT focused on industrial environments, integrating sensors, controllers, and actuators used in manufacturing, energy, or logistics
+	- Security Risks:
+		- Legacy Protocols with no encryption
+		- Weak physical security in remote sites
+		- Vendor remote access without MFA
+	- Segmentation Approach:
+		- Place IIoT devices in isolated industrial VLANs or zones
+		- Use firewall ACLs to tightly control communication with enterprise IT
+		- Deploy DMZ between IT and OT environments
+		- Implement NAC to verify device authenticity
+
+$ SCADA - Supervisory Control and Data Acquisition
+	- Definition: SCADA systems monitor and control industrial processes (e.g., power grids, water treatment, pipelines)
+	- They collect telemetry and send control commands to remote devices
+	- Components:
+		- RTUs (Remote Terminal Units) - gather data from sensors
+		- PLCs (Programmable Logic Controllers) - execute control logic
+		- HMI (Human-Machine Interface) - Operator dashboard
+	- Security Risks:
+		- SCADA devices often run legacy OS (like windows XP)
+		- Flat networks with full connectivity = easy lateral movement
+		- No native encryption or authentication in old protocols
+	- Segmentation Approach
+		- Place SCADA systems on a dedicated, isolated network
+		- Use firewalls and DMZs between IT and OT networks
+		- Limit remote access with VPN + MFA
+		- Use unidirectional gateways (data diodes) where appropriate
+
+$ ICS - Industrial Control System
+	- Definition: Broad term that includes SCADA, DCS (Distributed Control Systems), and PLCs - used to manage and automate industrial operations
+	- ICS Characteristics:
+		- Prioritizes availability and safety over confidentiality
+		- Often has real-time operational requirements
+		- Runs decade-old systems not designed for today's cybersecurity threats
+	- Segmentation Approach:
+		- Separate ICS and IT networks
+		- Control communication using strict firewalls
+		- Monitor with passive intrusion detection (no active scans) to avoid downtime
+		- Use jump servers for admin access
+
+$ OT - Operational Technology
+	- Definition: Hardware and software that detects or causes changes in physical processes through direct monitoring and control
+	- Includes: SCADA, PLCsk, sensors, actuators, and industrial controllers
+	- Security Focus:
+		- OT devices control critical infrastructure - downtime can cause physical harm
+		- Security focus:  availability and integrity > confidentiality
+	- Segmentation Approach:
+		- Separate OT from IT with firewalls or DMZs
+		- Use network zoning (Operations, Control, Enterprise)
+		- Apply NAC to prevent rogue devices
+		- Implement role-based access control (engineers vs. IT admins)
+
+$ Guest Networks
+	- Definition: A separate VLAN/subnet that allows visitors or unmanaged devices to access the internet - but not the internal network
+	- Best Practices:
+		- Use VLAN isolation and ACLs to prevent guest -> internal access
+		- use captive portal authentication (login splash page)
+		- Restrict bandwidth and service access (only DNS, HTTP/HTTPS)
+		- Monitor and log all guest activity
+	? "Employees can connect personal phones to wi-fi but can't access internal servers" -> That's a guest VLAN
+
+$ BYOD - Bring Your Own Device
+	- Definition: Policy allowing employees to use personal devices (laptops, phones, tablets) for work
+	- Security Risks:
+		- Personal devices are outside corporate patch management
+		- Risk of data leakage, malware, or unauthorized access
+		- Devices may lack MDM (Mobile Device Management) controls
+	- Segmentation and Controls:
+		- Assign BYOD devices to their own VLAN/Subnet
+		- Use NAC to check compliance before access (OS version, antivirus, encryption)
+		- Restrict access to internet or limited internal resources
+		- Use VPN + MFA for secure connections
+		- Enforce MDM and containerization (work/personal separation)
+
+
+<Types of Attacks>
+*** NOTES ***
+$ Denial of Service (DoS) / Distributed Denial of Service (DDoS)
+	- What it is:
+		- DoS: Attacker overwhelms a single target (server, link, service) so it becomes unavailable
+		- DDoS: Many compromised hosts (a botnet) flood the target, making the attack larger and harder to stop
+	- How it manifests (high level)
+		- Flood of traffic (volume), connection exhaustion (stateful resources), or targeted protocol/application abuse
+	- Indicators:
+		- Sudden spike in traffic/bandwidth utilization
+		- Excessive half-open connections or resource exhaustion on servers
+		- Legitimate users can't connect; monitoring shows service down even though hardware is up
+	- Mitigations / Defenses:
+		- Rate limiting, traffic filtering, geo-IP blocks
+		- Upstream scrubbing / DDoS protection services (CDNs, cloud scrubbing)
+		- Autoscaling for capacity, redundant infrastructure, SYN cookies, ACLs, and proper firewall rules.
+		- Blackholding only as last result
+
+$ VLAN Hopping
+	- What it is:
+		- Attack where a host on one VLAN gains access to traffic on another VLAN it shouldn't reach
+	- How it commonly happens (defensive view)
+		- Misconfigured trunks (native VLAN mismatches) or use of double-tagging vulnerabilities on older switches
+	- Indicators:
+		- Devices on a VLAN seeing traffic destined for other VLANs, unauthorized access to VLAN-restricted resources
+	- Mitigations / Defenses
+		- Disable unused ports, put unused ports in an unused VLAN and shut them down
+		- Do not use VLAN 1 for management or native VLAN. Explicitly set native VLANs and avoid VLAN tagging mismatches
+		- Use proper trunk configurations, management VLAN separate, port security, and private VLANs if needed
+
+$ MAC Flooding (CAM Table Overflow)
+	- What it is:
+		- Attacker floods a switch with fake source MAC addresses to overflow the switch's MAC (CAM) table, causing it to behave like a hub and broadcast frames out all ports
+	- Indicators: 
+		- High broadcast traffic, many MAC addresses in CAM table, legitimate traffic being seen on many ports, unexplained sniffable traffic
+	- Mitigations/Defenses:
+		- Enable port security (limit number of MACs per port), set static MACs for critical ports
+		- Use 802.1X on access ports
+		- Implement dynamic ARP inspection and DHCP snooping to complement
+
+$ ARP Poisoning / ARP Spoofing
+	- What it is:
+		- Attacker forges ARP messages to associate the attacker's MAC with the IP of another host (e.g., the gateway), enabling traffic interception or disruption
+	- High-level effect
+		- Enables Man--in-the-Middle (MitM) for local networks, can capture or modify traffic or perform DoS
+	- Indicators
+		- Duplicate MAC/IP entries in ARP table, sudden gateway MAC changes, intermittent connectivity, packet loss, or unexpected traffic flows
+	- Mitigations/Defenses
+		- Use static ARP entries for critical hosts where practical
+		- Enable Dynamic ARP Inspection (DAI) and DHCP snooping on switches
+		- Use encrypted protocols (TLS, SSH) to limit information an attacker can exploit even if they intercept traffic
+	? "Local hosts can't reach a gateway" or "Mismatched ARP entries" -> Think ARP Spoofing; DAI and DHCP snooping are common answers
+
+$ DNS Poisoning / DNS Spoofing
+	- What it is:
+		- Attacker corrupts DNS records or responses so users are pointed to malicious IPs (e.g., fake bank site) instead of legitimate sites
+	- Common delivery methods (defensive view)
+		- Cache poisoning on recursive resolvers, compromised authoritative servers, or intercepted DNS responses (on-path attacks)
+	- Indicators:
+		- Users are sent to suspicious IPs, many failed TLS certificate checks, DNS responses with odd TTLs or NS records, or unusual DNS query patterns
+	- Mitigations / Defenses
+		- Use DNSSEC to ensure integrity of DNS records
+		- Use reputable recursive resolvers and enforce DNS resolver patching
+		- Validate TLS/SSL certificates (HSTS, certificate pinning where appropriate)
+		- Monitor DNS logs for anomalies
+
+$ Rogue Devices / Rogue Services
+	- What it is:
+		- Unauthorized devices or services on the network (e.g., an unauthorized AP, switch, or server) that bypass controls or present risk
+	- Examples:
+		- Personal access point bridging guest traffic into the corporate LAN; unauthorized HDCP server handing out bad IPs
+	- Indicators:
+		- New SSIDs, unknown MAC addresses on switch ports, unexpected DHCP offers, or anomalous services in net scans/logs
+	- Mitigations / Defenses
+		- Network Access Control (NAC) to validate and quarantine unknown devices
+		- Monitor with asset inventory and IPAM, use periodic network scans
+		- Disable unused ports, use 802.1X, and enforce switch port security
+		- For wireless: detect rogue APs with wireless controllers and site surveys
+	? "Clients getting wrong IPs" or "Unexpected Wi-Fi SSId in corporate space" -> rogue devices/services
+
+$ Evil Twin (Rogue Wi-Fi / Malicious AP)
+	- What it is:
+		- Attacker sets up a malicious wireless AP with the same (or similar) SSID as a legitimate network to trick users into connecting, enabling credential capture or traffic interception
+	- Indicators:
+		- User complaints of captive portals or credential prompts, multiple APS with same SSID, sudden drop in connection security, or certificate/TLS warnings
+	- Mitigations/Defenses
+		- Educate users to verify the network (avoid auto-joining), use 802.1X (Enterprise Wi-Fi) with strong EAP (no PSK), enforce HTTPS, and use wireless intrusion prevention/detection systems (WIPS/WIDS) to detect rogue APs
+		- Use VPN on client devices when on Wi=Fi outside trusted networks
+
+$ On path Attack (Man-in-the-Middle / MitM / On-path)
+	- What it is: 
+		- Attacker intercepts communications between two parties and can eavesdrop, modify, or replay traffic
+	- How it happens (high level)
+		- Via ARP spoofing, rogue access points, compromised routers, SSL stripping, or interception at chokepoints
+	- Indicators
+		- Unexpected TLS certificate warnings, unusual latency, inconsistent content (injected scripts), or authentication failures
+	- Mitigations / Defenses
+		- Use end-to-end encryption (TLS, SSH), certificate pinning where applicable, HSTS, strong mutual authentication, and secure DNS (DNSSEC + DNS over HTTPS/TLS)
+		- Network Segmentation and strict routing policies reduce attacker opportunities
+	? "certificate errors while accessing sites" -> MitM
+
+$ Social Engineering
+	- Attacks target people rather than systems. They're extremely effective and often the weakest link
+	- Common Types
+		- Phishing
+			- What: Fraudulent emails/webpages that trick users into revealing credentials or running malware
+			- Indicators: Suspicious sender address, urgent tone, mismatched URLs, attachments with macros
+			- Defenses: User training, email filtering, URL scanning, MFA (so stolen creds alone aren't enough), DMARC/DKIM/SPF
+		- Dumpster Diving
+			- What: Searching physical trash for sensitive information (passwords, prints, notes)
+			- Indicators: Discovery of paper with credentials or config details in trash
+			- Defenses: Shredding policies, secure disposal, employee awareness
+		- Shoulder Surfing:
+			- What: Watching someone enter a password/PIN in public
+			- Indicators: Observed snooping near devices or ATMs
+			- Defenses: Privacy screens, awareness, shielding keyboards when typing
+		- Tailgating (Piggybacking)
+			- What: Following authorized personnel into secure areas without authorizatoin
+			- Indicators: Unknown person in restricted area, badge access logs without corresponding exit/entry
+			- Defenses: Physical access controls, mantraps, security training, enforcement of badge checks, security guards
+	
+
+<Security Features and Defense>
+*** NOTES ***
+$ Device Hardening
+	- Definition: Hardening = reducing a device's attack surface by disabling unnecessary services, tightening configurations, and applying security controls
+	- Why it matters:
+		- Every router, switch, server, or access point ships with default credentials, open ports, and services - easy targets if not secured
+	- Key Hardening Steps
+		Category                       | Description                                              | Example
+		Remove/Disable Unused Services | Reduce attack surface by turning off features not needed | Disable Telnet, FTP, or legacy protocols on network gear
+		Patch and Firmware Updates     | Fix vulnerabilities                                      | Regularly update router firmware
+		Strong Authentication          | Replace defaults with strong passwords and MFA           | Change admin/admin -> complex credentials, enable 2FA
+		Management Interfaces          | Limit access to trusted subnets                          | Only allow SSH from management VLAN
+		Encrypt Management Traffic     | Prevent credential theft                                 | Use SSH, HTTPS, SNMPv3, instead of Telnet, HTTP, SNMPv1/2c
+		Logging and Monitoring         | Record activity for auditing                             | Enable syslog, SNMP traps
+		Physical Security              | Prevent tampering                                        | Lock network cabinets, disable console ports
+	? "reduce the number of services exposed on a switch" -> device hardening
+	? "disable unused interfaces" -> device hardening
+
+$ NAC - Network Access control
+	- Definition: NAC enforces security policies before granting access to the network. It validates devices and uses at connection time
+	- Two main types:
+		1. Pre-admission NAC: Checks devices before they join the network
+		2. Post-admission NAC: Continuously monitors connected devices
+	- What NAC Checks:
+		- Device posture (antivirus, OS version, encryption)
+		- User authentication (credentials, certificates)
+		- Device identity (MAC, certificate, profile)
+	- Implementation:
+		- 802.1X for port-based authentication (switch/AP)
+		- RADIUS backend for user/device validation
+		- Quarantine VLAN for noncompliant devices
+	- Example Flow
+		- User plugs into switch port
+		- NAC checks endpoint compliance via 802.1X
+		- If compliant -> full access VLAN
+		- If not -> Quarantined or guest VLAN
+	? "devices checked for antivirus or OS version before joining the network" or "quarantined VLAN" -> NAC
+
+$ Key Management
+	- Definition: Key Management is the generation, distribution, storage, rotation, and revocation or cryptographic keys used for encryption and authentication
+	- Key Lifecycle:
+		1. Generation: Securely create keys using strong algorithms (AES, RSA, ECC)
+		2. Distribution: Deliver securely (e.g., using PKI or certificates)
+		3. Storage: Protect keys (HSMs, TPMs, encrypted storage)
+		4. Rotation: Regularly replace keys to reduce exposure time
+		5. Revocation: invalidate compromised or expired keys (CRLs, OCSP)
+		6. Destruction: securely delete retired keys
+	- Types of Keys
+		- Symmetric: Same key for encryption/decryption (fast, e.g., AES)
+		- Asymmetric: Public/private key pair (RSA, ECC)
+		- Session Keys: Temporary symmetric keys for specific sessions
+	- Tools:
+		- PKI (Public Key Infrastructure) for certificate-based key management
+		- HSM (Hardware Security Module) for secure key storage and operations
+	? "Centralized certificate management" or "secure key lifecycle" -> Key management
+
+$ ACL - Access Control List
+	- Definition: Defines which traffic is allowed or denied through an interface (firewall, router, switch)
+	- Core Concept:
+		- ACLs filter traffic based on:
+			- IP addresses (source/destination)
+			- Protocol (TCP, UDP, ICMP)
+			- Port numbers
+			- Direction (inbound/outbound)
+	- ACL Types:
+		- Standard ACL -> Filters by source IP only
+		- Extended ACL -> Filters by source/destination IP, protocol, and port
+		- Named ACL -> Identified by a name instead of number
+	- ACL Placement Rules:
+		- Standard ACLs -> near destination (simple)
+		- Extended ACLs -> near source (efficient)
+	- Use Cases:
+		- Prevent guest VLAN -> internal VLAN traffic
+		- Allow SSH to routers only from admin subnet
+		- Block specific IPs or ports
+	? "What to use to restrict network traffic based on IP/port" -> ACL
+
+$ URL and Content Filtering
+	- Definition: Controls what users can access on the web by blocking or allowing based on URL, keywords, or content category
+	- How it works:
+		- URL or DNS requests are check against filtering databases (e.g., "gambling", "social media", "malware")
+		- Can run on firewalls, proxies, or DNS-level filters
+	- Filtering Methods
+		Type	Description	Example
+		URL Filtering		Matches domain/URL to block list 	 		Block facebook.com or *.xxx
+		Content Filtering 	 	Scans page content for forbidden keywords		Block sites with "proxy" or "torrent"
+		DNS Filtering		Blocks resolution of known malicious domains	Prevents users from reaching C2 servers
+	- Tools:
+		- Cloud security gateways (Cisco Umbrella, Zscaler)
+		- local proxy servers (Squid, Secure Web Gateway)
+	? "company blocks employees from accessing social media during work" or "prevent malware domains" -> URL/content filtering
+
+$ Trust vs. Untrusted Zones
+	- Definition: Network zones categorize traffic based on trust level - defining how much control and monitoring each needs
+	- Common Zones
+		Zone	Description	Example
+		Trusted	Internal network, controlled and managed	Corporate LAN, internal servers
+		Untrusted	External network, like the Internet		Public WAN
+		DMZ 		Buffer zone between trusted and untrusted	Public-facing web or email servers
+		Management 	Restricted access for admins only 		Router/switch management subnet
+		Guest		Internet-only, isolated from LAN		Visitor Wi-Fi VLAN
+	- Implementation:
+		- Firewalls enforce access between zones
+		- ACLs and routing rules restrict communication
+		- IDS/IPS monitor boundary traffic
+	? "restrict internal network from the internet but allow public web access" -> trusted/untrusted zone separation
+
+$ Screened Subnet (DMZ)
+	- Definition: A DMZ (Demilitarized Zone) or screened subnet is a bugger network between the internal trusted network and the untrusted internet
+	- It allows public-facing services (like web, email, or DNS) to be accessed without exposing the internal LAN
+	- Architecture Options
+		- Single Firewall (Three-legged)
+			- internet -> firewall -> untrusted, DMZ, trusted
+		- Dual Firewall
+			- internet --- edge firewall --- DMZ --- Internal Firewall --- LAN
+		- Edge firewall -> Filters external traffic
+		- Internal firewall -> Protects LAN from DMZ breaches
+	- Security Principle:
+		- Limit inbound/outbound rules between zones
+		- Internal LAN never directly accessible from Internet
+		- Public servers (web, mail, DNS) live in DMZ
+	- Common services in a DMZ:
+		- Web servers
+		- Email gateways
+		- Reverse Proxies
+		- VPN concentrators
+	- Advantages:
+		- Reduces blast radius of compromise
+		- Supports least privilege between networks
+		- Simplifies monitoring and logging
+	? "public web server accessible to the internet but isolated from internal systems" -> screened subnet / DMZ
+
+
+*********************************
+** Network Troubleshooting 24% **
+*********************************
+
+<Troubleshooting Methodology>
+*** NOTES ***
+$ Step 1 (Identify the Problem)
+- Goal: Gather as much information as possible to understand the scope and symptoms of the issue
+- What to Do:
+	- Question the user: What changed, what they observed, when it started
+	- Identify symptoms: e.g., no connectivity, slow performance, intermittent drops
+	- Determine if anything changed recently: New updates, hardware, network policies
+	- Establish the scope: Is it one user, one subnet, or the entire network?
+	- Duplicate the problem: Can you reproduce it?
+	- Check device status indicators: Link lights, LEDs, error messages
+	- Review logs and alerts: Switch, router, firewall, or server logs
+- Tools and Data
+	- Ping, ipconfig/ifconfig, traceroute
+	- Network monitoring logs (Syslog, SNMP)
+	- User reports and tickets
+
+$ Step 2 (Establish a Theory of Probably Cause)
+- Goal: Come up with possible reasons for the issue - start broad, then narrow down
+- What to Consider:
+	- Is it hardware-related? (bad cable, failed port)
+	- Configuration-related?: (VLAN mismatch, wrong IP/gateway)
+	- Software-related?: (Update issue, driver failure)
+	- External causes?: (ISP outage, DoS attack, power issue)
+? "You suspect a faulty switch port" -> Theory stage (haven't confirmed it yet)
+
+$ Step 3: Test the Theory to Determine the Cause
+- Goal: Validate or disprove your theory with tests or diagnostics
+- What to Do:
+	- Run ping/traceroute to confirm connectivity
+	- Check interface status on switches and routers
+	- Swap cables or ports (simple isolation test)
+	- Try different devices on the same connection
+	- Review logs to match error timestamps
+- If the theory is confirmed -> move to step 4
+- If not -> got back to Step 2
+
+$ Step 4: Establish a Plan of Action and Identify Potential Effects
+- Goal: Plan how to fix the issue - safely, without disrupting other systems
+- What to Include:
+	- The fix steps
+	- Rollback Plan 
+	- Approval if needed
+	- Identify downtime impacts or user disruption
+? If your "Deciding when to apply a fix" or "getting approval to make a change" that's planning, not implementing
+
+$ Step 5: Implement the Solution or Escalate
+- Goal: Execute the fix - or, if beyond your authority/expertise, escalate to the appropriate team
+- What to Do:
+	- Appd
+\ly the configuration change, replacement, or patch
+	- Follow organizational change management procedures
+	- Document exactly what was done
+- If escalation is required:
+	- Provide all gathered data (symptoms, steps tried, results)j
+? "After confirming the cause, the tech installs a new switch module" -> Implementation
+
+$ Step 6 (Verify Full System Functionality and Implement Preventive Measures)
+- Goal: Ensure the issue is fully resolved and doesn't reoccur
+-j What to Do:
+	- Test all affected systems and services
+	- Verify user functionality (can they connect and perform tasks?)
+	- Monitor logs and network performance
+	- Implement preventative measures:
+		- Update firmware/software
+		- Add redundancy
+		- Adjust configurations
+? You confirm that users can now connect to the internet after replacing the router -> Verify functionality
+
+$ Step 7: Document Findings, Actions, and Outcomes:
+- Goal: Record what happened, what was done, wand what fixed it - for future reference and auditing
+- What to Document:
+	- Problem description
+	- Root cause
+	- Steps taken to resolve
+	- Preventative measures implemented
+	- Verification results
+	- Time/date and who performed the fix
+- Purpose:
+	- Builds organizational knowledge base
+	- Speeds up future troubleshooting
+	- Supports change and incident management policies
+? "The issue is resolved what should you do next?" -> Document Findings
+
+<Cabling and Physical Interface Issues>
+*** NOTES ***
+$ Cable Issues
+- Goal: Identify and correct Layer 1 (Physical) problems that prevent signal transmission or cause poor performance
+	- a. Incorrect Cable Type	
+		- Problem: Using the wrong category or type of cable for a given speed, distance, or purpose
+			- Example                                   | Why it's Wrong           | Symptom
+			Cat5 used for Gigabit Ethernet              | Not rated for 1000 Mbps  | Low throughput, link instability
+			Straight-through used instead of crossover  | TX/RX not aligned        | No connectivity
+			Multimode Fiber used instead of single-mode | Signal loss, attenuation | Link down, no light
+			Patch (stranded) cable used for long runs   | higher resistance        | Intermittent connection
+		? "Network link between two switches fails to establish; cable labeled Cat5 is being used for a Gigabit uplink" -> Replace with Cat5e or higher
+	- b. Signal Degradation (Attenuation, EMI, and Crosstalk)
+		- Signal degradation occurs when electrical or optical signals weaken or distort over distance
+		- Causes: 
+			- Long cable runs exceeding spec limits
+				- Ethernet limit: 100 meters for copper (90m horizontal + 10m patch)
+			- Electromagnetic Interference (EMI)
+				- Caused by motors, fluorescent lights, microwaves, power cables
+			- Crosstalk:
+				- Interference between twisted pairs
+		- Symptoms:
+			- Intermittent Connectivity
+			- Frame erros, CRC Errors
+			- Slow transfer speeds
+		- Tools to Detect
+			- Cable certifier or TDR (Time Domain Reflectometer)
+			- Network Analyzer (measures signal quality)
+		- Fix:
+			- Keep data cables away from power lines
+			- Use shielded twisted pair (STP) or fiber in noisy environments
+			- Respect max cable lengths
+	 - c. Improper Termination
+		- Problem: RJ45 connectors not terminated correctly (bad pinout or poor crimping)
+		T568A - Green pair first - used in residential
+		T568B - Orange pair first - used in most commercial devices
+		- Symptoms:
+			- No link light
+			- Collisions, CRC errors
+			- Link flapping (connects, disconnects)
+		- Fix:
+			- Re-crimp or re-terminate ends using proper color order and high-quality connectors
+		? "Network drops occur after a user replaced an RJ45 connector. What's the likely cause" -> Improper Termination
+	- d. TX/RX Transposed
+		- Tx (Transmit) and RX (Receive) lines are reversed - meaning the devices can't 'hear' each other
+		- Fiber: TX on one side must go to RX on the other
+		- Copper: Older switches/routers without auto-MDI-X need crossover
+		- Symptoms:
+			- No link lights
+			- Interface down/down
+			- No data transfer even if link light on
+		- Fix:
+			- Reverse the pair (swap TX/RX)
+			- Use crossover cable or enable auto-MDI/MDI-X
+		? "Fiber link light on one side but not the other" -> TX/RX Reversed
+
+$ Interface Issues
+- These happen on the network device's port (switch, router, NIC)
+- Monitoring interface counters helps detect subtle Layer 1-2 issues
+	- a. Increasing Counters
+		- Interfaces maintain counters for frames, errors, and drops.
+		- When these values increase abnormally -> Indicates a problem
+		Counter             | Indicates                | Possible Cause
+		CRC errors          | Bad frames               | EMI, bad cable
+		Collisions          | Shared medium issue      | Half-duplex mismatch
+		Late Collisions     | Out-of-spec cabling      | Cable too long
+		Runts               | Frames too short         | Duplex mismatch
+		Giants              | Frames too large         | Jumbo frame mismatch
+		Input/Output errors | Physical interface issue | Bad port or transceiver
+	- Fix:
+		- Replace cable or transceiver
+		- Check duplex/speed negotiation
+		- Verify interface configuration
+	? "An admin notices rapidly increasing CRC errors" -> Check cable quality or EMI first
+	
+	- b. Port Status Indicators
+		- Modern network interfaces have LED indicators that show real-time status
+		LED Pattern    | Meaning
+		Solid Green    | Link up and active
+		Flashing Green | Link active, traffic passing
+		Amber Orange   | Low speed (10/100 Mbps), errors, PoE Fault
+		Off            | No connection or power
+	- Fix:
+		- Check cable connection and port enablement
+		- Verify NIC enabled and correct VLAN assigned
+	? "The link light is off on one switch port" -> Problem likely Layer 1 (cable or port)
+
+$ Hardware Issues
+- Sometimes the physical device itself is to blame - not the cable or configuration
+	- a. PoE (Power over Ethernet) Problems
+		- Powers devices like APs, IP phones, and cameras over the Ethernet Cable
+		Issue                  | Symptom                | Fix
+		Power budget exceeded  | New device won't power | Disconnect or upgrade switch
+		Incorrect PoE standard | Device not powering    | Match IEEE spec (802.3af/at/bt)
+		Bad Cable              | Voltage Drop           | Replace with quality Cat5e/6 cable
+	- Standards Recap
+		Standard        | Power (at PD) | Example Device
+		802.3af (poE)   | 15.4W         | IP Phone
+		802.3at (PoE+)  | 25.5W         | Wireless AP
+		802.3bt (PoE++) | 60-100W       | PTZ Cameras
+	- b. Transceiver Mismatch
+		- Transceivers (SFP, SFP+< QSFP, etc.) must match both the device and the cable/fiber type
+		Mismatch Type                                | Symptom
+		SFP (1G) in SFP+ (10G) Port                  | Port won't link
+		Single-mode transceiver with multimode fiber | Signal loss
+		Vendor Mismatch                              | "Unsupported Transceiver" errors
+		- Fix:
+			- Use manufacturer-approved transceivers
+			- Match speed, wavelength, and mode
+	- c. Signal strength (for Wireless or Fiber)
+		- Weak signal = unstable or slow connection
+		- Causes:
+			- Damaged fiber
+			- Poor alignment
+			- Wireless AP too far / obstructions
+		- Tools:
+			- Optical power Meter (fiber)
+			- Wi-Fi analyzer (wireless)
+		- Fixes:
+			- Clean fiber connectors
+			- Reroute fiber with gentle bends
+			- Reposition antennas / APs for better coverage
+		? "Users report intermittent Wi-Fi drops; signal strength shows -80 dBm" -> Weak wireless signal
+
+
+<Network Services Issues>
+*** NOTES ***
+$ Switching Issues (Layer 2)
+	- Switching problems can prevent communication within the same network.
+	- They often manifest as connectivity failures, VLAN isolation, or loop-induced outages
+	- a. Spanning Tree Protocol Issues
+		- Purpose: STP prevents layer 2 loops by blocking redundant switch paths until they're needed
+		- Key Concepts
+			- STP identifies a root bridge and blocks redundant links
+			- Port states: Blocking -> Listening -> Learning -> Forwarding
+			- BDPU (Bridge Protocol Data Units): Used to elect root bridge and detect loops
+		- Common Issues
+	- b. VLAN Assignment Issues
+		- VLANs isolate broadcast domains
+		- If a port is in the wrong VLAN -> It's like it's on a different network
+		- Symptoms:
+			- Device's cant ping others on same switch
+			- Trunk ports show mismatched VLANs
+			- DHCP requests fail (broadcasts blocked by VLAN boundaries)
+		- How to Check:
+			- On Cisco: show vlan brief or show interface switch-port
+			- Ensure access ports are in the correct VLAN
+			- Trunk ports carry correct VLANs (check allowed VLAN list)
+		- Fix:
+			- Correct VLAN membership
+			- Ensure trunks use same native VLAN on both ends
+			- Verify VLAN exists and is active on all switches
+		? "User can't access local server; both are cabled to the same switch" -> Port VLAN mismatch
+	- c. ACL (Access Control List) Misconfiguration
+		- ACLs are used to permit or deny traffic based on IPs, protocols, or ports
+		- Common Issues:
+			- Users can't reach server -> ACL blocking required ports
+			- Ping fails between VLANs -> ACL denying ICMP or inter-VLAN traffic
+			- DHCP not working -> ACL blocking UDP 67/68 broadcast
+		- How to Check:
+			- show access-lists or show up interface
+			- Confirm ACL direction (inbound/outbound)
+			- Remember: ACLs process top-down - first match wins
+		- Fix:
+			- Adjust rules or reorder ACL entries
+			- Ensure an explicit "permit" rule exists for intended traffic
+			- Verify placement on correct interface and direction
+		? "Ping fails between subnets after security update" -> ACL blocking inter-VLAN or routed traffic
+
+$ Routing Issues (Layer 3)
+	- Routing Determines how packets move between networks.
+	- If something's off in the routing table, packets die en route
+	- a. Routing Table Issues
+		- The Routing Table:
+			- Stores known networks and next-hop IPs
+			- Includes directly connected, static, and dynamically learned routes
+		- Common Problems:
+			- Missing route: Destination unreachable
+			- Wrong next-hop: Packets routed incorrectly
+			- Asymmetric Routing: Replies never return
+			- Overlapping Subnets: Routing confusion, traffic misdelivery
+		- How to check:
+			- show ip route (Cisco) or ip route (Linux)
+			- Verify routes exist for all needed destinations
+			- Ping next-hop gateway for reachability
+		- Fix:
+			- Add or correct static routes
+			- Ensure routing protocols (OSPF/BGP/EIGRP) are exchanging updates properly
+			- Remove duplicate or conflicting routes
+		? "Traceroute stops after router A; router B has no route to 10.0.0.0/16" -> Missing entry route
+	- b. Default Route Issues
+		- The default route 0.0.0.0/0 handles all unknown destinations
+		- Common Problems:
+			- Default route missing -> internet unreachable
+			- Wrong next-hop -> Packets black-holed
+			- Overridden by more specific route
+		- Fix:
+			- Add correct default route
+			- Verify NAT/firewall not blocking return traffic
+		? Internal clients can't access the internet, but local routing works -> Missing or wrong default route
+
+$ Address Pool Exhaustion
+	- Address Pools are used by DHCP servers, NAT devices, and cloud VPCs
+	- When they run out of available addresses, new clients fail to connect
+	- a. DHCP Pool Exhaustion
+		- Symptoms:
+			- Clients get APIPA addresses (169.254.x.x)
+			- New users can't join the network
+			- DHCP logs show "no available addresses"
+		- Causes:
+			- Too small DHCP scope
+			- Lease times too long
+			- Rouge DHCP server
+			- Too many devices on subnet
+		- Fix:
+			- Expand DHCP scope
+			- Shorted lease durations
+			- Identify and disable rogue DHCP servers
+			- Subnet the network to add more address pools
+		? "Clients are getting 169.254.x.x addresses" -> DHCP pool exhausted or DHCP unavailable
+	- b. NAT Pool Exhaustion
+		- For devices using dynamic NAT, the router maintains a pool of public IPs
+		- If all are in use -> new outbound sessions fail
+		- Symptoms:
+			- Some users can browse internet, others cant
+			- Logs show NAT sessions and clear them
+		? "Some users lose Internet access at peak hours" -> NAT pool exhausted
+
+$ Incorrect Gateway / IP / Subnet Mask
+	- These are Layer 3 addressing issues that cause local or remote communication failures.
+	- a. Incorrect IP Address
+		- Symptom:
+			- Ip conflict or wrong network
+			- "Duplicate IP detected" errors
+			- Can't reach local or remote resources
+		- Fix: 
+			- Reassign IP manually or via DHCP
+			- Use IPAM to track and prevent overlaps
+	- b. Wrong Subnet Mask
+		- Symptom:
+			- Can ping some hosts but not others on same network
+			- Broadcasts not received by all devices
+		- Fix:
+			- Verify mask matches subnet design
+			- Update static configs or DHCP scopes
+		? "A device can only reach half of its local subnet" -> Incorrect Subnet Mask
+	- c. Incorrect Default Gateway
+		- Symptom:
+			- Local communication works, but Internet Unreachable
+			- Traceroute stops at first hop
+		- Fix:
+			- Set gateway to router interface on same subnet
+			- Verify ARP entry resolves to correct MAC
+		? "User can access local file server but not external sites" -> Wrong default gateway
+	- Summary
+		Issue Type       | Common Symptom               | Root Cause                  | Fix
+		STP              | Loops, outages               | STP disabled/misplaced root | Re-enable STP, adjust priorities
+		VLAN             | Can't talk to same switch    | Wrong VLAN membership       | Correct port VLANs
+		ACL              | Blocked Traffic              | Rule Order / Direction      | Adjust ACLs
+		Routing Table    | "Destination Unreachable"    | Missing route               | Add static/dynamic route
+		Default Route    | No Internet                  | Wrong next-hop              | Correct default gateway
+		DHCP Pool        | APIPA 169.254.x.x            | Exhausted leases            | Expand scope
+		NAT Pool         | Some users fail              | Out of public IPs           | Use PAT or enlarge pool
+		Wrong IP/Mask/GW | Partial or no connectivity   | Manual misconfig            | Correct addressing
+	- Real World troubleshooting flow
+		- 1. Ping local gateway -> tests local VLAN + IP config
+		- 2. Ping remote IP -> Tests routing and gateway
+		- 3. Ping external (8.8.8.8) -> tests Nat and ISP
+		- 4. Ping domain (google.com) -> tests DNS
+	
+<Performance Issues>
+*** NOTES ***
+$ Network Congestion
+	- What it is:
+		- Congestion occurs when too much traffic sent through a network path or device, exceeding available bandwidth or buffer capacity
+		- When a switch, router, or link can't process packets fast enough -> packets are queued or dropped
+	- Symptoms:
+		- Slow network speeds, especially at peak times.
+		- High latency and jitter (voice/video distortion)
+		- Packet drops and retransmissions (seen with TCP)
+		- CPU Spikes on routers or firewalls
+	- How to Identify:
+		- SNMP monitoring: High interface utilization
+		- NetFlow/sFlow: Which IPs or apps use most bandwidth
+		- show interfaces: High output drops, queue depth
+		- Wireshark: TCP retransmissions, window size reduction
+	- Causes:
+		- Insufficient link capacity (100 Mbps uplink with 200 Mbps demand)
+		- Broadcast storms
+		- Misconfigured QoS (voice/video not prioritized)
+		- Malware or DoS attacks flooding traffic
+	- Fixes:
+		- 1. Identify top talkers -> use NetFlow or packet capture
+`		- 2. Increase bandwidth (upgrade link or add parallel paths)
+		- 3. Implement QoS -> prioritize time-sensitive traffic (VoIP, video)
+		- 4. Segment traffic -> VLANs or subnets for heavy users
+		- 5. Check Loops -> ensure STP prevents broadcast storms
+	? "Users complain of slow network performance around 9 a.m daily" -> Look for bandwidth congestion
+
+$ Latency
+	- What it is:
+		- Latency: Time taken for a packet to travel from source to destination and back (RTT - round-trip time) (measured in ms)
+		- A healthy LAN has <5ms latency. WANs or internet paths may be 20-100+ ms
+	- Symptoms:
+		- Voice calls sound delayed or robotic
+		- Video streaming buffers
+		- File transfers take longer than expected
+		- Ping shows high response times
+	- How to Measure:
+		Tool            | Example Command    | Output
+		Ping            | ping 8.8.8.8       | RTT in ms
+		Traceroute      | tracert 8.8.8.8    | Which hop adds delay
+		MTR (Linux)     | mtr google.com     | Combined ping + trace view
+		Network monitor | SNMP latency graphs
+	- Causes:
+		- Network congestion (queueing delay)
+		- Long physical distance (propagation delay)
+		- Misconfigured QoS or routing loops
+		- VPN encryption overhead
+		- Faulty cables or bad optics
+	- Fixes:
+		- Check traceroute -> locate where latency spikes (router hop)
+		- Verify routing path -> ensure shortest, most efficient route
+		- Enable QoS for delay-sensitive apps
+		- Upgrade WAN bandwidth or optimize routing (SD-WAN)
+		- Eliminate unnecessary VPN hops
+	? "Users in a branch office experience 250ms latency to headquarters" -> Wan link distance or congestion. Not a DNS or IP conflict
+
+$ Packet Loss
+ 	- What is It:
+		- When packets are dropped (never arrive at destination)
+		- TCP retransmits them, but UDP (voice/video) does not - causing stuttering or gaps
+		- Even small loss rates (1%-2%) can cripple performance for real-time applications
+	- Symptoms:
+		- Voice/video jitter or drops
+		- Downloads fail or timeout
+		- Applications randomly disconnect
+		- Ping shows intermittent "Request timed out"
+	- How to Detect:
+		- Ping: Observe packet loss percentage
+		- Traceroute: See which hop loses packets
+		- Wireshark: "TCP Retransmission" flags
+	`	- SNMP/Interface stats: CRC errors, output drops
+		- Speed test tools: Measure loss under load
+	- Causes:
+		- Faulty cable, connector, or port (CRC errors)
+		- Wireless interference or low signal
+		- Network congestion (queues overflow)
+		- Duplex mismatch (half vs full)
+		- MTU mismatch (oversized packets dropped)
+		- Firewall or ACL dropping packets
+	- Fixes:
+		- Check interface stats (show interfaces) -> CRC or drop counts
+		- Replace cable or switch port
+		- Check duplex/speed settings -> force full-duplex if mismatched
+		- Enable jumbo frames consistently if using them
+		- Monitor QoS queues for congestion drops.
+	? "Ping test shows 10% packet loss; interface has CRC errors" -> layer 1 issue - replace cable or port
+
+$ Wireless Interference
+	- What it Is:
+		- Interference occurs when multiple wireless signals overlap or environmental factors distort signals.
+		- It results in packet loss, retransmissions, and high latency
+	- Frequency bands
+		- 2.4 GHz: Microwaves, cordless phones, Bluetooth, other wi-fi
+		- 5 GHz: Fewer sources, but shorter range
+		- 6 GHz (Wi-fi 6e): Clean spectrum, but limited device support.
+	- Symptoms:
+		- Slow wi-fi speeds even with strong signal
+		- Clients disconnect intermittently
+		- High retry count or ping spikes
+		- Users near microwaves or Bluetooth devices affected
+	- Tools to Identify:
+		- Wi-Fi analyzer (NetSpot, Ekahau, Wireshark): Detect overlapping channels
+		- Spectrum Analyzer: Identify non-wi-fi interference
+		- Controller Dashboard: View channel utilization and noise floor
+	- Causes:
+		- Overlapping channels (especially on 2.4 GHz)
+		- Co-channel interference (too many APs on same channel)
+		- Non-wifi-devices emitting on same band
+		- Physical obstructions (walls, metal, glass)
+		- APs placed too close (signal overlap)
+	- Fixes:
+		- Reassign channels:
+			- 2.4 GHz -> use only 1, 6, 11 (non-overlapping)
+			- 5 GHz -> Use DFS channels if available
+		- Reduce AP transmit power to avoid overlap
+		- Reposition APs for even coverage
+		- Upgrade clients/APs to 5GHz or 6GHz
+		- Perform site survey to optimize placement
+	? "Users report wi-fi slowdowns when multiple APs are active" -> Channel overlap or co-channel interference.
+	- Summary:
+		Issue                 | OSI Layer | Main Symptom      | Common Cause                | Key Fix
+		Congestion            | 3/4       | Network slowdown  | Too much traffic            | QoS, add bandwidth
+		Latency               | 3         | High ping/jitter  | distance, congestion        | optimize path, qos
+		Packet Loss           | 1-4       | Drops/Retransmits | Bad cable, interference     | Replace hardware, fix duplex
+		Wireless Interference | 1         | Unstable wi-fi    | Overlapping channels, noise | Reassign channels, site survey
+
+
+<Tools and Protocols>
+*** NOTES ***
+$ Protocol Analyzers
+	- What they are:
+		- A protocol analyzer (also called a packet sniffer) captures, decodes, and analyzes network packets traveling over a network interface
+		- These Tools let you see exactly what's happening on the wire - the actual frames, headers, and payloads between devices
+	- Common Tools:
+		- Wireshark: Most popular open-source packet analyzer. GUI based
+		- tcpdump: CLI version (Linux/macOS). Capture and filter packets via command line
+		- Tshark: Wiresharks cli equivalent
+		- SolarWinds Network Analyzer: Commercial option with dashboards
+	- What you can see:
+		- TCP handshakes (SYN, SYN-ACK, ACK)
+		- DNS queries and responses
+		- ARP requests and replies
+		- ICMP pings and errors
+		- HTTP/HTTPS requests
+		- DHCP leases
+		- CNMP traffic
+	- Common Uses:
+		Scenario             | What to Look For
+		Slow connections     | TCP retransmissions or excessive ACK delays
+		DNS issues           | Query packets and response IPs
+		DHCP issues          | Discover / Offer / Request / Ack sequence
+		Suspicious traffic   | unusual ports or IPs (malware, scanning)
+		VoIP troubleshooting | SIP packets and jitter patterns
+	? "Which tool would you use to view DNS request packets in real time?" -> Protocol Analyzer (Wireshark or tcpdump)
+
+$ Command-Line Tools
+	- a. ping
+		- Purpose: Tests basic connectivity and latency between devices using ICMP Echo Request/Reply
+		- Key insights:
+			- Success = host reachable
+			- Failure = network, routing, or firewall issue
+			- High RTT (ms) = latency or congestion
+		? if ping to IP works but not to hostname -> DNS problem
+	- b. traceroute / tracert
+		- Purpose: shows the path packets take to a destination (each hop)
+		- Windows: tracert 8.8.8.8
+		- Linux/macOS: traceroute 8.8.8.8
+		- Use cases
+			- Identify where latency spikes occur
+			- Detect routing loops or black holes
+			- Verify ISP or WAN path
+		? If traceroute stops at first hop -> default gateway issues
+		? If stops mid-path -> ISP or firewall filtering ICMP
+	- c. ipconfig / ifconfig / ip
+		- Windows: ipconfig: View IP, mask, gateway, DNS
+		- Linux / macOS: ifconfig: or set IP  (deprecated)
+		- Modern Linux: ip addr, ip route: Modern replacement for ifconfig
+		- Key Flags (Windows)
+			- ipconfig /all -> Detailed info
+			- ipconfig /release -> Drop DHCP lease
+			- ipconfig /renew -> Get new DHCP IP
+			- ipconfig /flushdns -> Clear DNS cache
+		? If device shows 169.254.x.x IP -> DHCP issue (no lease)
+	- d. nslookup/dig
+		- Purpose: Test and verify DNS resolution
+		- nslookup google.com
+		- dig google.com
+		- Use Cases:
+			- Confirm DNS server functionality
+			- Verify domain-to-IP mappings
+			- Check for internal vs external DNS leaks
+		? if nslookup fails but ping by IP works -> DNS problem
+	- e. netstat
+		- Purpose: Display active connections, listening ports, and routing tables
+		- netstat -an 
+		- netstat -rn -> show routing table
+		- netstat -s -> show statistics
+		- Use Cases:
+			- Identify open ports (security check)
+			- Find established TCP sessions
+			- Troubleshoot default routes
+	- f. arp
+		- Purpose: view or manipulate the ARP cache (maps IPs to MAC addresses)
+		- arp -a -> show current arp table
+		- arp -d * -> clear arp cache
+		? If device can't reach local subnet -> bad ARP entry or MAC table issue
+	- g. nmap
+		- Purpose: Scan a host or subnet for open ports, services, and os fingerprints
+			- nmap 192.168.1.0/24	
+			- nmap -p 22, 80 10.0.0.5
+		- Use Cases:
+			- Discover devices on a network
+			- Check firewall rules
+			- Detect unauthorized hosts
+		? "Which tool determines what ports are open on a remote host?" -> nmap
+	- h tcpdump
+		- Purpose: CLI packet capture (like Wireshark without GUI)
+		- tcpdump -i eth0 port 80
+		- tcpdump -n host 8.8.8.8
+		? used to capture and analyze live traffic - perfect for headless systems or quick troubleshooting
+	- i. show commands (Cisco)net
+		- show interfaces -> check link, errors, CRC
+		- show ip route -> Routing table
+		- show vlan brief -> VLAN assignment
+		- show spanning-tree -> STP state
+		- show mac address-table -> Layer 2 mapping
+		? if CRC errors increasing -> back cable or EMI (Layer 1)
+
+$ Cable Testers
+	- What They Are:
+		- Physical layer tools to test copper and fiber connections for continuity, pinout, and signal quality
+	- a. Continuity Tester
+		- Simple pass/fail check: ensures each conductor is connected end-to-end
+		- Detects opens, shorts, crossed pairs
+	- b. Wire Map Tester
+		- Verifies correct pinout (T568A/B standard)
+		- Detects TX/RX reversed, split pairs, or miswiring
+		? Which tool verifies that each wire in a Cat6 cable is properly terminated?" -> Wire map tester
+	- c. Time Domain Reflectometer (TDR)
+		- Measures cable length and locates breaks or shorts using reflected signals
+		- Reports fault distance in meters/feet
+		- For Fiber: user Optical TDR (OTDR)
+		? "Which tool locates a cable break 57m away?" -> TDR
+	-d. Cable Certifier
+		- High-end tool used by installers to certify cable meets performance standards (Cat6, Cat6a)
+		- Measures attenuation, NEXT, and signal loss
+		? Used in professional installations to guarantee performance
+	- e. Tone Generator and Probe ("Fox and Hound")
+		- Sends a tone down a cable -> probe detects which cable emits the tone
+		- Used for cable tracing in patch panels or walls
+		? "Technician needs to located one cable among many" -> Tone generator and probe
+
+$ Wi-Fi Analyzers
+	- What They Are:
+		- Tools that scan the wireless spectrum to detect signal strength, SSIDs, channels, interference, and coverage overlap
+	- Examples:
+		Tool                          | Type
+		Ekahau / NetSpot / AirMagnet  | Professional Wi-Fi site survey tools
+		Wireshark (with monitor mode) | Packet Capture for Wi-Fi
+		Acrylic Wi-Fi analyzer        | Free windows signal visualizer
+		Mobile Apps                   | Android/iOS Wi-Fi analyzers for signal mapping
+	- What You Can Find:
+		Issue                   | Detected by
+		Weak signal strength    | RSSI values (below -70 dBm = poor)
+		Channel overlap         | Overlapping SSIDs on 1/6/11
+		Co-channel interference | Too many APs on same channel
+		Rogue APs               | Unauthorized SSIDs
+		Noise sources           | Spectrum analyzer readings
+	- Fixes and uses:
+		- Reassign channels (1, 6, 11 for 2.4Ghz)
+		- Reposition APs for better coverage
+		- Adjust transmit power to avoid overlap
+		- Identify and disable rogue access points
+		? "Which tool identifies overlapping Wi-Fi channels in an office?" -> Wi-Fi analyzer
+	

@@ -1,0 +1,449 @@
+******************************
+** Professor Messer N10-009 **
+******************************
+
+** Understanding The OSI Model 1.1 **
+
+** Networking Devices 1.2 **
+Network Attached Storage (NAS)
+	Connect to a shared storage device across the network
+	File-level access
+		To edit a file you must download it and reupload it
+Storage Area Network (SAN)
+	Looks and feels like a local storage device
+	Block-level access
+		To edit a file, only the parts that are changed are reuploaded
+
+** Networking Functions 1.2 **
+
+** Designing the Cloud 1.3 **
+Network Security List
+	Assign a security rule to an entire IP subnet
+	Applies to all devices in the subnet
+	Broad and difficult to manage
+Network Security Group
+	Assign a security rule to a specific virtual NIC
+	Applies to specific devices and network connections	
+
+** Cloud Models **
+SaaS
+	On-demand software
+	No local installation
+	Google mail / 365
+IaaS
+	Sometimes called HaaS
+	Outsource your equipment
+	Web service providers
+PaaS
+	No servers, no software, no maintenance team, no HVAC
+	You don't have direct control of the data, people, or infrastructure
+	SalesForce.com
+
+** Introduction to IP 1.4 **
+Multiplexing - Use many different applications at the same time
+Non-Ephemeral Ports - 0-1023
+Ephemeral Ports - 1024-65535
+
+
+** Common Ports 1.4 **
+
+** Other Useful Protocols 1.4 **
+GRE - The tunnel between two endpoints
+	No built in encryption
+IKE - Agree on encryption/decryption keys without sending the key across the network by building the Security Association
+	Phase 1 - Use DH to craete a shared key on udp/500
+		ISAKMP - Internet Security Association and Key Management Protocol
+	Phase 2 - Coordinate ciphers and key sizes
+		Negotiate an inbound and outbound SA for IPsec
+Transport Mode and Tunnel Mode
+	Original packet -> IP Header | Data
+	Transport mode -> IP Header | IPsec Headers | Data | IPsec Trailers
+	Tunnel mode -> New IP Header | IPsec Headers | IP Header | Data | IPsec Trailers
+AH - Hash of the packet and a shared key
+		MD5, SHA-1, or SHA-2 for the hash
+		Adds the AH to the header packet
+		New IP Header | AH Header | IP Header | Data
+ESP - Encrypts the packet
+	MD5, SHA-1, or SHA-2 for the hash
+	3DES or AES for encryption
+	Adds a header, a trailer, and an integrity check value
+	New IP Header | ESP Header | IP Header | Data | ESP Trailer | Integrity Check Value
+
+** Wireless Networking 1.5 **
+Wireless networking (802.11)
+	802.11a		x		5GHz		6-54 Mbit/s
+	802.11b		x		2.4GHz		1-11 Mbit/s
+	802.11g		x		2.4GHz		6-54 Mbit/s
+	802.11n		Wifi 4		2.4/5GHz	72-600 Mbit/s
+	802.11ac	Wifi 5		5 GHz		433-6933 Mbit/s
+	802.11ax	Wifi 6 & 6E	2.4/5/6 GHz	574-9608 Mbit/s
+	802.11be	Wifi 7		2.4/5/6 GHz	1376-46120 Mbit/s
+4G and LTE (Long Term Evolution)
+	Converged standard (GSM and CDMA)
+	Based on GSM and EDGE (Enhanced Data Rates for GSM Evolution)
+	Standard supports download rates of 150 Mbit/s
+	LTE Advanced (LTE-A) supports 300 Mbit/s
+5G launched in 2020
+	Higher frequency with eventual speeds of 10GB/s
+	Slower speeds from 100-900 Mbit/s
+Satellite Networking
+	Non Terrestrial communication
+	High cost relative to terrestrial
+	100 Mbit/s down, 5 Mbit/s up
+	Latency: 250ms up and 250ms down
+	Starlink: 40ms
+	High frequencies - 2GHz
+		Line of sight, rain fade
+
+** Ethernet Standards 1.5 **
+IEEE 802.3
+Institute of electrical and electronics engineers
+	1000BASE-T	Gigabit Ethernet	Copper	1Gb/s
+	10GBASE-T	10Gb Ethernet		Copper	10Gb/s
+	1000BASE	Gigabit Ethernet	Fiber	1Gb/s
+The number is related to the network speed
+	1000 is commonly 1000 Mb/s
+	10G would be 10 Gb/s
+BASE (baseband)
+	Single frequency using the entire medium
+	Broadband uses many frequences sharing the medium
+Media Type
+	F is twisted pair, F is copper
+	SX would be short wavelength light over a fiber optic connection
+
+** Optical Fiber 1.5 **
+
+** Copper Cabling 1.5 **
+Twisted Pair
+	Balanced pair operation
+		Two wires with equal and opposite signals
+		Transmit+, Trasmit- / Receive+, Receive-
+	The twist is the secret
+		Keeps a single wire constantly moving away from the interference
+		The opposite signals are compared on the other end
+	Pairs in the same cable have different twist rates
+Cable Speeds
+	Cables don't have speeds, the copper just sits there
+	Electric signals are sent over the copper cable	
+		The signal encoding determines the data transfer rate
+Coaxial Cables
+	Two or more forms share a common axis
+	RG-6 used in television / digital cable
+		High speed internet over cable
+Twinaxial Cable
+	Two inner conductors
+		Twinax
+	Common on 10Gb Ethernet SFP+ Cables
+		Full duplex
+		Five meters
+		Low cost
+		Low latencer compared to twisted pair
+Plenum Rated Cable
+	Tradtional cable jacket - PVC - Polyvinyl Chloride
+	Fire rated cable jacket
+		Fluorinated Ethylene Polymer (FEP)
+		Low-smoke Polyvinyl Chloride (PVC)
+	Might not be quite as flexible
+
+** Network Transceivers 1.5 **
+Transceiver
+	Transmitter and Receiver
+		Usually a single component
+	Provides a modular Interface
+		Add the transceiver that matches your network
+SFP and SFP+
+	Small Form Factor Pluggable (SFP)
+		Commonly used to provide 1Gbit/s fiber
+		1 Gbit/s RJ45 SFPs also available
+	Enhanced Small Form Factor Pluggable (SFP+)
+		Exactly the same physical size as SFPs
+		Supports data rates up to 16 Gbit/s
+		Common with 10 Gb Ethernet
+QSFP 
+	4 chennel SFP = four 1 Gbit/s 
+	QSFP+ is four channel SFP+ = four x 10 Gbit/s
+
+** Fiber Connectors 1.5 **
+SC - Subscriber Connector / Square Connector / Standard Connector
+	Pushes on to lock, pull connector to unlock
+	Popular fiber connector
+LC - Local Connector / Lucent Connector / Little Connector
+	Another popular fiber type
+		Smaller and more compact connector
+ST - Straight Tip
+	Bayonet Connector
+		Stick and Twist
+	Push on and turn
+		Locks in place, turn to unlock
+MPO - Multifiber Push on
+	Twelve fibers in a single connector
+		Save space and manage one cable
+	Push to lock in place
+		Pull connector to unlock
+	May also see the MTP abbreviation
+
+** Copper Connectors 1.5 **
+RJ11
+	6 Position, 2 Conductor
+	Telephone & DSL connection
+RJ45
+	8 Position, 8 Conductor
+	Modular connector
+	Ethernet
+F-Connector
+	Coaxial Cable
+	Standard connector type
+	Threaded connector
+	Cable Television Infrastructure
+		Cable modem
+		DOCSIS (Data Over Cable Service Interface Specification)
+BNC Connector
+	Bayonet Neill-Concelman
+		Paul Neill (Bell Labs) and Carl Concelman (Amphenol)
+	Another common coaxial cable connector
+		Common with twinax and DS3 WAN links 
+		Video connections
+	Secure connections
+		Twist and Lock in place
+
+** Network Topologies 1.6 **
+Star/Hub and Spoke
+	Used in most large and small networks
+	All devices are connected to a central device
+	Switched Ethernet networks
+		The switch is in the middle
+Mesh
+	Multiple links to the same place
+		Fully connected
+		Partially connected
+	Redundancy, fault tolerance, load balancing
+	Used in WANs
+Hybrid
+	A combination of one or more physical topologies
+		Most networks are hybrid
+Spine and Leaf architecture
+	Each leaf switch connects to each spine switch
+	Each spine switch connects to each leaf switch
+	Leaf switches do not connect to each other and same for the spines
+	Top of Rack switching
+		Each leaf is on the top of a physical network rack
+	Advantages 
+		Simple cabling, redundant, fast
+	Disadvantages
+		Additional switches may be costly
+Point to Point
+	One to one connection
+	Older WAN links
+	Connection between buildings
+
+** Network Architectures 1.6 **
+Three Tier Architecture
+	Core
+		The center of the network
+		Web servers, databases, applications
+		Many people need access to this
+	Distribution
+		A midpoint betweent he core and the users
+		Communication between access switches
+		Manage the path to the end user
+	Access
+		Where the users connect
+		End stations, printers
+
+Collapsed Core
+	A Two Tier Model
+		Simplify the three tier architecture
+		A good fit for smaller orgs
+	Combine Core and Distribution Layers
+		Collapse Together
+	Differences over three tier
+		Simpler to design and suppot
+		Less expensive
+		Not as resilient
+Traffic Flow
+	East to West
+		Within the same data center
+	North to South
+		Ingress/egress to an outside device
+
+** Binary Math 1.7 **
+
+** IPv4 Addressing 1.7 **
+Virtual IP addresses (VIP)
+	Not associated with a physical network adapter
+	VM, internal router address
+APIPA
+	A link local address
+	Can only communicate to other local devices
+	No forwarding by routers
+	IETF has reserved 169.254.0.1 - 169.254.255.254
+	Functional block of 169.254.1.0 - 169.254.254.255
+	Automatically assigned
+		Uses ARP to confirm the address isn't currently in use
+Private Ip address ranges
+	Not publically routable, but can be routed internally
+	Use NAT for everything else
+	Defined in RFC 1918 (Request for Comment)
+	IP address Range		Number of addresses	Classful Description	Largest CIDR block (subnet mask)	Host ID size
+	10.0.0.0 - 10.255.255.255	16,777,216		Single class A		10.0.0.0/8	(255.0.0.0)		24 bits
+	172.16.0.0 - 172.31.255.255	1,048,576		16 contiguous class Bs	172.16.0.0/12	(255.240.0.0)		20 bits
+	192.168.0.0 - 192.168.255.255	65,536			256 contiguous class Cs	192.168.0.0/16  (255.255.0.0)		16 bits
+
+** Classful Subnetting 1.7 **
+Very specific subnetting architecture
+	Not used since 1993 but still referenced in casual conversation
+Used as a starting point when subnetting
+	Class	Leading Bits	Network bits	Remaining Bits	Number of Networks	Hosts per Network	Dafault Subnet Mask
+	A	0xxx(0-127)	8		24		128			16,777,214		255.0.0.0
+	B	10xx(128-191)	16		16		16,384			65,534			255.255.0.0
+	C	110x(192-223)	24		8		2,097,152		254			255.255.255.0
+	D	1110(224-239)	x		x		x			x			x
+	E	1111(240-255)	x		x		x			x			x
+Class D is multicast
+Class E is reserved for future use
+127.0.0.0/8 is reserved as a loopback address
+What IP class
+	17.22.90.7 -> A
+	220.10.77.40 -> C
+	165.244.0.1 -> B
+The construction of a subnet
+	Network Address
+		The first IP address of a subnet
+		Set all host bits to 0
+	First usable host address
+		One number higher than the network address
+	Network broadcast address
+		The last IP address of a subnet
+		Set all host bits to 1
+	Last usable host address
+		One number fewer than the broadcast address
+Subnet Calculations
+	10.74.222.11
+		Class: A
+		Subnet Mask: 255.0.0.0
+		Network: 10.0.0.0
+		First host address: 10.0.0.1
+		Broadcast address: 10.255.255.255
+		Last host address: 10.255.255.254
+	172.16.88.200
+		Class: B
+		Subnet Mask: 255.255.0.0
+		Network: 172.16.0.0
+		First host address 172.16.0.1
+		Broadcast address: 172.16.255.255
+		Last host address: 172.16.255.254
+	192.168.4.77
+		Class: C
+		Subnet Mask: 255.255.255.0
+		Network: 192.168.4.0
+		First host address: 192.168.4.1
+		Broadcast address: 192.168.4.255
+		Last host address: 192.168.4.254
+
+** IPv4 Subnet Masks 1.7 **
+
+** Calculating IPv4 Subnets and Hosts 1.7 **
+VLSM
+Number of subnets = 2^subnet bits
+Hosts per subnet = 2^ host bits - 2
+IP address: 10.1.1.0/24
+	Class: A
+	Network bits: 8
+	Subnet bits: 16
+	Total subnets: 65536
+	Hosts per subnet: 254
+IP address: 192.168.11.0/26
+	Class = C
+	Network bits: 24
+	Subnet bits: 2
+	Total subnets: 4
+	Hosts per subnet: 62	
+IP address: 172.16.55.0/21
+	Class: B
+	Network bits: 16
+	Subnet bits: 5
+	Total subnets: 32
+	Hosts per subnet: 2046
+
+** Magic Number Subnetting 1.7 **
+	
+
+
+** Software Defined Networking 1.8 **
+SDN
+	Infrastructure/Data Plane
+		Process the network frames and packets
+		Forwarding, trunking, ecnrypting, NAT
+	Control Layer / Control plane
+		Manages the actions of the data plane
+		Routing tables, sessions tables, NAT tables
+		Dynamic routing protocol updates
+	Application Layer / Management Plane
+		Configure and manage the device
+		SSH, browser, API
+SD WAN
+	Zero Touch Provisioning
+		Remote equipment is automatically configured
+		Application traffic uses the most optimal path
+		Can change based on traffic patterns and network health
+
+** Virtual Extensible LAN 1.8 **
+DCI - Connect multiple data centers together
+
+** Zero Trust 1.8 **
+SASE - A "next generation" VPN
+	Security technologies are in the cloud
+	SASE clients on all devices
+
+** Infrastructure as Code **
+Playbook
+	Conditional steps to follow
+		Investigate a data breach, recover from ransomware, etc.
+	A reusable template
+	Often integrated into SOAR platorms - Security Orchestration, Automaton, and Response
+Automation use cases
+	Configuration drife/compliance
+		Ensure the same config on all systems
+Source Control
+	Managing Chsnge
+	
+** IPv6 Addressing 1.8 **
+
+** Dynamic Routing 2.1 **
+EIGRP
+	Partly proprietary to Cisco
+	Commonly used on internal Cisco routed networks
+	Easy to enable and use
+	Loop free operation
+	Minimum bandwidth use
+OSPF
+	Common interior gateway protocol
+	Used within a single AS
+	Link-State protocol
+		Routing is based on the connectivity between routers
+		Each link has a cost
+			Throughput, reliability, round trip time
+			Low cost and fastest path wins
+BGP
+	External gateway protocol
+		Connect different AS
+	The 'three napkins protocol'
+	
+FHRP
+	Your computer is configured with a single default gateway
+	THe default router IP address isnt real
+		Devices use a VIP for the default gateway
+
+** Network Address Translation 2.1 **
+RFC 1918 private addresses
+10.0.0.0-10.255.255.255
+172.16.0.0-172.31.255.255
+192.168.0.0-192.168.255.255
+
+
+
+
+
+
+
+

@@ -1,0 +1,1460 @@
+******************************
+** Professor Messer Sy0-701 **
+******************************
+
+** Security Controls 1.1 **
+Categories: Technical, Managerial, Operational, Physical
+Technical Controls
+	controls implemented using systems
+	operating system controls
+	fireswalls, anti-virus, ect.
+Managerial Controls
+	administrative controls associated with security design and implementation
+	security policies, standard operating procedures
+Operational Controls
+	controls implemented using people instead of systems
+	security guards, awareneess programs
+Physical Controls
+	limit physical access
+	guard shack, fences, locks, badge readers
+Types of control types: Preventative, Deterrent, Detective, Corrective, Compensating, Directive
+Preventive
+	Block access to a resource
+	firewall rules, security policies, guard shack checks, door locks
+Deterrent
+	Discourage an intrusion attempt
+	Does not directly prevent access
+	splash screens, threat of demotion, recpetion desk, warning signs
+Detective
+	identify and log an intrusion attempt
+	may not prevent access
+	collect and review system logs, review login reports, regularly patrol the property, enable motion detectors
+Corrective
+	apply a control after an event has been detected
+	reverse the impact of an event
+	continue operating with minimal downtime
+	restore from backups, create policies for reporting security issues, contacting law enforcement, use a fire extinguisher
+Compensating
+	control using other means
+	existing controls aren't sufficient
+	may be temporary
+	firewalls blocks an app instead of patching it, implement separation of duties, simultanious guard duties, generator for power outage
+Directive
+	direct a subject towards security compliance
+	relatively weak security control
+	"Do this please": store sensitive files in protected folder, create policies and procedures, training, signage 	
+
+** The CIA Triad 1.2 **
+Confidentiality - Prevent disclosure of information to unauthorized individuals or systems
+	Certain information should only be known to certain people
+		Prevent unauthorized information disclosure
+	Encryption
+		enconde messages so only certain people can read it
+	Access controls
+		Selectively restrict access to a resource
+	Two-factor auth
+		Additional confirmation before information is disclosed
+Integrity - Messages can't be modified without detection
+	Data is stored and transferred as inteded
+		Any modification to the data would be identified
+	Hashing
+		Map data of an arbitrary length to data of a fixed length
+	Digital Signatures
+		Mathematical scheme to verify the integrity of data
+	Certificates
+		Combine with a digital signature to verify an individual
+	Non-repudiation
+		Provides proof of integrity, can be asserted to be genuine
+Availability - Systems and networks must be up and running
+	Information is accessible to authorized users
+		Always at your fingertips
+	Redundancy
+		Build services that will always be available
+	Fault Tolerance
+		Systems will continue to run, even when a failure occurs
+	Patching
+		Stability
+		Close security holes
+
+** Non-Repudiation 1.2 **
+You can't deny what you've said
+	There's no taking it back
+Sign a contract
+	Your signature adds non-repudiation
+	You really did sign the contract
+	Others can see your signature
+Adds a different perspective for cryptography
+	Proof of integrity
+	Proof of origin, with high assurance of authenticity
+Proof of Integrity
+	Verify data does not change
+		The data remains accurate and consistent
+	In cryptography we use a hash
+		Represent data as a short string of text
+		A message digest, a fingerprint
+	If the data changes, the hash changes
+		If the person changes, you get a different fingerprint
+	Doesn't necessarily associate data with an individual
+		Only tells you if the data has changed
+Proof of origin
+	Prove the message was not changed
+		Integrity
+	Prove the source of the message
+		Authentication
+	Make sure the signature isn't fake
+		Non-repudiation
+	Sign with the private key
+		The message doesn't need to be encrypted
+		Nobody else can sign this 
+	Verify with the public key
+		Any change to the message will invalidate the signature
+
+** Authentication, Authorization, and Accounting 1.2 **
+AAA Framework
+Identification
+	This is who you claim to be
+	Usually your username
+Authentication
+	Prove you are who you say you are
+	Password and other authentication factors
+Authorization
+	Based on your identification and authentication, what access do you have
+Accounting
+	Resources used: Login time, data sent and received, logout time
+Authenticating systems
+	You have to manage many devices
+		Often devices that you'll never physically see
+	A system can't type a password
+		And you may not want to store one
+	How can you truly authenticate a device?
+		Put a digitally signed certificate on the device
+	Other business processes rely on the certificate
+		Access to the VPN from authorized devices
+		Management software can validate the end device
+Certificate Authentication
+	An organization has a trusted CA
+		Most organizations maintain their own CAs
+	The organization creates a certificate for a device
+		And digitally signes the certificate with the organization's CA
+	The certificate can now be included on a device as an authentication factor
+		The CA's digital signature is used to validate the certificate
+Authorization Models
+The user or device has now authenticated
+	To what do they have access?
+	Time to apply the authorization model
+Users and services -> Data and Applications
+	Associating individual users to access rights does not scale
+Put an authorization model in the middle
+	Define by roles, organizations, attributes, etc.
+No Authorization Model
+	A simple relationship
+		User -> Resource
+	Some issues with this method
+		Difficult to understand why an authorization may exist
+		Does not scale
+Using an authorization model
+	Add an abstraction
+		Reduce complexity
+		Create a clear relationship between the user and the resource
+	Administration is streamlined
+		Easy to understand the authorizations
+		Support any number of users or resources
+
+** Gap Analysis 1.2 **
+Where you are compared with where you want to be
+	The "gap" between the two
+This may require extensive research
+	There's a lot to consider
+This can take weeks or months
+	An extensive study with numerous participants
+	Get ready for emails, data gathering, and technical research
+Choosing the Framework
+	Work towards a known baseline
+		This may be an internal set of goals
+		Some organizations should use formal standards
+	Determine the end goal
+		NIST Special Publication 800-171 Revision 2, Protecting Controlled Unclassified Information
+		in Nonfederal Systems and Organizations.
+		ISO/IEC 27001, Information security management systems.
+Evaluate People and Processes
+	Get a baseline of employees
+		Formal experience
+		Current training
+		Knowledge of security policies and procedures
+	Examine the current processes
+		Research existing IT systems
+		Evaluate existing security policies
+Compare and Contrast
+	The comparison
+		Evaluate existing systems
+	Identify weaknesses
+		Along with the most effective processes
+	A detailed analysis
+		Examine broad security categories
+		Break those into smaller segments
+The Analysis and Report
+	The final comparison
+		Detailed baseline objectives
+		A clear view of the current state
+	Need a path to get from the current security to the goal
+		This will almost certainly include time, money, and lots of change control
+	Time to create the gap analysis report
+		A formal description of the current state
+		Recommendations for meeting the baseline
+
+** Zero Trust 1.2 **
+Many networks are relatively open on the inside
+	Once you're through the firewall, there are few security controls
+Zero Trust is a holistic approach to network security
+	Covers every device, every process, every person
+Everything must be verified
+	Nothing is inherently trusted
+	MFA, encryption, system permissions, additional firewalls, monitoring and analytics, etc.
+Plans of Operation
+	Split the network into functional planes
+		Applies to physical, virtual, and cloud components
+	Data Plane
+		Process the frames, packets, and network data
+		Processing, forwarding, trunking, encrypting, NAT
+	Control Plane
+		Manages the actions of the data plane
+		Define policies and rules
+		Determines how packets should be forwarded
+		Routing tables, sessions tables, NAT tables
+Extend the Physical Architecture
+	Separate into functional tasks
+		Incorporate into hardware or software
+Controlling Trust
+	Adaptive Identity
+		Consider the source and the requested resources
+		Multiple risk indicators - relationsihp to the organization, physical location, type of connection, ip address, etc.
+		Make the authentication stronger if needed
+	Threat scope reduction
+		Decrease the number of possible entry points
+	Policy-driven access control
+		Combine the adaptive identity with a predefined set of rules
+Security Zones
+	Security is more than a one-to-one relationship
+		Broad categorizatoins provide a security-related foundation
+	Where are you coming from and where are you going
+		Trusted, untrusted
+		Internal network, external network
+		VPN 1, VPN 5, VPN 11
+		Marketing, IT, Accounting, Human Resources
+	Using the zones may be enough by itself to deny access
+		For exapmle, untrusted to trusted zone traffic
+	Some zones are implicitly trusted
+		For example: trusted to internal zone traffic
+Policy Enforcement Point
+	Subjects and Systems
+		End users, applications, non-human entities
+	Policy Enforcement Point (PEP)
+		The gatekeeper
+	Allow, Monitor, and terminate connections
+		Can consist of multiple components working together
+Applying Trust in the Planes
+	Policy Decision Point
+		There's a process for making an authentication decision
+	Policy Engine
+		Evaluates each access decision based on policy and other information sources
+		Grant, Deny, or Revoke
+	Policy Administrator
+		Communicates with the Policy Enforcement Point
+		Generates access tokens or credentials
+		Tells the PEP to allow or disallow access
+Zero Trust Across Planes
+	Subject -> System -> Policy Enforcement Point -> Enterprise Resource
+
+** Physical Security 1.2 **
+
+** Deception and Disruption 1.2 **
+
+** Change Management 1.3 **
+  
+** Technical Change Management 1.3 **
+
+** Public Key Infrastructure 1.4 **
+Policies, procedures, hardware, software, people
+	responsible for creating, distributing, managing, storing, and revoking related to digital certificates
+Also refers to the binding of public keys to people or devices
+	The certificate authority (CA)
+	It's all about trust
+Symmetric Encryption
+	Anytime you decrypt information, you are using the same key that was used to encrypt it
+	A single shared key/secret
+	Doesn't scale very well and can be challenging to distribute
+	Very fast to use due to less overhead, and is often combined with asymmetric encryption
+Asymmetric Encryption
+	Public key cryptography
+	Two or more mathematically related keys
+	Once they are created, 1 is the private key, and 1 is the public key
+	The private key is the only key that can decrypt data encrypted with the public key
+		You can't derive the private key from the public key 
+They Key Pair
+	Asymmetric encryption
+		public key cryptography
+	Key generation
+		Builds both the public and private key at the same time
+		Lots of randomization, large prime numbers, and lots of math
+Example
+	Bob writes a message to Alice using Alice's public key
+	A cipher text is created using a combination of the plaintext and alices public key
+	Anyone can see the ciphertext, but only Alice can decrypt it using her private key
+Key Escrow
+	Someone else holds your decryption keys
+		Your private keys are in the hands of a 3rd party (maybe an organization)
+	This can be a legitimate business arrangement
+		A business might need access to employee information
+		Government agencies may need to decrypt parnter data
+
+** Encrypting Data 1.4 **
+Full-disk and partition/volume encryption
+	Windows: Bitlocker
+	MacOS: FireVault
+	File encryption
+		EFS (encrypting file system)
+Transparent encryption
+	Encrypt all database information with a symmetric key
+	Record-level encryption
+		Encrypt individual columns
+		Use separate symmetric keys for each column
+Encryption Algorithms
+	Same algorithm myst be used to encrypt and decrypt on both sides
+Cryptographic Keys
+	The key determines the output
+		Encrypted data
+		Hash value
+		Digital signature
+Symmetric Encryption
+	128-bit or larger symmetric keys are common
+Asymmetric Encryption
+	Complex calculations of prime numbers
+	Larger keys than symmetric encryption
+	Common to see key lengths of 3,072 bits or larger
+Key Stretching
+	Hashing the hash of the password. and continue
+		Brute forcing would require reversing each of those hashes
+
+** Key Exchange 1.4 **
+Out-of-band key exchange
+	Don't send the symmetric key of the 'net'
+	Telephone, courier, in-person, etc.
+In-band key exchange
+	It's on the network
+	Protect the key with additional encryption
+	Use asymmetric encryption to deliver a symmetric key
+Session keys 
+	Ephemeral so need to be recreated often
+Symmetric key from asymmetric key
+	Public key cryptography
+		Allows you to create the same symmetric key on both sides without sending it across the network
+	Example
+		Bob and Alice both have private keys
+		Combine Bob's private key with Alice's public key
+		Combine Alice's private key with Bob's public key
+
+** Encryption Technologies 1.4 **
+Trusted Platform Module (TPM)
+	A standardized piece of hardware to provide cryptographic functions for that computer
+	A specification for cyrptographic functions
+		Cryptography hardware on a device
+	Cryptographic processor
+		Random number generator, key generators
+	Persistent Memory
+		Unique keys burned in during manufacturing
+	Versatile Memory
+		Storage keys, hardware configuration information
+	Password Protected
+		No way to brute force in
+Hardware Security Module (HSM)
+	Provides cryptographic functions for many devices
+	Used in large environments
+		Clusters, redundant power
+		Securely store thousands of cryptographic keys
+	High-end cryptographic hardware
+		Plug-in card or separate hardware device
+	Key backup
+		Secure storage hardware
+	Cryptographic accelerators
+		Offload that CPU overhead form other devices
+Secure Enclave
+	Security process built into the devices we use
+	A separate processor used solely for the protection of your data
+	Keeps your data private if your device falls in the hands of someone else
+	Provides extensive security features
+		Has it's own boot ROM
+		Monitors the system boot process
+		True random number generator
+		Real-time memory encryption
+		Root cryptographic keys
+		Performs AES encryption in hardware
+
+** Obfuscation 1.4 **
+Steganography
+	Typically hidden in images, but can also be embedded in TCP packets, audio/video files, invisible watermarks, etc.
+	Greek for "concealed writing"
+	Security through obscurity
+		Anyone can reverse it if they know how
+Tokenization
+	Replace sensitive data with a non-sensitivate placeholder
+	Common with credit card processing
+		Use a temporary token during payment
+		An attacker capturing the card numbers can't use them later
+	This isn't encryption or hashing
+		The original data and token aren't mathematically realated
+Data Masking
+	Data obfuscation
+		Hide some of the original data
+		Protects PII
+			And other sensitive data
+		May only be hidden from view
+			The data may still be intact in storage and control the view based on permissions
+
+** Hashing and Digital Signatures 1.4 **
+Hashes
+	Represent data as a short string of text
+		A message digest or fingerprint
+	One-way trip
+		Impossible to recover the original messgae from the digest
+		Used to store passwords / confidentiality
+	Verify a downloaded document is the same as the original 
+		Integrity
+	Can be a digital signature
+		Authentication, non-repudiation, integrity
+Collision
+	Hash Functions
+		Take an input of any size
+		Create a fixed size string
+		Message digest, checksum
+	If 2 inputs create the same hash it's called a collission
+	MD5 has a collision problem found in 1996
+Practical Hashing
+	Verify a downloaded file
+	Password storage
+		Instead of storing the password, store a salted hash
+		Compare hashes during the authentication process
+Adding some salt
+	Salt: random data added to a password when hashing
+	Every user gets their own random salt
+	Rainbow tables won't work with salted hashes
+		Rainbow tables are common passwords with common password hashes
+Digital Signatures
+	Prove the message was not changed
+		Integrity
+	Prove the source of the message
+		Authentication
+	Make sure the signature isn't fake
+		Non-repudiation
+	Sign with the private key
+		The message doesn't need to be encrypted bc nobody else can sign with it
+	Verify with the public key	
+		ANy change in the message will invalidate the signature
+
+** Blockchain Technology 1.4 **
+
+** Certificates 1.4 **
+A public key certificate
+	Binds a public key with a digital signature
+	As well as other details about the key holder
+A digital signature adds trust
+	PKI uses Certificate Authorities for additional trust
+	Web of Trusts adds other users for additional trust
+Certificate creation can be built into the OS
+	Part of Windows Domain services
+	Many 3rd party options
+What's in a digital certificate
+	X.509 - standard format
+	Certificate details - serial number, version, signature alg, issuer, name of cert holder, public key, and more...
+Third-party Certificate Authorities
+	Built into your browser
+	Purchase your web site certificate
+		It will be trusted by everyone's browser
+Certificate Signing Requests
+	Createa a key pair, then send the public key to the CA to be signed
+		A Certificate Signing Request (CSR)
+	The CA validates the request
+		Confirms DNS emails and website ownership
+	CA digitally signs the cert
+		Returns to the applicant
+Private Certificate Authorities
+	You are your own CA
+		Build it in-house
+		Devices must trust the internal CA
+	Needed for medium to large oraganizations
+		Many web servers and privacy requirements
+Self-Signed Certificates
+	Internal certificates don't need to be signed by a public CA
+		Your company is the only one using it
+	Build your own CA
+	Install the CA certificate/trusted chain on all devices.
+Wildcard Certificates
+	Subject Alternative Name (SAN)
+		Extension to an X.509 certificate
+		Lists additional identification information
+		Allows a certificate to support many different domains
+Key Revocation
+	Certificate Revocation List (CRL)
+		Maintained by the CA
+		Can contain many revocations in a large file
+OCSP Stapling
+	Online Certificate Status Protocol
+		Provides scalability for OCSP checks
+	The CA is responsible for responding to all client OCSP requests
+		May not scale well
+	Instead have the certificate holder verify their own status
+		Status information is stored on the certificate holder's server
+	OCSP status is "staples" into the SSL/TLS handshake
+		Digitally signed by the CA
+Getting revocation details into the browser
+	OCSP
+		The broswer can check certificate revocation
+	Messages usually send to an OCSP respond via HTTP
+		Easy to support over internet links
+		More efficient than downloading a CRL
+	Not all browsers/apps support OCSP
+		Early broswer versions don't support it
+
+** Threat Actors 2.1 **
+APT - Advanced Persistent Threat
+
+** Common Threat Vectors 2.2 **
+A method used by the attacker
+Message-based vectors
+	Email
+	SMS - Short Message Service
+	Phishing attacks
+Image-based vectors
+	SVG - Scalable Vector Graphic
+		Described in XML - Extensible markup Language
+		HTML injection
+		Javascript attack code
+File-based vectors
+	More than just executables
+		Adobe PDF
+		ZIP/RAR (or any compression type)
+		Microsoft Office
+			Documents with macros
+			Add in files
+Voice-call vecotrs
+	Vishing
+		Voice Phishing
+	Spam over IP
+	War dialing - unpublished phone numbers that might gain them access to systems
+	Call tampering - disrupting voice calls
+Removable-device vector
+	Get around the firewall
+		USB interface
+	Malicious software on USB flash drives
+		Infect air gapped networks
+		Industrial systems, high-security services
+	USB devices can act as keyboards
+		Hacker on a chip
+	Data Exfiltration
+		Terabytes of data walk out the door
+		Zero bandwidth used
+Vulnerable-software vectors
+	Client-based
+		infected executable
+		Known (or unknown) vulverabilities
+		May require constand updates
+	Agentless
+		No installed executable
+		Compromised software on the server
+		Would affect all users
+		Client runs a new instance each time
+Unsupported-system vectors
+	Patching is an important prevention tool
+		Ongoing security fixes
+	Unsupported systems aren't patched
+		There amy not even be an option
+	Outdated operating systems
+		Eventually the manufacturer won't help
+	A single system could be an entry
+		Keep your inventory and records current
+Unsecure-network vectors
+	Wireless
+		Outdataed security protocols (WEP, WPA, WPA2)
+		Open to rogue wireless networks
+	Wired
+		Unsecure interfaces - No 802.1X
+	Bluetooth
+		Reconnaissance
+Open Service Ports
+	Each port is a way for an attacker to get in
+	Every application has their own open port
+	Firewall rules
+Default Credentials
+	Change the default creds
+	Very easy to find default credentials - https://www.routerpasswords.com
+Supply-chain vector
+	Tamper with the underlying infrastructure
+		Or manufacturing process
+	Managed Service Providers (MSP)
+		Access many different customer networks from one location
+	Gain access to a network using a vendor
+		2013 Target credit card breach
+	Suppliers
+		Counterfeit network equipment
+		Install backdoors, substandard performance and availability
+
+** Phishing 2.2 **
+Social Engineering with a touch of spoofing
+Typosquatting - https://professormessor.com -> https://professormesser.com
+	Malicious links that appear as typos
+Pretexting - Lying to get info, "hi we're calling from visa"
+Vishing - Voice phishing
+Smishing - SMS phishing
+
+** Impersonation 2.2 **
+
+** Watering Hole Attacks 2.2 **
+When employees are training to not be fooled by common attack vectors, attackers will attack the system itself and wait.
+	Example: employees order coffee everyday, so the attacker gains access to the coffee shops server
+
+** Other Social Engineering Attacks 2.2 **
+Incorrect information - create confusion and division
+Influence campaigns - Sway public opinion on political and social issues
+Nation-state actors - divide, sistract, and persuade
+Advertising is an option - Buy a voice for your opinion
+Enabled through Social Media - Createing, sharing, liking, amplifying
+Brand Impersonation 
+
+** Race Conditions 2.3 **
+A programming conundrum
+	Sometimes things happen at the same time and can be bad if you've not planned it
+Time-of-check to time-of-use attack (TOCTOU)
+	Check the system
+	When do you use the results of your last check?
+	Something might happen between the check and the use
+
+** Malicious Updates 2.3 **
+
+** Operating System Vulnerabilities 2.3 **
+
+** SQL Injection 2.3 **
+
+** Cross-site Scripting 2.3 **
+Non-persistent (reflected) XSS attack
+	Web site allos scripts to run in user input
+		Search box is a common source
+	Attacker emails a link that takes advantage of this vulnerability
+		Runs a script that sends credentials/session IDs/cookies to the attacker
+	Script embedded in URL executes in the victim's broswer
+		As if it came from the server
+	Attacker uses credentials/session IDs/cookies to steal vidtim's information without their knowledge 
+Persistent (stored) XSS attack
+	Attacker posts a message to a social network
+		Includes the malicious payload
+	It's now 'persistent'
+		Everyone gets the payload
+	No specific target
+		All viewers to the page
+	For social networking, this can spread quickly
+		Everyone who view the message can have it posted to their page
+
+** Memory Injection 2.3 **
+Malware runs in memory
+	It can run its own processes or inject itself into another process
+	It can inject itself in between the memory of a valid process, granting itself the rights of the valid application
+DLL injection
+	Dynamid-Link Library
+		A windows library containing code and data
+		Many applicatrions can use this library
+	Attackers inject a path to a malicous DLL
+		uns as part of the target process
+	One of the most poopular memory injection methods
+		Relatively easy to implement
+
+** Buffer Overflows 2.3 **
+Overwriting a buffer of memory
+	Spills over into other memory areas
+Developers need to perform bounds and checking
+	The attackers spend a lot of time looking for openings
+Not a simple exploit
+	Takes time to avoid crashing things
+	Takes time to make it do what you want
+A really useful buffer overflow is repeatable
+
+
+** Hardware Vulnerabilities 2.3 **
+Firmware - Software inside the hardware
+	The OS of the hardware device
+End-of-Life (EOL) - Manufacturer stops selling a product, may continue supporting the product, important security patches
+End-of-Serviced Life (EOSL) - Manufactuerer stops selling a product and no longer supports it
+Legacy Platforms - Older operating systems, applications, and middlewear
+
+** Virtualization Vulnerabilities 2.3 **
+Quantity of resources vary between VMs
+	CPU, memory, storage
+Virtualization vulnerabilities
+	Local privilege escalation
+	Command injection
+	Information disclosure
+VM escape protection
+	Attackers can break out of the VM and interact with the host operting system or hardware
+Resource Reuse
+	The hypervisor manages the relationship between physical and virtual resources
+		Available RAM, storage, CPU availability, etc.
+	These resources can be reused between VMs
+		Hypervisor host with 4GB of RAM
+		Supports three VMs with 2GB of RAM each
+		RAM is allocated and shared between VMs
+		Data can inadvertently be shared between VMs
+
+** Cloud Specific Vulnerabilities 2.3 **
+76% of organizations aren't using MFA for management console users
+63% of code in production is unpatched
+Attack the service
+	DoS
+	Authentication bypass
+	Directory Traversal
+	RCE
+Attack the Application
+	Log4j and Spring Cloud Function
+	Easy to exploit, rewards are extensive
+	XSS
+	Out of bounds write
+		Write to unauthorized memory areas
+		Data corruption, crashing, or code execution
+	SQLi
+		Accessing unauthorized data into the database
+
+** Supply Chain Vulnerabilities 2.3 **
+One exploit at any step can effect the entire chain
+Service Providers
+	Often have access to internal systems
+	Many different types of providers
+Hardware Providers
+	Can you trust your new server/router/switch/firewall/software
+	String controls over policies and procedures
+Cisco or not Cisco
+	All network traffic flows through switches and routers
+Software Providers
+	Verify Digital Signatures
+	Updates and patches
+
+
+** Misconfiguration Vulnerabilities 2.3 **
+Superuser account - linux root/windows admin
+Insecure Protocols
+	Telnet, FTP, SMTP, IMAP, etc.
+	Verify if data is insecure/secure with a pcap
+
+** Mobile Device Vulnerabilities 2.3 **
+Android - rooting
+Apple iOS - jailbreaking
+Sideloading - Installing applications not from the verfied app store
+
+** Zero Day Vulnerabilities 2.3 **
+http://cve.mitre.org/
+CVE - Common Vulnerabiilities and Exposures
+
+** An Overview of Malware 2.4 **
+Viruses, worms, randomware, torjan horse, rootkit, keylogger, spyware, bloatware, logic bomb, etc.
+
+** Viruses and Worms 2.4 **
+Virus
+	Malware that can reproduce itslef
+	It needs you to execute a program
+	Reproduces through file systems or the network
+		Just running a program can spread a virus
+	May or may not cause problems
+		Some viruses are invisible, some are annoying
+	AV is very common
+		Thousands of new viruses every week
+		Keep your signature file updates
+Virus Types
+	Program viruses
+		Part of the application
+	Boot Sector Viruses
+		Virus runs on boot
+	Script viruses
+		Executed through scripts
+	Macro Viruses
+		Coded as a macro
+	Fileless Virus
+		A steal attack (can evade AV detection)
+		Operates in memory (never installed in a file or application)
+		Link -> website -> vulnerability -> powershell script -> run in memory
+Worms
+	Malware the self-replicates
+		Doesn't need you to do anything
+		Uses the network as a transmission medium
+		Self propagates and spreads quickly
+	Worms can take over many systems very quickly
+	Firewalls and IDS/IPS can mitigate many worm infestations
+
+** Spyware and Bloatware 2.4 **
+Spyware
+	Malware that spies on you
+		Advertising, identity theft, affiliate fraud
+	Can trick you into installing
+	Broswer monitoring
+	Keyloggers
+Bloatware
+	Included apps on a new device that you may not want
+	Apps installed by the manufacturer
+
+** Other Malware Types 2.4 **
+Logic Bomb
+	Waits for a predefined event
+		Often left by someone with a grudge
+	Time bomb
+	User Event
+	Difficult to Identify
+	
+Rootkit
+	Originally a Unix technique
+		THe "root" in rootkit
+	Modifies core system files
+		Part of the kernel
+	Can be invisible to the operating system
+		Won't see in task manager
+	Also invisible to traditional AVs
+Finding and removing rootkits
+	Secure boot with UEFI
+		Security in the BIOS
+
+** Physical Attacks 2.4 **
+
+** Denial of Service 2.4 **
+Force a server to fail by overloading the service
+A 'friendly' DoS
+	UNintentional DoSing
+	Network DoS 
+		Layer 2 loop without STP
+	Bandwidth DoS
+		Downloading multi gb Linux distributions over a DSL line
+Distributed DDoS
+	Launch an arm of computers to bring down a service
+		Use all the bandwidth or resources
+	Asymmetric threat - attacker may have fewer resources than the victim
+DDoS refletion and Amplification
+	Turn your small attack into a big attack
+	Uses protocols with little (if any) authentications or checks
+		NTP, DNS, ICMP
+	Sending little information and having the victim recieve more then you sent
+	DNS amplification DDoS
+		Botnet Command and Control -> Botnet -> Internet -> Open DNS Resolver -> Web Server
+
+** DNS Attacks 2.4 **
+DNS Poisoning
+	Modify the DNS server
+		Requires some crafty hacking
+	Modify the client host file
+		The host file takes presedent over DNS queries
+	Send a fake response to a valid DNS request
+		Requires a redirection of the original request or the resulting response
+		Real time redirection
+		This is an on path attack
+Domain Hijacking
+	Get access to the domain registration and you have control where the traffic flows
+		You don't need to touch the actual servers
+		Determines the DNS names and DNs IP addresses
+	Many ways to get into the account
+		Brute force
+		Social engineering the password
+		Gain access to the email address that manages the account
+		The usual things...
+URL Hijacking - Typosquatting
+	Make money from your mistakes
+	Sell the badly spelled domain to the actual owner
+		Sell a mistake
+	Redirect toa  competitor
+	Phishing site
+	Infect with drive by download
+
+** Wireless Attacks 2.4 **
+802.11 Management frames
+	802.11 wireless includes a number of management feauters
+		Frames that make everything work
+		You never see them
+	Important for the operation of 802.11 wireless
+		How to find APs, manage QoS, associate/disassociate with an AP, etc.
+	Original wireless standards did not add protection for management frames
+		Sent in the clear, no auth or validation
+Protecting Against Deauth Attacks
+	IEEE has already addressed the problem 
+		Updates included with 802.11ac
+	Some of the important management frames and encrypted
+		Disassociate, deauthenticate, channel switch announcements, etc.
+	Not everything is encrypted
+		Beacons, probes, authentication, association
+Radio Frequency (RF) Jamming
+	DoS
+		Prevent wireless comms
+	Tansmit interfering wireless signals
+		Decrease the signal-to-noise ration at the receiving device
+		The receiving device can't hear the good signal
+	Sometimes it's not intentional
+		Interference, not jamming
+		Microwave oven, fluorescent light
+Wireless Jamming
+	Many different types
+		Constant, random bits/constant, Legitimate frames
+		Data sent at random times, random data and legitimate frames
+		Reactive jamming, only when someone else tries to communicate
+	Needs to be somewhere close
+		Difficult to be effective from a distance
+	Fox Hunting
+		Using a directional antenna and attenuator to find where the signal is coming from
+
+** On Path Attacks 2.4 **
+Allows an attacker to sit between 2 devices and see all the traffic (MitM)
+ARP Poisoning (Spoofing)
+On Path Browser Attack
+	THe middleman is on the same computer as the victim
+		Malware/Trojan does all the proxy work
+		Man in the Browser attack
+	Huge advantage for the attacker
+		Easy to proxy encrypted traffic, and everything looks normal to the victim
+	Malware sits in your browser and waits for sensitive info
+
+** Replay Attacks 2.4 **
+Need access to the raw network data
+	Network tap, ARP poisoning, Malware on the victim computer
+The gathered information may help the attacker
+	Replay the data to appear as someone else
+This is not an on path attack
+	The actual replay doesn't require the original workstation
+Pass the Hash
+	Client/Victim sends normal auth request to server -> Attacker gets copy of username and hashed password -> replay it
+	back to the server, and now the attacker can pose as the victim computer
+	Ways to avoid: Encryption, Salting
+Browser cookies and session IDs
+	Cookies
+		Information stored on your computer by the browswer
+	Used for tracking, personalization, session management
+		Not executable, not generally a security risk
+			Unless someone gets access to them
+	Could be considered a privacy risk
+		Lots of personal data in there
+	Session IDs are often stored in the cookie
+		Maintains sessions across multiple browser sessions
+Session Hijackin (Sidejacking)
+	When an attacker gains access to the victims session ID
+Header Manipulation
+	Information gathering
+		Wireshark, Kismet
+	Exploits
+		XSS
+	Modify headers
+		Tamper, firesheep, scapy
+	Modify cookies
+		Cookies manager+ (firefox addon)
+Prevent Session Hijacking
+	Encrypt end to end
+		Can't caputure session ID if they can't see it
+		Additional load on web server
+		Extensions
+	Encrypt end to somewhere
+		At least to avoid capture over a local wireless network
+		VPNs
+
+** Malicious Code 2.4 **
+
+** Application Attacks 2.4 **
+Buffer Overflow - Overwriting a buffer of memory spilling over into other memory areas
+	Developers need to perform bounds checking
+Replay Attack - Replaying captured information to the server to appear as someone else
+Privilege Escalation - Gain higher level access to a system by exploiting a vulnerability
+Mitigating Priv Esc
+	Data Execution Prevention
+		Limits what areas of memory applications can run
+	Address space layout randomization
+		Prevent a buffer overflow at a certain address
+Cross Site Requests
+	Are common and legitimate
+Cross Site Request Forgery
+	One click attack, session riding
+		XSRF, CSRF
+	Takes advantage of the trust that a web application has for the user
+		The web site trusts your browser
+		Requests are made without your consent or your knowledge
+		Example: Attacker posts a FaceBook status on your account
+	Significant Web Application development oversight
+		The application should have anti-forgery techniques added
+		Usually a cryptographic token
+	Example: 1. Visitor is authenticated to the bank web server
+		 2. Attacker creats a funds transfer request
+		 3. Request is sent as a hyperlink to a user who may already be logged into the bank web site
+		 4. Visitor clicks the link and unknowingly sends the transfer request to the bank web site
+		 5. Bank validates the transfer and sends the visitor's funds to the attacker
+Directory Traversal / Path Traversal
+	Reads files from a web server that are outside of the websites file directory
+	Users shouldn't be able to browse the Windows folder
+	'../' attack
+
+** Cryptography Attacks 2.4 **
+Birthday Attack
+	'If you have 23 students in a room what is the chance of two students sharing a birthday?'
+	About 50%
+	'For a class of 30' -> 70%
+	In the digital world this is a hash collision
+		Find a collision through brute force
+Downgrade Attack
+	Instead of using Perfectly good encrypt, use something that's not so great
+		Force the systems to downgrade their security
+	SSL stripping
+		Combines an on path attack with a downgrade attack
+		Difficult to implement, but big returns for the attacker
+		Attacker must sit in the middle of the conversation
+		Victims browser page isnt encrypted
+		Strips away the S from HTTPS
+
+** Password Attacks 2.4 **
+Hashing a password
+	Hashes represent data as a fixed length string of text (a fingerprint)
+	One way trip. Impossible to recovery the original message from the digest
+Spraying Attack
+	Trying the most common passwords across several accounts
+Brute Force
+	Try every possible password/hash combination
+
+** Indicators of Compromise 2.4 **
+IoC - Indicators of Compromise
+Indicators might include - Unsual amounts of activity, change to file hash values, changes to DNS data,
+				spikes of read requests to certain files, uncommon login patterns
+Account lockout - exceeding login attempts / administratively disables,  a part of a larger plan
+
+** Segmentation and Access Control 2.5 **
+Physical, Logical, or Virtual segmentation
+	Devices, VLANs, virtual networks
+
+** Hardening Techniques 2.5 **
+System Hardening
+	Updates, minimum password lengths / complexity, account limitations, monitor
+Encryption
+	Windows Encrypting File System (EFS)
+	Full Disk Encryption (FDE)
+		Encrypt everything on the drive
+			Bitlocker, Filevault, etc.
+	Encrypt network Traffic
+		VPN, Application Encryption
+Endpoint Detection and Response (EDR)
+	A different method of threat protection
+		Scale to meet the increasing number of threats
+	Detect a threat
+		Signatures aren't the only detection tool
+		Bahvioral analysis, ML, process monitoring
+		Lightweight agent on the endpoint
+	Investigate the threat
+		Root cause of analysis
+	Respond to the threat
+		Isolate the system, quarantine the threat, rollback to a previous config
+		API driven, no user or technician intervention required
+Host Based Firewall
+	Software based firewall
+		Personal firewall, runs on every endpoint
+	Allow or Disallow incoming or outgoing application traffic
+		Control by application process
+		View all data
+	Identify and block unknown processes
+		Stop malware before it can start
+	Manage centrally
+Finding Intrusions
+	Host Based Intrusion Preventon System (HIPS)
+		Recognize and block known attacks
+		Secure OS and application configs, validate incoming service requests
+		Often built into endpoint protection software
+	HIPS identification
+		Signature, heuristics, behavioral
+		Buffer overflows, registry updates, writing files to the Windows folder
+		Access to non encrypted data
+
+** Cloud Infrastructers 3.1 **
+Cloud Responsibility Matrix
+	IaaS, PaaS, SaaS, etc.
+	who is responsible? It is a matrix of responsibilities
+Infrastructure as Code
+	Define servers, network, and applications as code
+	Modify the infrastructure and create versions
+		The same way you build app code
+	Use the code to build other application instances
+		Build it the same way everytime
+Serverless Architecture
+	Function as a Service (FaaS)
+		Applications are separated into individual, autonomous functions
+		Remove the OS from the equation
+	Dev still creats the server-side logic
+		May only run for one event
+	Mainly managed in the cloud by a third-party
+Microservices and APIs
+	Monolithic Applications
+		One big application that does everything
+	Application contains all decision making processes
+		User interface, Business logic, Data I/O
+	APIs
+		The 'glue' for microservices
+	Scalable
+		Scale just the microservices you need
+	Security and Compliance
+		Containment built in
+	Resiliant
+		Outages are contained
+
+** Network Infrastrucuture concepts 3.1 **
+Physical Isolation
+	Devices are separated by an air gap
+	Web server in one rack, DBs in another
+	Customer A on 1 switch, Customer B on another
+Logical Segmentation with VLAN
+SDN
+	Networking devices have different functional planes of operation
+		Data, control, and management
+	Split the functions into separate logical units
+		Extend functionality of a single device, built into the cloud
+	Infrastructure Layer / Data Plane
+		Process the network frames and packets
+		Forwarding, trunking, encrypting, NAT
+	Control Layer / Control Plane
+		Manages the actoins of the data plane
+		Routing tables, session tables, NAT tables
+		Dynamic routing protocol updates
+	Application Layer / Management Plane
+		Configure and manage the device
+		SSH, Browser, API
+	Example: DP -> Network Traffic, CP -> Dynamic routing protocols, MP -> SSH, SNMP, API
+SDN Security
+	3 web servers -> firewall -> load balancer -> firewall/ips -> the internet
+
+** Other Infrastructure 3.1 **
+Virtualization - run many different operating systems on the same hardware
+	Each application instance has its own operating system
+		Adds overhead and complpexity
+		Virtualization is really expensive
+	Hypervisor - manage all the separate resources between the VM on the system
+Application Containerization
+	Containerization - run multiple applicatons on the same hardware
+	Container
+		Contains everything you need to run an application
+		Code, dependencies
+		A standardized unit of software
+	An isolated process in a sandbox
+		Self contained
+		Apps can't interact with each other
+	Container Image
+		A standard for potability
+		Lightweight, uses the host kernel
+		Secure separation between applications
+SCADA / ICS
+	Supervisory Control and Data Acquisition System
+		Large scale, multisite, ICS
+	PC manages equipment
+		Power generation, refining, amnugacturing equip
+		Facilities, industrial, energy, logistics
+	Distributed Control Systems
+		Real time information
+		Sys control
+	Requires extensive segmentation
+	
+RTOS - Real Time Operating Systems
+Window / Linux / MacOS are non deterministic operating systems
+	Can't grab all the resources for 1 recourse
+An Operating system with a deterministric processing schedule
+	No time to wait for other processes
+	Industrial equipment, automobiles, military environments
+	Difficult to know what type of security is in place
+Embedded Systems
+	Hardware and software are defined for a specific function
+		Or to operate as a part of a larger system
+	Is build with 1 task in mind
+		Can be optimized for size and/or cost
+	Common examples
+		Traffic light controllers, digital watches, medical imaging systems
+HA - High Availability
+	Redundancy doesn't always mean always available
+	May need to be powered on manually
+	Acitve/Active
+
+** Infrasturcture Considerations 3.1 **
+
+** Secure Infrastructures 3.2 **
+Attack Surface - How many ways into the system?
+Application level encryption - the hard work as already been done
+Network level encryption - IPsec, tunnels, VPn connections
+
+** Intrusion Prevention 3.2 **
+Acitve monitoring
+	System is connected online
+	Data can be blocked in real time as it passes
+	Intrusion prevention is commonly active
+	Immeditately identified and dropped at the IPS
+Passive Monitoring
+	A copy of the network traffic is examined using a tap or port monitor
+	Data cannot be blocked in real time
+	SPAN - Switch Port ANalyzer
+	Examine a copy of the traffic (no way to block traffic)
+
+** Network Applicances 3.2)
+Jump Server
+	Access secure network zones
+		Provides an access mechanism to a protected network
+	Highly secured device
+		Hardened and monitored
+	SSH / Tunnel / VPN to the jump server
+		RDP, SSH, or jump from there
+	Compromise of the jump server is a significant breach
+Proxies
+	Sits between the users and the external network
+	Transparent proxy - the user has no idea the proxy is in place
+Application Proxy
+	One of the simplest proxies is NAT
+		Network level proxy
+	Most proxies in use are application proxies
+		The proxy understand the way the application works
+	A proxy may only know one application
+		HTTP
+	Many proxies are multipurpose proxies
+		HTTP, HTTPs, FTP, etc.
+Forward Proxy (internal proxy)
+	Proxy inside the network
+	Used to protect and control user access to the internet
+Reverse Proxy
+	Inbound traffic from the Internet to your internal service
+Open Proxy
+	Third party, uncontrolled proxy
+		Can be a significant security concert
+		Often used to cirumvent existing security controls
+Load Balancer
+	Fault Tolerance - server outages have no effect
+		Very fast convergence
+	Active/Active - All servers active
+		Configurable load (manage across all servers)
+		TCP offload and SSL offload
+		Caching (QoS)
+		Content switching
+	Active/Passive - some servers are active, others are on standby
+		If an active server fails, the passive server takes its place
+
+** Port Security 3.2 **
+EAP - Extensible Authentication Protocol
+EAP integrates with 802.1X
+	Prevents access to the network until the authentication succeeds
+IEEE 802.1X - port based NAC
+	You don't get access to the network until you authenticate
+	EAP integrats with 802.1X preventing access until authentication succeeds
+	Used in conjunction with RADIUS, LDAP, TACACS+, Kerberos, etc.
+IEEE 802.1X and EAP
+	Supplicant - the client
+	Authenticator - The device that provides access
+	Authentication Server - Validates the client credentials
+	supplicant -> authenticator -> supplicant -> authenticator -> authentication server
+
+** Firewall Types 3.2 **
+Network Based Firewall
+	Filter traffic by port number or application
+		L4 vs L7
+		trad vs ngfw
+	Encrypt traffic
+		VPN
+	Most firewalls can be L3 devices
+		Often sit on the ingress/egress of the network
+		NAT functionality
+UTM / Web Security Gateway
+	URL filter/content inspection, malware inspection, spam filter, csu/dsu, router, switch, firewall, ids/ips, vpn 
+NGFW
+	L7
+	All data in every packet
+	Deep packet inspection
+	Stateful multilayer inspection
+	Content filtering (url filtering, control website traffic by category)
+WAF - Web Application Firewall
+	Not a 'normal' firewall
+	Allow or deny based on expected input
+	Can identify SQLi
+	PCIDSS
+
+** Secure Communications 3.2 **
+VPNS
+	Concentrator - purpose built device for everyone to connect to using the link
+	Original packer: ip header + data
+	Tunnel mode: new ip header + ipset header + encrypted ip header + encrypted data + ipset trailer
+SSL/TLS VPN 
+	tcp 443 same as https
+	almost no firewall issues
+	Usually used for remote access comms
+	No requirement for digital certificates or shared passwords like ipsec
+	can run from a browser	
+	
+Site to Site IPsec VPN
+	always (or almost) always on
+	Firewalls often act as VPN concentrators
+		Probably already have firewalls in place
+SD WAN
+	A WAN built for the cloud
+	The data center used to be in one place (now it's in the cloud)
+SASE - Secure Access Service Edge
+	Update secure access for cloud services
+		Securely connect from different locations
+	A next generation VPN
+	Security tech is in the cloud and a client is installed on all devices
+		allowing for access to all other cloud devices
+
+** Secure Communications 3.2 **
+Concentrator
+	Encryption/decryption access device often built into the firewall
+
+** Data Types and Classifications 3.3 **
+
+** States of Data 3.3 **
+
+** Protecting Data 3.3. **
+
+** Resiliancy 3.4 **
+COOP - Continuity of Operations Planning
+
+** Recovery Testing 3.4 **
+Snapshot
+	Common with VMs and cloud based infrastrucutres
+	Can backup a copy of the system with the click of a button
+Replication
+	Ongoing, real-time backup
+Journaling
+	Power goes out while writing data to storage -> some data is still written to the drive
+	Before writing to storage, make a journal entry, then write the data to storage
+
+** Secure Baselines 4.1 **
+
+** Hardening Targets 4.1 **
+SCADA/ICS - Supervisory Control and Data Acquisition System / Industrial Control System
+	Large scale, multi site ICS
+	PC manages equipment
+		Power generation, refining, manufacturing equipment
+		Facilities, industrial, energy, logistics
+	Distributed Control Systems
+		Real time information
+		System control
+	Requires extensive segmentation
+		No access from the outside
+Embedded Systems
+	Hardware and software designed for a specific function
+RTOS - Real Time Operating System
+	An operating system with a deterministic schedule
+	No time to wait for other processes
+	Industrial equipment, automobiles, military environments
+	Isolate the system from other areas
+	Run with minimu services
+
+** Securing Wireless and Mobile 4.1 **
+
+** Wireless Security Settings 4.1 **
+MIC - Message Integrity Check
+The WPA2 PSK problem - brute force
+	Listen to the four way handshake and derive the hash from the handshake by taking it off line and brute forcing it
+WPA3 and GCMP
+	Wifi Protected Access 3
+	GCMP block cipher mode - Galois/Counter Mode Protocol
+		Data confidentiality with AES
+		MIC with GMAC - Galois Message Authentication Code
+SAE
+	WPA3 changes the PSK process
+	Creates a shared sessoin without sending the key across the network
+	A DH derived key exchange with an authentication component
+	Everyone usees a different session key even with the same PSK
+802.1X centralized authentication
+WPA3-Personal / WPA3-PSK
+	WPA2 or 3 with presharked 256bit key
+WPA3-Enterprise / WPA3-802.1X
+	Authentications users individually with an authentication server like RADIUS
+RADIUS
+	Common AAA protocol
+	Centralized authentication for users
+		Routers, switches, firewalls
+		server auth
+		remote VPN access
+		802.1X network access
+IEEE 802.1X - port based NAC
+	Used in conjunction with an access base like RADIUS, LDAP, or TACACS+
+EAP - Extensible Authentication Protocol
+	Authentication framework
+	Supplicant - the client
+	Authenticator - device that provides access
+	Authentication server - validates the client credentials
+
+** Application Security 4.1 **
+Secure Cookies
+	Have an attribute set to only be transferred over a secure connection
+
+** Asset Management 4.2 **
+Certificate of Destruction - Need confirmation that your data is destroyed
+
+** Vulnerability Scanning 4.3 **
+CTA - Cyber Threat Alliance
+
+** Analyzing Vulnerabilities 4.3 **
+CVSS - Common Vulnerability Scoring System
+
+** Security Tools 4.4 **
+SCAP - Security Content Automation Protocol
+	Managed by NIST - National Institute of Standards and Technology
+	Allows tools to identify and act on the same criteria
+	Can be shared between tools
+NetFlow
+	Father traffic statistcs from all traffic flows
+	Shared collection method
+	Probe and Collector
+
+** Firewalls 4.5 **
+NGFW
+	Layer 7, deep packet inspection, stateful
+	Every packet must be analyzed, categorized, and a security decision made
+Rules are from top to bottom
+Implicit Deny - Everythat that doesn't have a match in the ACL gets denied
+
+** Web Filtering 4.5 **
+Content Filtering
+	Control traffic based on data within the content
+		URL filtering, website category filtering
+		Parental controls
+Agent Based
+	Install client software on the user's device
+	Usually managed from a central consol
+	Users can be located anywhere
+	The lcoal agent makes the filtering decision
+
+** Operating System Security 4.5 **
+AD - Active Directory
+	A database of everything on the network
+Group Policy
+	Manage the computers or users with group policies
+SELinux
+	Security patches for the Linux kernel
+	Adds MAC to Linux
+	Linux tradionally uses DAC Discretionary Access Contol
+	Least privilege
+
+** Secure Protocols 4.5 **
+
+** Email Security 4.5 **
+Mail Gateway - Determines whether email is legitimate or should go to the mail server
+SPF - Sender Policy Framework
+	Which servers are authorized to send emails for a domain
+DKIM - DomainKeys Identifiable Mail
+	A mail server digitally signs all outgoing mail
+	The signature is avlidated by the recieving mail servers
+DMARC - Domain based Message Authentication, Reporting, and Conformance
+	An extension of SPF and DKIM
+	Accept all, send to spam, or reject the mail
+	Compliance reports are sent to the email administrator
+
+** Monitoring Data 4.5 **
+FIM - File Integrity Monitoring
+	Monitor important OS and application files
+	Windows: SFC - System File Checker
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

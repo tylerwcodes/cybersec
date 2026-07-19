@@ -1,0 +1,612 @@
+freeCodeCamp.org - Microsoft Azure Fundamentals Certification Course (AZ-900)
+https://www.youtube.com/watch?v=5abffC-K40c
+
+********************
+** Cloud Concepts **
+********************
+
+* What is Cloud Computing?
+	The practice of using a network of remote servers hosed on the Internet to store, manage, and process
+	data, rather than a local server or personal computer
+		On-Premise
+			You own the servers, hire the IT people, pay the rent, take all the risk
+		Cloud Providers
+			Someone else owns the servers, IT people, and rent, but you are responsible for
+			configuring cloud services and code, someone else takes care of the rest
+
+* The Evolution of Cloud Hosting
+	Dedicated Server - One physical machine dedicated to a single business
+		Very Expensive, High maintenance, High security
+	Virtual Private Server (VPS) - The physical machine is virtualized into sub-machine
+		Better utilization and isolation of resources
+	Shared Hosting - One physical machine shared by hundreds of businesses
+		Very cheap, limited functionality, poor isolation
+	Cloud Hosting - Multiple physical machines that act as one system
+		Flexibly, Scalable, secure, cost-effective, high configurability
+
+* Common Cloud Services
+	Four most common types of cloud services for IaaS
+		Compute - Imagine having a virtual computer that can run application, programs and code
+		Storage - Imagine having a virtual hard-drive that can store files
+		Networking - Imagine having the virtual network being able to define internet connections or
+				network isolations.
+		Databases - Imagine a virtual database for storing reporting data or a database for general
+				purpose web-application.
+
+* What is Microsoft
+	Redmond, Washington
+	Windows (Late 70s)
+
+* What is Azure
+	Azure means "Bright blue color of the cloudless sky"
+	CSP - Cloud Service Provider
+
+* Benefits of cloud computing
+	Cost effective - Pay for what you consume
+		PAYG - Pay As You Go
+	Global - Launch workloads anywhere in the world, just choose a region
+	Secure - Cloud provider takes care of physical security. Cloud services can be secure by default
+	Scalable - Increate or decrease resources and services based on demand
+	Elastic - Automate scaling during spikes and drop in demand
+	Current - The underlying hardware and managed software is patched, upgraded and replaced by the
+			cloud provider without interruption to you
+
+* Types of Cloud Computing
+	SaaS - Software as a Service
+		A product that is run by the service provider
+		Salesforce, Office 365, Gmail
+	PaaS - Platform as a Service
+		Focus on development and management of your apps. No provisioning, configuring, and understanding		 the hardware or OS.		
+		Elastic Themestock, Heroku, Google App Engine
+	IaaS - Infrastructure as a service
+		Basic building blocks for cloud IT. Access to networking features, computers, and data storage
+		Don't worry about IT staff, data centers and hardware
+		Microsoft Azure, AWS, Oracle Cloud
+
+* Types of Cloud Computing Responsibilities
+	CR - Customer is Responsible
+	CSPR - CSP is Responsible
+			On-Premise	IaaS		PaaS		SaaS
+	Applications	CR		CR		CR		CSPR
+	Data		CR		CR		CR		CSPR
+	Runtime		CR		CR		CSPR		CSPR
+	Middleware	CR		CR		CSPR		CSPR
+	OS		CR		CR		CSPR		CSPR
+	Virtualization	CR		CSPR		CSPR		CSPR
+	Servers		CR		CSPR		CSPR		CSPR
+	Storage		CR		CSPR		CSPR		CSPR
+	Networking	CR		CSPR		CSPR		CSPR
+
+* Cloud Deployment Models
+	Public Cloud
+		Everything built on the Cloud Provider (Cloud-Native)
+		Most cost effective
+		Security Controls by Default
+		Limited Configuration based on what the CSP exposes to you
+		You don't need in-depth knowledge of underlying infrastructure
+	Private Cloud
+		Everything built on company's datacenters (On-Premise)
+		Most expensive
+		No guarantee its secure
+		Can meet any security compliance requirement if you put in the work
+		You can configure the infrastructure however you like
+		You need to know in-depth how to conifgure all levels of your infrastructure
+	Hybrid
+		Using both On-Premise and a CSP
+		Could be more cost-effectiev based on what you offload to the cloud
+		You now have to secure your connection to the cloud
+		Can meet all security requirements
+		You get the best of both worlds
+		You need to know in-depth how to configure all levels of your infrastructure and know the CSP's
+		services
+	Cross-Cloud
+		Using multiple Cloud Providers (Multi-cloud, Hybrid-cloud)
+		Amazon EKS <-> Azure Arc <-> GCP Kubernetes Engine
+
+* Total Cost of Ownership (TCO)
+	On-Premise (CAPEX)			Azure (OPEX)
+	Software license Fees			Subscription Fees
+	Implementation				Implementation
+	Configuration				Configuration	
+	Training				Training
+	Physical Security
+	Hardware
+	IT Personal
+	Maintenance
+	
+	75% savings by moving from On-Premise -> Cloud
+
+* Capital vs Operational Exenditure
+	Captial Expenditure (CAPEX)				Operational Expenditure (OPEX)
+	Spending money upfront on physical 			The costs associated with an on-premise
+	infrastructure						datacenter that has shifted the cost to the	
+	Deducting that expense from tax bill over time		service provider. The customer only has to be	
+		Server costs (computers)			concerned with non-physical costs.
+		Storage Costs (hard drives)				Leasing Software and features
+		Network Costs (Routers, cables, switches)		Training employees
+		Backup and Archive Costs				Paying for Cloud Support
+		Disaster Recovery Costs					Billing based on cloud metrics
+		Datacenter Costs (Rent, cooling, security)			Compute usage
+		Technical Personel						Storage usage
+	You have to guess upfront what you plan to spend	Product testing without buying equipment
+
+* Cloud Architecture Terminologies
+	What is a Solutions Architect?
+		A role in a technical organization that architects a technical solution using multiple systems
+		via researching, documentation, experimentation
+		Security - How secure is this solution?
+		Cost - How much is this going to cost?
+	What is a Cloud Architect?
+		A solutions architect that is focused solely on architecting technical solutions using cloud
+		services.
+		Availability - Your ability to ensure a service remains available (HA - High Availability)
+		Scalability - Your ability to grow rapidly or unimpeded
+		Elasticity - Your ability to shrink and grow to meet the demand
+		Fault Tolerance - Your ability to prevent a failure
+		Disaster Recovery - Your ability to recover from a failure. Highly Durable
+
+* High Availability
+	Your ability for your service to remain available by ensuring there is no single point of failure
+	and/or ensure a certain level of performance.
+	Running your workload across multiple Availability Zones ensures that if 1 or 2 AZs become unavailable
+	your service / applications remains available.
+	Azure Load Balancer
+		A load balancer allows you to evenly distribute traffic to multiple servers in one or datacenter.
+		If a datacenter or server becomes unavailable (unhealthy) the load balancer will route the 
+		traffic to only available datacenters with servers.
+
+* High Scalability
+	Your ability to increase your capacity based on the increasing demand of traffic, memory and compute 
+	Vertical Scaling			Horizontal scaling
+		Scaling up				Scaling out
+		Upgrade to a bigger server		Add more servers of the same size
+
+* High Elasticity
+	Your ability to automatically increase or decrease your capacity based on the current demand of
+	traffic, memory and computing power.
+	Horizontal Scaling
+		Scaling Out - Add more servers of the same size
+		Scaling In - Removing more servers of the same size
+	Vertical Scaling is generally hard for traditional architecture so you'l usually only see horizontal
+	scaling described with Elasticity.
+	Azure VM Scale Sets
+		Automatically increase or decrease in response to demand or a defined schedule
+	SQL Server Stretch Database
+		Dynamically stretch warm and cold transactional data from MSFT SQL Server 2016 to MSFT Azure
+
+* Fault Tolerance
+	Your ability for your service to ensure there is no single point of failure.
+	Preventing the chance of failure.
+	Fail-Overs
+		When you have a plan to shift traffic to a redundant system in case the primary system fails
+		A common example is having a copy (secondary) of your database where all ongoing changes are
+		synced. The secondary system is not in use until a fail over occurs and it becomes the primary
+		database
+		Azure Traffic Manager
+			A DNS-based traffic balancer to fail over from a failing primary system to a
+			stand by secondary system
+
+* High Durability
+	Your ability to recover from a disaster and to prevent the loss of data 
+	Disaster Recovery (DR) - Solutions that recover from a disaster
+		Do you have a backup?
+		How fast can you restore that backup?
+		Does your backup still work?
+		How do you ensure current live data is not corrupt?
+
+* Business Continuity Plan (BCP)
+	A document that outlines how a business will continue operating during an unplanned disruption in service
+	Recovery Point Objective (RPO) - Maximum acceptable amount of data loss after an unplanned incident
+					 Expressed as an amount of time
+	Recovery Time Objective (RTO) - Maximum amount of downtime your business can tolerate without incurring a 					  significant financial loss.
+
+* Disaster Recovery Options
+	Backup & Restore - You backup your data and restore it to new infrastructure (Hours)
+		Lower priority, Restore data after an event, Deploy after event, Cost $
+	Pilot Light - Data is replicated to another region with the minimal services running (10 mins)
+		Less stringent RTO & RPO, Core services, Start & Scale resources after event, Cost $$
+	Warm Standby - Scaled down copy of your infrastructure running ready to scale up (Minutes)
+		Business Critical Services, Scale resources after event, Cost $$$
+	Multi-site Active/Active - Scaled up copy of your infrastructure in another region (Real-time)
+		Zero downtime, Nero zero loss, Mission Critical Services, Cost $$$$
+
+***************************
+** Evolution of Compute  **
+***************************
+* The Evolution of Computing
+	Dedicated
+		A physical server wholly utilized by a single customer
+		You have to guess your capactity, you'll overpay for an underutilized server
+		Upgrading beyond your capacity will be slow and expensive
+		You are limited by your Operating System
+		Multiple apps can result in conflicts in resource sharing
+		You have a guarantee of security, privacy and full utility of underlying resources.
+	VMs
+		You can run multiple VMs on one machine
+		Hypervisor is the software layer that lets you use the VMs
+		A physical server shared by multiple customers
+		You pay for a fraction of the server cost
+		You'll overpay for an underutilized VM
+		You are limited by your Guest Operating System
+		Multiple apps on a single VM can result in conflicts in resource sharing
+	Containers
+		VM running multiple containers
+		Docker Deamon is the name of the software layer that lets you run multiple containers
+		You can maximumize and utilize the available capacity which is more cost effective
+		Your containers share teh same underlying OS so containers are more efficient than multiple VMs
+		Multiples apps can run side by side wihtout being limited to the same OS requirements and will
+			not cause conflicts during resource sharing
+	Functions
+		A managed VM running managed containers
+		Serverless Compute
+		You upload a piece of code and choose the amount of memory and duration
+		Only responsible for code and data, nothing else
+		Very cost effective, only pay for the time code is running, VMs only run when code is executed
+		Cold Starts are a side effect of this setup
+
+***************************		
+** Global Infrastructure **
+***************************		
+* Regions and Geographies
+	A region is a grouping of multiple datacenters (Availability Zones)
+		Azure has 58 regions available across 140 countries
+	A Geography is a discreety market of two or more regions that preserves data residency and compliance boundaries
+		Azure Geographies
+			United States
+			Azure Government (US)
+			Canada
+			Brazil
+			Mexico
+		Data Residency Example - You want a guarantee that the data will stay in your country
+	
+* Paired Regions
+	Each region is paired with another region 300 miles away
+	Only one region is updated at a time to ensure no outages
+	Some Azure Services rely on Paired Regions for DR
+	Example: Azure Geo-redundant Storage (GRS) - replicates data to a secondary region automatically, ensuring that data is
+	durable even in the event that the primary region isn't recoverable.
+
+* Region Types and Service Availability
+	Not all Azure cloud services are available in every Region
+	Recommended region							Alternate (other) region
+		A region that provides the broadest range of service		A region that extends Azure's footprint within a data
+		capabilities and is designed to support Availability		residency boundary where a recommended region also 
+		Zones now, or in the future					exists. Not designed for AZs. Labeled as 'Other'
+
+	General Availability (GA) is when a service is conisdered ready to be used publicly by everyone
+	Azure Cloud services are grouped into three categories.
+		Their category determines when cloud services become available.
+		1. Foundational - When GA, immediately or in 12 months in Recommended Alternate Regions
+		2. Mainstream - When GA immediate or in 12 months in Recommended Regions. May become available in Alternate Regions
+				based on customer demand
+		3. Specialized - Available in Recommended or Alternate regions based on customer demand
+
+* Special Regions
+	Azure has specialized regions to meet complicance or legal reasons.
+		US - US DoD Central, US Gov Virginia, US Gov Iowa, Three Azure Government secret locations
+		China - China East, China North, Available through a unique parternship between MSFT and 21Vianet. MSFT does not 
+			directly maintain the datacenters
+
+* Availability Zones
+	An Availability Zone is physical location made up of one or more datacenter.
+	A datacenter is a secured building that contains hundreds of thousands of computers.
+	A region will generally contain 3 AZs
+	Datacenters within a region will be islated from each other (so different buildings). But they wil be close enough to provide
+	low latency
+	It is common practice to run workloads in at least 3 AZs to ensure services remain available in case one or two datacenters
+	fail. (High Availability)
+
+* AZ Supported Regions
+	Not every regions has support for AZs
+	These regions are known as Alternate or Other
+	Recommended Regions are supposed to have at least 3 AZs
+	The following Regions have a minimum of 3 AZs
+		Central US, East US 2, West US 2, West Europe, France Central, North Europe, Southeast Asia
+
+* Fault and Update Domains
+	An AZ in an Azure region is a combination of a fault domain and an update domain
+	Fault Domain
+		A logical grouping of hardware to avoid a single point of failure within an AZ.	
+		It's a group of VMs that share a common power source and network switch.
+	Update Domain
+		Azure may need to apply updates to the underlying hardware and software.
+		Update domains ensure your resources do not go offline.
+	Availability Set
+		A logical grouping that you can use in Azure to ensure that the VMs you place in the Availability Set are 
+		different fault/update domains to avoid downtime.
+		
+**************************************	
+** Getting Started and Follow Along **
+**************************************	
+* Creating an Azure Account
+
+* Registered Providers
+	
+* Create a User Account
+
+* Enabling MFA
+
+* Computing Services
+	Azure VM
+		Windows or Linux VM. Most common type of compute
+		You choose your OS, Memory, CPu, Sotrage. You share hardware with other customers.
+	Azure Container Instances
+		Docker as a Service - Run containerized apps on Azure without provisioning servers or VMs
+	Azure Kubernetes Service (AKS)
+		Kubernetes as a Service. Easy to deploy, manage and scale containerized applications.
+			Uss the open source K8 software
+	Azure Service Fabric
+		Tier 1Enterprise Containers as a Service
+			Distributed systems platform. Runs in Azure or on premises
+			Easy to package, deploy, and manage scalable and reliable microservices
+	Azure Functions
+		Event-driven, serverless computer (functions) run code without provisioning or managing servers.
+			You pay only for the compute time you consume
+	Azure Batch
+		Plans, schedules and executes you batch computer workloads across running 100+ jobs in parallell.
+		Use spot Vms to save you money (previously used low priority Vms to save on compute)
+
+* Intro to Azure VMs
+	Azure VMs are a highly configurable server
+	Virtualization let you run a server without having to buy and maintain the physical hardware that runs it
+	Virtual Machines still require maintainance such as:
+		Applyying OS system patches
+		Installing and configuring packages
+	Some things to know
+		The size of the VM is determined by the Image
+			The image defines the combination of vCPUs, Memory and Storage CCapacity
+		The current limit on a per subscription basis is 20 Vms per region
+		Azure Vms are billed at an hourly rate
+		A single instance VM has an availability of 99.9% (when all storage disks are premium)
+		Two instances deployed in Availability set will give you 99.95% availability
+		You can attach multiple Managed Disk to an Azure VM
+	When you launch an Azure VM other networking components will be either created or associated to your VM	
+		NSG - Network Security Group - attached to NIC, virtual firewall with rules around ports and protocols
+		NIC - Network Interface Card - A device that handle ip protocols and network communication
+		VM instance - The actual running server
+		Public IP Address - The address that you will use to publicly access your VM
+		VNet - Virtual Network - The network where you VM will reside
+
+* Operation Systems	
+	Azure Marketplace
+		SUSE Linux Enterprise Server
+		Red Hat Enterprise Linux
+		Ubuntu Server
+		Debian
+		FreeBSD
+		Azure Marketplace - Flatcar Container Linux
+		RancherOS
+		Bitnami LIbrary for Azure
+		Mesosphere DC/OS on Azure
+		Docker images
+		CloudBees Jenkins Platform
+	You can bring your own linux by creating a Linux Virtual Hard Drive (VHD)
+		Hyper-V virtual hard disk (VHDX) format isn't supported in Azure only fixed VHD.
+
+* Azure Scale Sets
+	Azure Scale Sets allow you to automatically increase or decrease your VM capacity.
+	A scale set is a group of identical VMs
+	Create Scaling Policies to automatically add or remove based on Host Metrics
+	Create Health checks and set a Repair Policy to replace unhealthy instances
+	Associate A Load Balancer to distribute Vms across AZs
+	You can scale to 100s or even 1000s of VMs using Scale Sets.
+
+* Load Balancer
+	Azure Scale Sets - Load Balancer
+		A load balancer can be associated with a scale set
+		This will allow you to:
+			Evenly distribute you Vms across multiple Avalability Zones to make your application Highly Available
+			Use Load Balancer probe checks for more robust Health checks
+		You hvae the choice between 2 load balancers:
+			1. Application Gateway is an HTTP/HTTPS web traffic load balancer with URL-based routing, SSL termination,
+				session persistence, and web application firewall
+			2. Azure Load Balancer supports all TCP/UDP network traffic, port-forwarding, and outbound flows
+
+* Scaling Policy
+	Determines when a VM should be added or removed to meet current capacity requirements
+	Scale out when an instance should be added to the Scale Set to increase capacity
+	Scale in when an instance should be removed from the scale set to decrease capacity
+	After you create a ScaleSet you have a-lot more optoins availble to configure the rules of your Scaling Policy
+		CPU%, Network in/out, disk speeds, etc.
+	Scale-In Policy
+		Determines what VM is removed(deleted) to decrease the capacity of the Scale Set	
+			Default 
+				delete the VM with the highest Instance ID
+				Balanced across AZs and Fault Domains (ADs)	
+			Newest VM
+				Delete the newest created VM
+				Balanced across AZs
+			Oldest VM
+				Delete the oldest Vm
+				Balanced across AZs
+		Update Policy - Determine how VM instances are brought up to date with the latest scale set model
+			Automatic - Increasing with start upgrading immediately in random order
+			Manual - Existing instances must be manually upgraded
+			Rolling - Upgrades roll out in batches with optional pause
+
+* Health Monitoring
+	Can be enabled to determine if your server is healthy or unhealthy
+	2 modes:
+		1. Application health extension -Ping an HTTP request to a specific path and except a status 200
+		2. Load Balancer Probe - Allow you to check based on TCP, UDP, or HTTP requests
+
+* Azure Virtual Desktop
+	A desktop and App virtualization service that runs on the cloud
+	Works acorss devices and OSs with apps that you can use to access remote desktopas and apps
+	You can use most modern browsers to access AVD's
+	Use AVD for specific needs like when security is a concern because all data is saved on the server and cannot be left on the user device
+	Advantages
+		Enable secure and productive remote work on any device
+			AVD provides full Windows 10 and Windows Server desktop and application virtualization on any personal device
+			Seamless integration with MS365 Apps for enterprise and teams
+		Reduce costs of licensing and infrastructure
+			Use eligible Windows / 365 licenses to access Windows VD and pay only for what you use
+		Protect against outages
+			Help keep your team running during outages by leverage built-in Azure Site Recovery and Azure Backup technologies
+		Simplify IT management
+			Windows VD manages the virtual desktop infrastructure for you , so you can focus on users, apps, and OS images instaed 
+			of hardware and maintainance
+		Keep application and user data secure
+			Easily apply the right access controls to users and devices with Azure AD Conditional Access
+
+* Launching a Server	
+
+* Introduction to Azure App Service
+	Azure App Service is an HTTP-based service for hosting web aplications, REST APIs, and mobile back ends
+	You can choose your programming language and either a Windows or Linux environment
+	It is a PaaS so its the Heroku equivalent for Azure
+	Azure App Service takes care of:
+		Underlying infrastructure
+		Security patches for OS and languages
+		Load Balancing
+		Autoscaling
+		Automated Manager
+	Easy to implement:
+		Azure DevOps
+		GitHub
+		Docker Hub Integration
+		Package Management
+		Easy to setup staging environments
+		Custom Domaain
+		Attaching TLS/SSL certificates
+	You pay based on an Azure APP Service Plan:
+		Shared Tier (Free, shared (no Linux))
+		Dedicated Tier - Basic, Standard, Premium, Premium v2, Premiumv3
+		Isolated
+
+* Azure App Services Runtimes
+	What is runtime environment?
+		Software enstructions that are executed while your program is running
+		What programming languages and frameworks/libraris are you using
+		A runtime for Azure App Services will be a predefined container that has your language and libraries installed
+		.NET, .NET Core, Java, Ruby, Node.js, PHP, Python
+
+* Azure App Services Custom container
+	Azure app services allows you to create defined custom containers for windows and linux
+	You might want to create your own custom container to use a different runtime or bundle in a packages or software
+	Create your own Docker container on your local environment -> Push the docker container to Azure Container Registry -> Deploy your container to App Services
+
+* Azure App Service - Deployment Slots
+	Deployment Slots: Allow you to create different environments of your web-application associated to a different hostname. 
+		Useful when staing, or QA env.
+	Example. app, staging, beta slots. You swap environments (Blue/Green deploy)
+
+* Azure App Service - App Service Environment
+	ASE is an Azure App Service feature that provides a fully isolated and dedicated environment for securely running App Service apps at high scale
+	This allows you to host:
+		Windows web apps
+		Linux web apps
+		Docker containers
+		Mobile apps
+		Functions
+	Can create multiple ASEs within a single Azure region or across multiple Azure regions making ASEs ideal for horizontally scaling stateless application tiers
+	in support of high requests per second (RPS) workloads
+	ASE Comes with its own pricing tier (Isolated)
+	ASEs can be used to configure security architecture
+	Apps running on ASEs can have their access gated by upstream devices such as web application firewalls (WAFs)
+	App Service Environments can be deployed into AXZ using zone pinning 
+	There are 2 deployment types for an App Service Environment (ASE)
+		External ASE
+		ILB ASE
+
+* Azure App Service Plan
+	Shared Tiers - Do not support linux
+		Free
+			1GB of disk space
+			Up to 10 apps on a single shared instance
+			No SLA for availability
+			Each app has a compute quotea of 60 minutes per day
+		Shared
+			Up to 100 apps on a single shared instance
+			No SLA for availability
+			Each app has a compute quota of 240 minutes per day
+	Dedicated
+		Basic, tnadard, Premium, PremiumV2, PremiumV3
+
+* Introduction to ACI
+	Azure Container Instances (ACIs) allow you to launch contianers without the need to worry about configuring or managing the underlying virtual machine
+	Azure Container Instances is designed for isolate containers:
+		Simple applications
+		Task automation
+		Built jobs
+	Containers can be provisioned within seconds where VMs can take several minutes
+	Containers are billed per second where Vms are billed per hour (greater savings)
+	Containers have granular and custom sizing of vCPUs, memory and GPUs where Vms sizes are predetermined
+	ACI can deploy Windows or Linux
+	You can persists storage with Azure Files for your ACI containers
+	ACIs are accssed via a FQDN (Fully Qualified Domain Name) eg customlabel.azureregion.azurecontainer.io
+	Azure provides
+		Quickstart images to start launching example applications but you can also source containers from:
+			Azure Container Registry
+			Docker Hub
+	Container Groups
+		A collection of containers that get scheduled on the same host
+		Multi container groups currently support only Lunux containers
+	Two ways to deploy a multi-container group
+		Resource Manager Template (ARM template) - when you need to deploy additional Azure service resources
+		YAML File - when your deployment includes only container instances
+
+* Container Restart Policies
+	Always - Containers are always restarted
+	Never - Run only one time
+	OnFailure - Containeres that encounter an error
+
+
+* Container Persistent Storage
+	Azure COntainers are stateless by default
+		When a container crashes or stops all state is loss
+		To persiste a state you need to mount an external volume
+	You can mount the following external volumes:
+		Azure Files (file share) 
+		Secret Volume
+		Empty Directory
+		Cloud Git Repo
+
+* Azure Virtual Network (VNet)
+	A logically isolated section of the Azure Network where you launch your Azure resources
+	Azure DNS - manage your own DNS domain
+	Virtual Network (vNET) - logically isolated section of Azure network
+		Address spaces
+		Route Tables
+		Subnets
+	Network Security Groups - A virtual firewall at the subnet or NIC level
+	ExpresRoute - A 50mbps-1Gbps connection between on-premise to VNET
+	Virtual WAN - a centralized network to route different network connections
+	Virtual Network Gateway - Site to site VPN connection between VNet and local networks
+	Network Interfaces - Virtual network device to allow your VMs to communicate using IP protocols
+
+* VNeT Peering
+	Connect multiple VNet so they act as one network
+	There are 2 types of VNet peering:
+		Regional VNet Peering When you peer two VNets from the same region
+		Global VNet peering When you peer two VNets from two different regions
+
+* Network Interfaces
+	What is a Network Interface?
+	Software or haredware interface between tow pieces of equipment or protocol layers in a computer network
+	Network Interface Controller (NIC)
+		A computer hardware component that connects a computer to a computer network
+			AKA - NIC, Network adapter, LAn adapter, physical network interface, Ethernet interface controller card
+		Communicate using IP on the Data Link and Physical Layer
+		Azure Network Interfaces
+		Azure Network INterfaces are attached to Azure VM instance
+			Without NIC, an Azure VM instance would have no way to communicate
+		Can have one or multiple NICs
+
+* VNeT - Subnets
+	A logical division of address space. 
+		Help you define different kinds of workloads and allow you to apply virtual isolation within your network. 
+		WHen you launch an Azure resource you choose the subnet you want to launch withina nd an IP from that subnet is assigned to your resource
+	Associateing a Route Table
+		A subnet needs a route table so it can access
+	Public vs. Private subnet
+		Public and Private subnet describes whether a subnet is reachable from the internet or not. Aaure has no concept of private and public subnets and 
+		its up to you to configure our subnets to ensure they do not reach the internet by ensuring they have no route via their route table to the
+		Internet Gateway
+	Associating NSG
+		You can associate an NSG to protect traffic entering and leaving your subnet by applying security ruiles that can Allow or deny access based
+		on IP address, port and protocol	
+	Gateway Subnet
+		Azure has a special type of Gateway SUbnet that is used by Azure Virtual Network Gateway and that service Launches special VMs into that subne
+	
+* Introduction into Azure DNSt

@@ -1,0 +1,183 @@
+*********
+** DNS **
+*********
+
+*** DNS Conceptual / End-User Layer
+
+* DNS is a Hierarchial Namespace
+- Domain names are like folders in a tree, but read from right to left
+- www.google.com
+	- com (Top-Level Domain TLD)
+		- google (domain)
+			- www (Hostname / Label)
+- The root of the DNS system is just "." - but you usually don't see it
+	- www.google.com. (the trailing dot is real, and in DNS terminology is called the 'actual full name')
+
+* Zones, Not Domains
+- A domain is a name
+- A zone is the piece of the namespace that someone controls and manages
+- Example:
+	- com is a zone (managed by Verisign)
+	- google.com is a zone (managed by Google)
+	- www.google.com is not a zone. It is a record inside the google.com zone
+	- ZONE: google.com
+	- Contains: A/AAA/MX/TXT/CNAME/etc.
+
+* Delegation
+- How control is passed down the tree
+- "Who knows google.com?" 
+	- Root -> .com -> google.com
+- Each layer points to the next layer using NS (name server) records and sometimes glue records
+- At .com there is a record saying:
+	- google.com.  NS  ns1.google.com
+	- google.com.  NS  ns2.google.com
+- This tells resolvers: "Ask these authoritative servers for google.com"
+
+* Authoritative vs Recursive Resolvers
+Type			What it does							Example Software
+Authoritative Server	Holds the real zone data					BIND, NSD, Knot, PowerDNS-Authoritative
+Recursive Resolver	Looks up answers on behalf of clients, following the chain	Unbound, BIND (as resolver), dnsmasq, Cloudflare 1.1.1.1
+- Clients don't contact authoritative servers directly. They ask recursive resolvers like (8.8.8.8)
+
+* Common DNS Record Types
+- These are resource records inside a zone
+Record		Purpose							Example
+A		Maps name -> IPv4					example.com -> 93.184.216.34
+AAAA		Maps name -> IPv6					exapmle.com -> 2606:2800:220:1:248:1893:25c8:1946
+CNAME		Alias/redirect name -> another name			www -> example.com
+MX		Mail Server Routing					example.com -> mail.example.com
+TXT		Human-readable or verification text			SPF, DKIM, Google site verify
+NS		Delegation / authoritative nameserver for zone		Points to servers for the zone
+SOA		"Start of Authority" (zone metadata)			Serial, refresh times, etc
+
+* Caching & TTL
+- When a resolver gets a DNS answer, it stores it in cache to avoid asking again
+- Every record has a TTL (Time to Live) in seconds
+- Example: 
+	- Example.com.	300	A	93.184.216.34
+- TTL = 300 means:
+	- Cache for 300 seconds 
+	- After that, ask upstream again
+
+* What a Zone File Looks Like
+____________________________________________________
+$TTL 3600
+@       IN SOA  ns1.example.com. admin.example.com. (
+                2025020501 ; serial
+                3600       ; refresh
+                900        ; retry
+                1209600    ; expire
+                86400 )    ; minimum
+
+        IN NS   ns1.example.com.
+        IN NS   ns2.example.com.
+
+@       IN A    203.0.113.10
+www     IN A    203.0.113.10
+mail    IN A    203.0.113.11
+
+@       IN MX   10 mail.example.com.
+
+_txttest IN TXT "hello world"
+___________________________________________________
+- @ means "the zone name" (example.com)
+- Relative names automatically append the zone (so www means www.example.com)
+- Serial should change every time the zone changes (important for replication)
+
+* Putting it All Together (mental Walk-through)
+- When the browser looks up www.example.com
+	1. Your OS -> Recursive resolver
+	2. Resolver checks cache:
+		If present and TTL not expired -> returns immidiately
+	3. If not cached, resolver:
+		Contacts Root -> Gets NS for .com
+		Contacts .com -> Gets NS for example.com
+		Contacts authoritative NS for example.com
+		Gets the A record for www
+	4. Resolver returns answer and caches it
+
+* More on Zones
+- The Key Idea
+	- A domain is just a name in ther hierarchy
+	- A zone is the administrative authority over a portion of that hierarchy
+	- You can own a domain name, but that doesn't mean you server the DNS reords for it yourself - that's the zone's job.
+	- Example (The global DNS tree)
+	.
+	- com
+		- google
+			- www
+			- mail
+		- example
+			- www
+
+	- Now look at zones (who manages what)
+		- Zone 1: The root zone "."
+		- Zone 2: The "Com" zone (managed by verisign)
+		- Zone 3: The "google.com" zone (managed by Google DNS servers)
+		- Zone 4: The "example.com" zone (managed by Example corp)
+	- Even though www.google.com is a domain name, the zone that contains it is google.com
+	Things		Is it a name?	Is it a zone?	Why
+	google.com	Domain		Zone		It has its own SOA + NS
+	www.google.com	Domain		Not a zone	No separate authority
+
+- How We Know SOmething is a Zone
+	- A zone has:
+		1. An SOA record ("Start of Authority)
+		2. NS records listing its authoritative nameservers
+	- If there is an SOA, it's a zone
+	- Example zone top:
+		google.com.	IN SOA	ns1.google.com.	dns-admin.google.com.	(...)
+		google.com.	IN NS	ns1.google.com
+		google.com.	IN NS	ns2.google.com
+
+- Why Zones Exits
+	- Zones allow the DNS hierarchy to be split and delegated
+	- Without zones:
+		- The root would need to store every hostname in the world (impossible)
+	- With zones:
+		- The Root only needs to know who controls .com
+		- .com only needs to know who controls google.com
+		- google.com controls everything below it
+	- Zones decentralize control
+
+- What are Zone Transfers?
+	- Zones are usually stored on multiple authoritative nameservers
+	- One is the primary (master), others are secondary (slaves)
+	- A zone transfer is how the secondary servers copy the zone from the primary
+	- Two Types:
+		- AXFR	Full zone transfer	Copies entire zone database
+		- IXFR	Incremental update	Only copy what changed since last time
+	- Zone transfers use TCP not UDP
+
+- Why Do We Need Zone Transfers?
+	- Redundancy (If one server dies, others serve the zone)
+	- Load sharing
+	- Global reliability across networks
+	(Zones are not stored on recursive resolvers, they are only on authoritative servers)
+
+- What is a Zone used for?
+	- A zone:
+		- Stores all DNS records for the domain it manages
+		- Answers queries authoritatively
+		- Controls TTL policy
+		- Signs data if using DNSSEC
+		- Replicates to other authoritative servers via zone transfers
+	- Essentially a database for that part of DNS
+
+- Zones compared to everything around them
+	Domain		Just a name in the hierarchy
+	Zone		The admin authority over part of the hierarchy
+	SOA		Declares where a zone begins and who manages it
+	NS		Points to which servers provide the zone
+	Zone File	The actual data (records) stored for that zone
+	Zone Transfer	How that data gets copied to other authoritative servers
+
+
+
+
+
+
+
+
+
+
