@@ -1,10 +1,49 @@
 #!/usr/bin/env python3
 """Validate a topic question-bank module against the required schema.
 
-Usage: python3 validate.py topics/d1_1.py
+Usage: python3 validate.py topics/d1_1.py [vocab_data.py ...]
 """
 import importlib.util
 import sys
+
+
+def validate_vocab(path):
+    spec = importlib.util.spec_from_file_location("vocab_under_test", path)
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+
+    assert isinstance(m.PAIRS, list) and len(m.PAIRS) >= 20, \
+        f"PAIRS needs >= 20 entries (got {len(m.PAIRS)})"
+    seen = set()
+    for i, p in enumerate(m.PAIRS):
+        where = f"PAIRS[{i}] ({p.get('a', '?')} vs {p.get('b', '?')})"
+        missing = {"a", "b", "def_a", "def_b", "difference", "scenarios", "tf"} - set(p)
+        assert not missing, f"{where} missing keys: {missing}"
+        for k in ("a", "b", "def_a", "def_b", "difference"):
+            assert isinstance(p[k], str) and p[k].strip(), f"{where} bad {k}"
+        assert p["a"] != p["b"], f"{where} a == b"
+        key = frozenset((p["a"].lower(), p["b"].lower()))
+        assert key not in seen, f"{where} duplicate pair"
+        seen.add(key)
+        assert len(p["scenarios"]) >= 3, f"{where} needs >= 3 scenarios"
+        answers = set()
+        for s in p["scenarios"]:
+            assert s["answer"] in (p["a"], p["b"]), \
+                f"{where} scenario answer {s['answer']!r} is not exactly a or b"
+            assert isinstance(s["stmt"], str) and s["stmt"].strip(), f"{where} empty stmt"
+            answers.add(s["answer"])
+        assert len(answers) == 2, f"{where} scenarios never use one of the two terms"
+        assert len(p["tf"]) >= 2, f"{where} needs >= 2 tf items"
+        truths = set()
+        for t in p["tf"]:
+            assert isinstance(t["truth"], bool), f"{where} tf truth must be bool"
+            assert isinstance(t["stmt"], str) and t["stmt"].strip(), f"{where} empty tf stmt"
+            assert isinstance(t["why"], str) and t["why"].strip(), f"{where} tf missing why"
+            truths.add(t["truth"])
+        assert truths == {True, False}, f"{where} tf needs at least one True and one False"
+    n_scen = sum(len(p["scenarios"]) for p in m.PAIRS)
+    n_tf = sum(len(p["tf"]) for p in m.PAIRS)
+    print(f"OK {path}: {len(m.PAIRS)} pairs, {n_scen} scenarios, {n_tf} true/false")
 
 
 def validate(path):
@@ -59,4 +98,7 @@ def validate(path):
 
 if __name__ == "__main__":
     for p in sys.argv[1:]:
-        validate(p)
+        if "vocab_data" in p:
+            validate_vocab(p)
+        else:
+            validate(p)

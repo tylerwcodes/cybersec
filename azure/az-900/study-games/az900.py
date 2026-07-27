@@ -14,6 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import drills
 import engine
+import vocab
 from engine import C, QuitRound, banner, get_input, wrap
 
 DOMAINS = {
@@ -60,6 +61,7 @@ def main_menu(mods, progress):
     print("    G) Azure gym (infinite generated problems)")
     print("    S) Service blitz")
     print("    A) Acronym blitz")
+    print("    V) Vocab arcade (every term + confusable pairs, 8 question styles)")
     print("    R) Review ALL missed questions")
     print("    T) Stats & weakest topics")
     print("    Q) Quit")
@@ -212,6 +214,8 @@ def main():
                 drills.service_blitz()
             elif choice == "A":
                 drills.acronym_blitz()
+            elif choice == "V":
+                vocab.arcade(mods, progress)
             elif choice == "R":
                 review_all(mods, progress)
             elif choice == "T":
