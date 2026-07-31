@@ -14,6 +14,10 @@
   "1.3": {
    "right": 38,
    "wrong": 5
+  },
+  "2.1": {
+   "right": 40,
+   "wrong": 7
   }
  },
  "history": [
@@ -64,6 +68,24 @@
    "score": 5,
    "total": 5,
    "ts": 1785111316.1614661
+  },
+  {
+   "label": "Full 2.1",
+   "score": 34,
+   "total": 40,
+   "ts": 1785166259.656619
+  },
+  {
+   "label": "Full 2.1 (retake)",
+   "score": 5,
+   "total": 6,
+   "ts": 1785176754.616684
+  },
+  {
+   "label": "Full 2.1 (retake)",
+   "score": 1,
+   "total": 1,
+   "ts": 1785176759.41619
   }
  ]
 }

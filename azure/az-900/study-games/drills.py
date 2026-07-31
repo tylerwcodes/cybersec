@@ -282,12 +282,7 @@ ACRONYMS = {
 }
 
 
-def acronym_blitz(rounds=20):
-    banner("ACRONYM BLITZ", C.MAGENTA)
-    print(wrap(f"{len(ACRONYMS)} acronyms and short names from the AZ-900 world. "
-               "Type the expansion; close answers are auto-judged, borderline "
-               "ones you self-grade. q to stop."))
-    items = random.sample(list(ACRONYMS.items()), min(rounds, len(ACRONYMS)))
+def _acronym_rounds(items):
     score, asked = 0, 0
     try:
         for n, (abbr, full) in enumerate(items, 1):
@@ -313,6 +308,38 @@ def acronym_blitz(rounds=20):
     if asked:
         print()
         print(grade_line(score, asked))
+
+
+def acronym_blitz():
+    banner("ACRONYM BLITZ", C.MAGENTA)
+    total = len(ACRONYMS)
+    print(wrap(f"{total} acronyms and short names from the AZ-900 world. "
+               "Type the expansion; close answers are auto-judged, borderline "
+               "ones you self-grade. q to stop."))
+    quarter = -(-total // 4)
+    print()
+    print(f"  1) Full stack  — all {total} acronyms in one run")
+    print(f"  2) Quarter set — one 25% set (~{quarter} acronyms) at a time")
+    try:
+        mode = get_input("  Choose 1 or 2 (q to cancel): ")
+    except QuitRound:
+        return
+    items = sorted(ACRONYMS.items())
+    if mode == "2":
+        sets = [items[i:i + quarter] for i in range(0, total, quarter)]
+        print()
+        for i, chunk in enumerate(sets, 1):
+            print(f"    {i}) Set {i}  ({len(chunk)} acronyms)")
+        try:
+            pick = get_input(f"  Which set (1-{len(sets)})? ")
+        except QuitRound:
+            return
+        if not (pick.isdigit() and 1 <= int(pick) <= len(sets)):
+            print(C.YELLOW + "  Not a valid set — cancelled." + C.RESET)
+            return
+        items = list(sets[int(pick) - 1])
+    random.shuffle(items)
+    _acronym_rounds(items)
 
 
 # --------------------------------------------------------------- Azure gym ---
